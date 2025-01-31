@@ -1,0 +1,8 @@
+<config>
+    <vrchat-log-path>noinit</vrchat-log-path>
+    <codes-file>codes.xml</codes-file>
+    <keyword-start>Log        -  [START]</keyword-start>
+    <keyword-end>[END]</keyword-end>
+    <keyword-date-end> Log</keyword-date-end>
+    <file-delay>30</file-delay>
+</config>
