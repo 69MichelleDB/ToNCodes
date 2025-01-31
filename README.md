@@ -1,6 +1,6 @@
 # ToNCodes
 
-**Current version:** alpha 0.2 (2025-01-31)
+**Current version:** alpha 0.2.1 (2025-01-31)
 
 **Project started on the** 2025-01-30
 
