@@ -1,6 +1,6 @@
 <config>
     <vrchat-log-path>noinit</vrchat-log-path>
-    <codes-file>codes.xml</codes-file>
+    <codes-folder>Codes</codes-folder>
     <keyword-start>Log        -  [START]</keyword-start>
     <keyword-end>[END]</keyword-end>
     <keyword-date-end> Log</keyword-date-end>

@@ -9,7 +9,7 @@ def CreateFromDefault(i_file):
             with open(defaultConfigFile, 'r') as src, open(i_file, 'w') as dst:
                 dst.write(src.read())
         else:
-            raise FileNotFoundError(f"Default config file '{defaultConfigFile}' not found.")
+            raise FileNotFoundError(f"Default template file '{defaultConfigFile}' not found.")
 
 # Pass it a list of files and obtain a dictionary with the file name and the date modified
 def GetDateModified(i_files):

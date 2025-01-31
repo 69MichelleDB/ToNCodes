@@ -3,17 +3,16 @@ from Tools.fileTools import CreateFromDefault, GetDateModified, GetModifiedFiles
 import time
 
 '''
-Current version alpha 0.1
+Current version alpha 0.2
 
 Project started on 2025-01-30
 Author: MichelleDB - https://michelledb.com/
-I have no direct relation with Terrors of Nowhere outside
-of being a fan and a Patreon supporter.
+I have no direct relation with Terrors of Nowhere outside of being a fan and a Patreon supporter.
 
 Terrors of Nowhere belongs to Beyond https://www.patreon.com/c/beyondVR
 
 TODO:
-- Consider splitting codes.xml file into multiple files, probably by log file to keep it simple
+- Exception handling
 - GUI, everything
 - Discord webhook
 '''
@@ -32,7 +31,6 @@ _previousDateFiles = {}
 if __name__ == "__main__":
     CreateFromDefault(_CONFIG_FILE)                     # Verify the config file exist
     configList = InitializeConfig(_CONFIG_FILE)         # Retrieve all config data
-    CreateFromDefault(configList['codes-file'])         # Verify the XML file exist
     
     # Start the loop to watch all the files
     while True:
@@ -50,6 +48,6 @@ if __name__ == "__main__":
                             configList['keyword-start'],
                             configList['keyword-end'],
                             configList['keyword-date-end'],
-                            configList['codes-file'])
+                            configList['codes-folder'])
         
         time.sleep( int(configList['file-delay']) )                         # The program is very eepy, let it rest

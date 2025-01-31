@@ -36,13 +36,14 @@ def WriteXml(i_root, i_filePath):
 
 # Generic function to get all Node values, given a specific node
 def GetNodeValues(i_xmlFile, i_node='.//Date'):
-    tree = ET.parse(i_xmlFile)
-    root = tree.getroot()
-    
     nodeValues = set()
-    for fileElement in root.findall(i_node):
-        nodeValues.add(fileElement.text)
-    
+    if os.path.exists(i_xmlFile):
+        tree = ET.parse(i_xmlFile)
+        root = tree.getroot()
+        
+        for fileElement in root.findall(i_node):
+            nodeValues.add(fileElement.text)
+        
     return list(nodeValues)
 
 
@@ -89,9 +90,14 @@ def GetAllFiles(i_path):
     return logFiles
 
 
-def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_codesFile):
+def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_codesFolder):
     print('Processing modified files, extracting codes...')
-    addedDates = GetNodeValues(i_codesFile, './/Date')  # Since I'm treating the Date as a PK, we'll use it to discard duplicates
+    addedDates = []
+    
+    for file in i_logFiles:
+        currentFilePath = i_codesFolder + '/' + os.path.basename(file).replace('.txt', '.xml')
+        auxDates = GetNodeValues(currentFilePath, './/Date')  # Since I'm treating the Date as a PK, we'll use it to discard duplicates
+        addedDates = list(set(addedDates + auxDates))
 
     logEntries = []
     # Read each file in search of all ToN codes
@@ -112,17 +118,22 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
                 dateTime = content[logLineStart:startCursor].strip().split(i_endDateIndex)[0]
                 fileName = os.path.basename(file)
                 if dateTime not in addedDates:              # check the date is not inserted already
-                    print(f'Code {dateTime} is new, added to {i_codesFile}')
+                    print(f'Code {dateTime} is new')
                     logEntries.append((fileName, dateTime, logContent))
                 else:
                     print(f'Code {dateTime} is not new')
                 startCursor = endIndex + len(i_keywordEnd)
             print(f'[END] Reading file: {os.path.basename(file)}')
 
-    print(f'Saving codes to {i_codesFile}...')
+    print(f'Saving codes to XML...')
     # Extract all data into the XML
-    root = ReadXml(i_codesFile)
     for fileName, dateTime, logContent in logEntries:
+        currentLogFile = i_codesFolder + '/' + os.path.basename(fileName).replace('.txt', '.xml')
+        if not os.path.exists(currentLogFile):
+            root = ET.Element('Root')
+            root.text = '\n'                    # Make sure it creates <Root></Root> instead of <Root />
+            WriteXml(root, currentLogFile)
+        root = ReadXml(currentLogFile)
         tonCode = ET.Element('TON-Code')
         dateElement = ET.SubElement(tonCode, 'File')
         dateElement.text = fileName
@@ -132,16 +143,16 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
         codeElement.text = logContent
         root.append(tonCode)
     
-    # Let's clean the mess and leave it pretty
-    tree = ET.ElementTree(root)
-    tree.write(i_codesFile, encoding='utf-8', xml_declaration=True)
+        # Let's clean the mess and leave it pretty
+        tree = ET.ElementTree(root)
+        tree.write(currentLogFile, encoding='utf-8', xml_declaration=True)
 
-    # Add indentations and save it...
-    with open(i_codesFile, 'r+') as file:
-        xmlContent = file.read()
-        xmlDom = minidom.parseString(xmlContent)
-        prettyXmlString = xmlDom.toprettyxml(indent="  ")  # Add indentations
-        prettyXmlString = "\n".join([line for line in prettyXmlString.split('\n') if line.strip()])   # Remove empty lines
-        file.seek(0)
-        file.write(prettyXmlString)
-        file.truncate()
+        # Add indentations and save it...
+        with open(currentLogFile, 'r+') as file:
+            xmlContent = file.read()
+            xmlDom = minidom.parseString(xmlContent)
+            prettyXmlString = xmlDom.toprettyxml(indent="  ")  # Add indentations
+            prettyXmlString = "\n".join([line for line in prettyXmlString.split('\n') if line.strip()])   # Remove empty lines
+            file.seek(0)
+            file.write(prettyXmlString)
+            file.truncate()
