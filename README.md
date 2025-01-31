@@ -1,11 +1,14 @@
 # ToNCodes
 
 **Current version:** alpha 0.1 (2025-01-31)
+
 **Project started on the** 2025-01-30
+
 **Author:** MichelleDB - https://michelledb.com/
+
 *I have no direct relation with Terrors of Nowhere outside of being a fan and a Patreon supporter.*
 
-Terrors of Nowhere belongs to Beyond https://www.patreon.com/c/beyondVR
+*Terrors of Nowhere belongs to Beyond https://www.patreon.com/c/beyondVR*
 
 ## Intro
 This is a personal application to store all Terrors of Nowhere codes generated while playing,
