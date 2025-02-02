@@ -1,8 +1,6 @@
 # ToNCodes
 
-**Current version:** alpha 0.2.1 (2025-01-31)
-
-**Project started on the** 2025-01-30
+**Current version:** alpha 0.3.0 (2025-02-02)
 
 **Author:** MichelleDB - https://michelledb.com/
 
@@ -21,3 +19,8 @@ I'm aware that Beyond may (or may not) be working on a save system using VRC's P
 This current version was made under Python 3.10.12. If you want to run it, you can clone the project and run ToNCodes.py
 
 I plan to make the process a bit more straightforward and add it to releases in future versions.
+
+For the clipboard on linux, I'm on Pop!_OS 22.04 on X11 and I needed to download xclip to get it to work
+> sudo apt-get install xclip
+
+For wayland sessions you may need xclip, xsel, or wl-clipboard

@@ -47,6 +47,22 @@ def GetNodeValues(i_xmlFile, i_node='.//Date'):
     return list(nodeValues)
 
 
+# Retrieves everything from every XML file in the given folder
+def ReadCodeFiles(folder):
+    files_data = []
+    for file_name in os.listdir(folder):
+        if file_name.endswith('.xml'):
+            file_path = os.path.join(folder, file_name)
+            root = ET.parse(file_path).getroot()
+            for ton_code in root.findall('.//TON-Code'):
+                file = ton_code.find('.//File').text if ton_code.find('.//File') is not None else ''
+                data = ton_code.find('.//Date').text if ton_code.find('.//Date') is not None else ''
+                code = ton_code.find('.//Code').text if ton_code.find('.//Code') is not None else ''
+                if code != '':                  # I plan to allow deleting codes, this will help
+                    files_data.append((file, data, code))
+    return files_data
+
+
 # Let's check if the xml file has been initialized
 def InitializeConfig(i_configFile):
     result = {}                                             # Dictionary to store all data

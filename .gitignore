@@ -1,5 +1,4 @@
 config.xml
-codes.xml
 __pycache__/
 Codes/*
 !Codes/Hi.txt
