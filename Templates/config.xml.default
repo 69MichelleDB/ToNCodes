@@ -5,5 +5,5 @@
     <keyword-end>[END]</keyword-end>
     <keyword-date-end> Log</keyword-date-end>
     <file-delay>20</file-delay>
-    <gui-delay>5</gui-delay>
+    <gui-delay>1</gui-delay>
 </config>

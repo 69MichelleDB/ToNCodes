@@ -58,7 +58,7 @@ def ReadCodeFiles(folder):
                 file = ton_code.find('.//File').text if ton_code.find('.//File') is not None else ''
                 data = ton_code.find('.//Date').text if ton_code.find('.//Date') is not None else ''
                 code = ton_code.find('.//Code').text if ton_code.find('.//Code') is not None else ''
-                #note = ton_code.find('.//Note').text if ton_code.find('.//Note') is not None else ''
+                note = ton_code.find('.//Note').text if ton_code.find('.//Note') is not None else ''
                 if code != '':                  # I plan to allow deleting codes, this will help
                     files_data.append((file, data, code, note))
     return files_data
@@ -134,9 +134,10 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
                 logLineStart = content.rfind('\n', 0, startCursor) + 1
                 dateTime = content[logLineStart:startCursor].strip().split(i_endDateIndex)[0]
                 fileName = os.path.basename(file)
+                note = ''                                   # TODO: Add logic to process what note goes here
                 if dateTime not in addedDates:              # check the date is not inserted already
                     print(f'Code {dateTime} is new')
-                    logEntries.append((fileName, dateTime, logContent))
+                    logEntries.append((fileName, dateTime, logContent, note))
                 else:
                     print(f'Code {dateTime} is not new')
                 startCursor = endIndex + len(i_keywordEnd)
@@ -144,7 +145,7 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
 
     print(f'Saving codes to XML...')
     # Extract all data into the XML
-    for fileName, dateTime, logContent in logEntries:
+    for fileName, dateTime, logContent, note in logEntries:
         currentLogFile = i_codesFolder + '/' + os.path.basename(fileName).replace('.txt', '.xml')
         if not os.path.exists(currentLogFile):
             root = ET.Element('Root')
@@ -158,6 +159,8 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
         dateElement.text = dateTime
         codeElement = ET.SubElement(tonCode, 'Code')
         codeElement.text = logContent
+        codeElement = ET.SubElement(tonCode, 'Note')
+        codeElement.text = note
         root.append(tonCode)
     
         # Let's clean the mess and leave it pretty

@@ -30,8 +30,6 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
             )
             tree.column(col, width=maxWidth * 3)                                    # It doesn't really fit, so I'll multiply a bit
 
-    AdjustColumnSizes()
-
     # I need the window to refresh from time to time in case there's new data
     def FillTree():
         existingItems = {tree.item(item, 'values') for item in tree.get_children()}    # Get all the items in the tree in a tuple, only the values
@@ -60,4 +58,6 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
 
     tree.bind('<Double-1>', on_row_click)           # Hook the double click event
     FillTree()                                      # Fill the tree
+    if len(tree.get_children()) > 0:
+        AdjustColumnSizes()
     i_root.after(i_RefreshInterval, refreshTree)    # Hook the data refresh event
