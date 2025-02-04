@@ -1,7 +1,5 @@
 # ToNCodes
 
-**Current version:** alpha 0.3.0 (2025-02-02)
-
 **Author:** MichelleDB - https://michelledb.com/
 
 *I have no direct relation with Terrors of Nowhere outside of being a fan and a Patreon supporter.*

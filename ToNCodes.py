@@ -6,7 +6,7 @@ from CodesHunter import CodesHunter
 import threading
 
 '''
-Current version alpha 0.3.0
+Current version alpha 0.3.1
 
 Author: MichelleDB - https://michelledb.com/
 I have no direct relation with Terrors of Nowhere outside of being a fan and a Patreon supporter.
@@ -29,7 +29,7 @@ Pyperclip: https://pypi.org/project/pyperclip/
 
 # Constants
 _CONFIG_FILE = 'config.xml'
-_VERSION = 'alpha 0.3.0'
+_VERSION = 'alpha 0.3.1'
 _TITLE = f"ToN Codes {_VERSION} - by MichelleDB - Double click to copy"
 _HEIGHT = 620
 _WIDTH = 300

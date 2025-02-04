@@ -111,7 +111,7 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
     addedDates = []
     
     for file in i_logFiles:
-        currentFilePath = i_codesFolder + '/' + os.path.basename(file).replace('.txt', '.xml')
+        currentFilePath = os.path.join(i_codesFolder,os.path.basename(file).replace('.txt', '.xml'))
         auxDates = GetNodeValues(currentFilePath, './/Date')  # Since I'm treating the Date as a PK, we'll use it to discard duplicates
         addedDates = list(set(addedDates + auxDates))
 
