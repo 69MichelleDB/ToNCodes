@@ -11,19 +11,34 @@ def CreateWindow(i_title, i_width, i_height):
 
 # This will allow us to display the XMLs data
 def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
-    tree = ttk.Treeview(i_root, columns=('File', 'Date', 'Code'), show='headings')
+    tree = ttk.Treeview(i_root, columns=('File', 'Date', 'Code', 'Notes'), show='headings')
     tree.heading('File', text='File')
     tree.heading('Date', text='Date')
-    tree.heading('Code', text='Code')
+    tree.column('Code', width=0, stretch=tk.NO)                 # I'm going to keep Code hidden and add a new colum Notes
+    tree.heading('Notes', text='Notes')
     tree.pack(fill=tk.BOTH, expand=True)
 
+    # Adjust column widths based on the data
+    def AdjustColumnSizes():
+        colIndex = {'File': 0, 'Date': 1, 'Notes': 3}
+        for col in colIndex:
+            maxWidth = max(
+                len(str(item[colIndex[col]])) 
+                if len(item) > colIndex[col] and item[colIndex[col]] is not None    # This way we cover for empty columns
+                else 0 
+                for item in i_CodesData
+            )
+            tree.column(col, width=maxWidth * 3)                                    # It doesn't really fit, so I'll multiply a bit
+
+    AdjustColumnSizes()
+
     # I need the window to refresh from time to time in case there's new data
-    # TODO: Optimize so I don't need to empty the wole tree and refill it, that way we ovoid the flicker
     def FillTree():
-        for item in tree.get_children():
-            tree.delete(item)
-        for fileData in i_CodesData:
-            tree.insert('', tk.END, values=fileData)
+        existingItems = {tree.item(item, 'values') for item in tree.get_children()}    # Get all the items in the tree in a tuple, only the values
+        sortedData = sorted(i_CodesData, key=lambda x: x[1], reverse=True)  # Sort by Date
+        for fileData in sortedData:
+            if fileData not in existingItems and fileData[2]!='':           # Only insert new values, avoid blank codes (this is for the future)
+                tree.insert('', tk.END, values=fileData)
 
     # Event handler for double click, copies the code to the clipboard (I needed xclip on pop!_os for it to work, on windows there's no need in theory)
     def on_row_click(event):

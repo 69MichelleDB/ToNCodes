@@ -6,18 +6,15 @@ from CodesHunter import CodesHunter
 import threading
 
 '''
-Current version alpha 0.3.1
-
 Author: MichelleDB - https://michelledb.com/
 I have no direct relation with Terrors of Nowhere outside of being a fan and a Patreon supporter.
 
 Terrors of Nowhere belongs to Beyond https://www.patreon.com/c/beyondVR
 
 TODO:
-- os.path.join on anywhere that uses path + file name
+- New field Notes
 - Scrollbar
 - Move initial config to a modal window
-- Optimize the Code refresh in the treeview
 - Delete codes feature
 - GUI polish
 - Better exception handling
@@ -29,8 +26,8 @@ Pyperclip: https://pypi.org/project/pyperclip/
 
 # Constants
 _CONFIG_FILE = 'config.xml'
-_VERSION = 'alpha 0.3.1'
-_TITLE = f"ToN Codes {_VERSION} - by MichelleDB - Double click to copy"
+_VERSION = 'alpha 0.3.2'
+_TITLE = f"ToN Codes {_VERSION} - by MichelleDB //// [Double click to copy]"
 _HEIGHT = 620
 _WIDTH = 300
 

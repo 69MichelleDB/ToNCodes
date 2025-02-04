@@ -58,8 +58,9 @@ def ReadCodeFiles(folder):
                 file = ton_code.find('.//File').text if ton_code.find('.//File') is not None else ''
                 data = ton_code.find('.//Date').text if ton_code.find('.//Date') is not None else ''
                 code = ton_code.find('.//Code').text if ton_code.find('.//Code') is not None else ''
+                #note = ton_code.find('.//Note').text if ton_code.find('.//Note') is not None else ''
                 if code != '':                  # I plan to allow deleting codes, this will help
-                    files_data.append((file, data, code))
+                    files_data.append((file, data, code, note))
     return files_data
 
 
