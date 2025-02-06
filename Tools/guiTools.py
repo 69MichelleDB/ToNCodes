@@ -14,10 +14,14 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
     tree = ttk.Treeview(i_root, columns=('File', 'Date', 'Code', 'Notes'), show='headings')
     tree.heading('File', text='File')
     tree.heading('Date', text='Date')
-    #tree.heading('Code', text='Code')
     tree.column('Code', width=0, stretch=tk.NO)                 # I'm going to keep Code hidden and add a new colum Notes
     tree.heading('Notes', text='Notes')
-    tree.pack(fill=tk.BOTH, expand=True)
+
+    # Scrollbar
+    scrollbar = ttk.Scrollbar(i_root, orient = 'vertical', command=tree.yview)
+    tree.configure(yscrollcommand=scrollbar.set)
+    scrollbar.pack(side='right', fill='y')
+    tree.pack(side='left', fill='both', expand=True)
 
     # Adjust column widths based on the data
     def AdjustColumnSizes():
@@ -29,7 +33,7 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
                 else 0 
                 for item in i_CodesData
             )
-            tree.column(col, width=maxWidth * 3)                                    # It doesn't really fit, so I'll multiply a bit
+            tree.column(col, width=maxWidth * 4)                                    # It doesn't really fit, so I'll multiply a bit
 
     # I need the window to refresh from time to time in case there's new data
     def FillTree():
