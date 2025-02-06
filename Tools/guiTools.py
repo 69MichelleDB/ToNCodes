@@ -49,9 +49,9 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
         selectedItems = tree.selection()
         if selectedItems:
             selectedItem = selectedItems[0]
-            file, Date, code = tree.item(selectedItem, 'values')
+            file, date, code, notes = tree.item(selectedItem, 'values')
             pyperclip.copy(code)
-            messagebox.showinfo("Copied!", f"Code '{Date}' copied to clipboard")
+            messagebox.showinfo("Copied!", f"Code '{date}' copied to clipboard")
         else:
             messagebox.showwarning("Warning", "No item selected")
 
