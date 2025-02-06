@@ -1,7 +1,7 @@
 from Tools.xmlTools import InitializeConfig, ReadCodeFiles
 from Tools.fileTools import CreateFromDefault
 from Tools.errorHandler import StartErrorHandler
-from Tools.guiTools import CreateWindow, CreateTreeView
+from Tools.guiTools import CreateWindow, HorizontalMenu, CreateTreeView
 from CodesHunter import CodesHunter
 import threading
 
@@ -48,6 +48,7 @@ if __name__ == "__main__":
 
     # GUI setup
     root = CreateWindow(_TITLE, _HEIGHT, _WIDTH)
+    HorizontalMenu(root)
     codesData = RefreshCodes()
     CreateTreeView(root, codesData, int(configList['gui-delay'])*1000, RefreshCodes)
     root.mainloop()

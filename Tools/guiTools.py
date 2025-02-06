@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, Menu
 import pyperclip
 
 # Create the window
@@ -8,6 +8,36 @@ def CreateWindow(i_title, i_width, i_height):
     root.title(i_title)
     root.geometry(f"{i_width}x{i_height}")
     return root
+
+
+# H-Menu
+def HorizontalMenu(i_root):
+    menubar = Menu(i_root)                  # Create and assign to the window
+    i_root.config(menu=menubar)
+    
+    # File...
+    fileMenu = Menu(menubar, tearoff=False) # New Menu
+    fileMenu.add_command(label='Options')
+    fileMenu.add_separator()
+    fileMenu.add_command(
+        label='Exit',
+        command=i_root.destroy
+    )
+    menubar.add_cascade(
+        label='File',
+        menu=fileMenu,
+        underline=0
+    )
+
+    # About...
+    aboutMenu = Menu(menubar, tearoff=False)
+    aboutMenu.add_command(label='About')
+    menubar.add_cascade(
+        label='About',
+        menu=aboutMenu,
+        underline=0
+    )
+
 
 # This will allow us to display the XMLs data
 def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
