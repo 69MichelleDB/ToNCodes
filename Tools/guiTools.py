@@ -14,6 +14,7 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
     tree = ttk.Treeview(i_root, columns=('File', 'Date', 'Code', 'Notes'), show='headings')
     tree.heading('File', text='File')
     tree.heading('Date', text='Date')
+    #tree.heading('Code', text='Code')
     tree.column('Code', width=0, stretch=tk.NO)                 # I'm going to keep Code hidden and add a new colum Notes
     tree.heading('Notes', text='Notes')
     tree.pack(fill=tk.BOTH, expand=True)
@@ -32,11 +33,16 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
 
     # I need the window to refresh from time to time in case there's new data
     def FillTree():
-        existingItems = {tree.item(item, 'values') for item in tree.get_children()}    # Get all the items in the tree in a tuple, only the values
-        sortedData = sorted(i_CodesData, key=lambda x: x[1], reverse=True)  # Sort by Date
-        for fileData in sortedData:
-            if fileData not in existingItems and fileData[2]!='':           # Only insert new values, avoid blank codes (this is for the future)
-                tree.insert('', tk.END, values=fileData)
+        existingItems = {tree.item(item, 'values') for item in tree.get_children()}     # Get all the items in the tree in a tuple, only the values
+        sortedData = sorted(i_CodesData, key=lambda x: x[1], reverse=True)              # Sort by Date
+        if len(existingItems) == 0:                 # If there's no data in the table, just insert as is
+            for fileData in sortedData:
+                if fileData not in existingItems and fileData[2]!='':                   # Only insert new values, avoid blank codes (this is for the future)
+                    tree.insert('', tk.END, values=fileData)
+        else:                                       # If there's data, I need to read from the bottom of sortedData, insert at the top of the tree
+            for fileData in reversed(sortedData):
+                if fileData not in existingItems and fileData[2]!='':                   # Only insert new values, avoid blank codes (this is for the future)
+                    tree.insert('', 0, values=fileData)
 
     # Event handler for double click, copies the code to the clipboard (I needed xclip on pop!_os for it to work, on windows there's no need in theory)
     def on_row_click(event):

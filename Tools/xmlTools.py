@@ -134,7 +134,7 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
                 logLineStart = content.rfind('\n', 0, startCursor) + 1
                 dateTime = content[logLineStart:startCursor].strip().split(i_endDateIndex)[0]
                 fileName = os.path.basename(file)
-                note = ''                                   # TODO: Add logic to process what note goes here
+                note = 'No notes'                                   # TODO: Add logic to process what note goes here
                 if dateTime not in addedDates:              # check the date is not inserted already
                     print(f'Code {dateTime} is new')
                     logEntries.append((fileName, dateTime, logContent, note))

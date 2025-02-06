@@ -6,6 +6,9 @@
 
 *Terrors of Nowhere belongs to Beyond https://www.patreon.com/c/beyondVR*
 
+Outside dependencies:
+Pyperclip: https://pypi.org/project/pyperclip/
+
 ## Intro
 This is a personal application to store all Terrors of Nowhere codes generated while playing, the reason I made it is because the current available solutions don't work on linux. 
 
@@ -21,4 +24,4 @@ I plan to make the process a bit more straightforward and add it to releases in 
 For the clipboard on linux, I'm on Pop!_OS 22.04 on X11 and I needed to download xclip to get it to work
 > sudo apt-get install xclip
 
-For wayland sessions you may need xclip, xsel, or wl-clipboard
+For wayland sessions you may need xsel, or wl-clipboard if xclip doesn't work
