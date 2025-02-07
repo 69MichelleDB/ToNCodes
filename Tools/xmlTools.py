@@ -152,7 +152,7 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
     print(f'Saving codes to XML...')
     # Extract all data into the XML
     for fileName, dateTime, logContent, note in logEntries:
-        currentLogFile = i_codesFolder + '/' + os.path.basename(fileName).replace('.txt', '.xml')
+        currentLogFile = i_codesFolder + os.path.sep + os.path.basename(fileName).replace('.txt', '.xml')
         if not os.path.exists(currentLogFile):
             root = ET.Element('Root')
             root.text = '\n'                    # Make sure it creates <Root></Root> instead of <Root />

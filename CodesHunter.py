@@ -16,8 +16,6 @@ def CodesHunter():
         # Let's retrieve all files again, just in case VRC crashed or was restarted, it creates a new log file
         logFiles = GetAllFiles(gs.configList['vrchat-log-path']+'output_log_*.txt')
 
-        print(gs.configList['vrchat-log-path'])
-
         previousDateFiles = currentDateFiles                                              # Move the dates
         currentDateFiles = GetDateModified(logFiles)                                      # Obtain the new dates
 

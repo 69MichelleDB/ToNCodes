@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, Menu, Label, filedialog
 from tkinter.ttk import Treeview, Scrollbar, Label, Entry
+import os.path
 import pyperclip
 from Tools.xmlTools import ChangePath, InitializeConfig
 import Tools.getSetTools as gs
@@ -42,6 +43,7 @@ def CreateOptionsWindow():
 
     # Textbox/Entry
     textPath = tk.StringVar()
+    textPath.set(gs.configList['vrchat-log-path'])
     textboxPath = Entry(framePath, textvariable=textPath)
     textboxPath.pack(side='left', fill='x', padx=5, expand=True)
 
@@ -57,8 +59,11 @@ def CreateOptionsWindow():
     # Save changes
     def SaveOptions():
         # VRC Path
-        print(f'Change VRC path to {textPath.get()}/')
-        ChangePath(gs._CONFIG_FILE, textPath.get()+'/')
+        textPathfix = textPath.get()
+        if textPathfix and not textPathfix.endswith(os.path.sep):
+            textPathfix += os.path.sep
+        print(f'Change VRC path to {textPathfix}')
+        ChangePath(gs._CONFIG_FILE, textPathfix)
 
         # Reload config variable
         gs.configList = InitializeConfig(gs._CONFIG_FILE)

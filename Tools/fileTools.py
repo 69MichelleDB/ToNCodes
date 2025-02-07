@@ -4,7 +4,7 @@ import os
 def CreateFromDefault(i_file):
     if not os.path.exists(i_file):                    # If the file doesn't exist, duplicate the template
         print(f'The {os.path.basename(i_file)} file does not exist, creating...')
-        defaultConfigFile = os.path.join('Templates/', i_file+'.default')
+        defaultConfigFile = os.path.join('Templates'+os.path.sep, i_file+'.default')
         if os.path.exists(defaultConfigFile):
             with open(defaultConfigFile, 'r') as src, open(i_file, 'w') as dst:
                 dst.write(src.read())

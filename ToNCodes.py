@@ -13,9 +13,7 @@ I have no direct relation with Terrors of Nowhere outside of being a fan and a P
 Terrors of Nowhere belongs to Beyond https://www.patreon.com/c/beyondVR
 
 TODO:
-- Init 
 - New field Notes
-- Move initial config to a modal window
 - Delete codes feature
 - GUI polish
 - Better exception handling
