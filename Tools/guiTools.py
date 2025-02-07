@@ -1,14 +1,75 @@
 import tkinter as tk
-from tkinter import ttk, messagebox, Menu
+from tkinter import messagebox, Menu, Label, filedialog
+from tkinter.ttk import Treeview, Scrollbar, Label, Entry
 import pyperclip
+from Tools.xmlTools import ChangePath, InitializeConfig
+import Tools.getSetTools as gs
 
-# Create the window
-def CreateWindow(i_title, i_width, i_height):
-    root = tk.Tk()
+
+# Create a window
+def CreateWindow(i_title, i_width, i_height, i_resizable, i_modal=False):
+    if i_modal==False:
+        root = tk.Tk()
+    else:
+        root = tk.Toplevel()
+
     root.title(i_title)
     root.geometry(f"{i_width}x{i_height}")
+    root.resizable(i_resizable,i_resizable)
+
     return root
 
+
+
+# region Options Win
+
+# Options window
+def CreateOptionsWindow():
+    # Window creation
+    optionsRoot = CreateWindow('Options', 500, 120, False, True)
+    # Modal stuff
+    optionsRoot.grab_set()
+    optionsRoot.transient()
+    optionsRoot.wait_visibility()
+
+    framePath = tk.Frame(optionsRoot)
+    framePath.pack(fill='x', padx=10, pady=10)
+
+    ## FIRST ROW
+    # Label
+    labelPath = Label(framePath, text="VRC log Path")
+    labelPath.pack(side='left')
+
+    # Textbox/Entry
+    textPath = tk.StringVar()
+    textboxPath = Entry(framePath, textvariable=textPath)
+    textboxPath.pack(side='left', fill='x', padx=5, expand=True)
+
+    # File browser
+    def BrowseVRCFolder():
+        folder_selected = filedialog.askdirectory(parent=optionsRoot)   # parent prevents it defaulting to root
+        if folder_selected:
+            textPath.set(folder_selected)
+    # File browser button
+    browseButton = tk.Button(framePath, text="Browse", command=BrowseVRCFolder)
+    browseButton.pack(side='left', padx=5)
+
+    # Save changes
+    def SaveOptions():
+        # VRC Path
+        print(f'Change VRC path to {textPath.get()}/')
+        ChangePath(gs._CONFIG_FILE, textPath.get()+'/')
+
+        # Reload config variable
+        gs.configList = InitializeConfig(gs._CONFIG_FILE)
+    saveButton = tk.Button(framePath, text='Save', command=SaveOptions)
+    saveButton.pack(side='left', padx=5)
+
+    optionsRoot.wait_window()
+
+
+
+# region Main Win
 
 # H-Menu
 def HorizontalMenu(i_root):
@@ -17,7 +78,7 @@ def HorizontalMenu(i_root):
     
     # File...
     fileMenu = Menu(menubar, tearoff=False) # New Menu
-    fileMenu.add_command(label='Options')
+    fileMenu.add_command(label='Options',  command=CreateOptionsWindow)
     fileMenu.add_separator()
     fileMenu.add_command(
         label='Exit',
@@ -41,14 +102,14 @@ def HorizontalMenu(i_root):
 
 # This will allow us to display the XMLs data
 def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
-    tree = ttk.Treeview(i_root, columns=('File', 'Date', 'Code', 'Notes'), show='headings')
+    tree = Treeview(i_root, columns=('File', 'Date', 'Code', 'Notes'), show='headings')
     tree.heading('File', text='File')
     tree.heading('Date', text='Date')
     tree.column('Code', width=0, stretch=tk.NO)                 # I'm going to keep Code hidden and add a new colum Notes
     tree.heading('Notes', text='Notes')
 
     # Scrollbar
-    scrollbar = ttk.Scrollbar(i_root, orient = 'vertical', command=tree.yview)
+    scrollbar = Scrollbar(i_root, orient = 'vertical', command=tree.yview)
     tree.configure(yscrollcommand=scrollbar.set)
     scrollbar.pack(side='right', fill='y')
     tree.pack(side='left', fill='both', expand=True)
@@ -95,6 +156,10 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
         i_CodesData = i_RefreshCallback()
         FillTree()
         i_root.after(i_RefreshInterval, refreshTree)
+
+        if gs.configList['firstBoot']==True:        # Open the config window to get the path
+            gs.configList['firstBoot'] = False
+            CreateOptionsWindow()
 
     tree.bind('<Double-1>', on_row_click)           # Hook the double click event
     FillTree()                                      # Fill the tree

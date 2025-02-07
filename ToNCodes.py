@@ -1,9 +1,10 @@
 from Tools.xmlTools import InitializeConfig, ReadCodeFiles
 from Tools.fileTools import CreateFromDefault
 from Tools.errorHandler import StartErrorHandler
-from Tools.guiTools import CreateWindow, HorizontalMenu, CreateTreeView
+from Tools.guiTools import CreateWindow, HorizontalMenu, CreateTreeView, CreateOptionsWindow
 from CodesHunter import CodesHunter
 import threading
+import Tools.getSetTools as gs
 
 '''
 Author: MichelleDB - https://michelledb.com/
@@ -12,6 +13,7 @@ I have no direct relation with Terrors of Nowhere outside of being a fan and a P
 Terrors of Nowhere belongs to Beyond https://www.patreon.com/c/beyondVR
 
 TODO:
+- Init 
 - New field Notes
 - Move initial config to a modal window
 - Delete codes feature
@@ -23,32 +25,28 @@ Outside dependencies:
 Pyperclip: https://pypi.org/project/pyperclip/
 '''
 
-# Constants
-_CONFIG_FILE = 'config.xml'
-_VERSION = 'alpha 0.3.3'
-_TITLE = f"ToN Codes {_VERSION} - by MichelleDB //// [Double click to copy]"
-_HEIGHT = 620
-_WIDTH = 300
+
 
 # This is for the GUI
 def RefreshCodes():
-    return ReadCodeFiles(configList['codes-folder'])
+    return ReadCodeFiles(gs.configList['codes-folder'])
 
 
 if __name__ == "__main__":
     StartErrorHandler()
 
-    CreateFromDefault(_CONFIG_FILE)                     # Verify the config file exist
-    configList = InitializeConfig(_CONFIG_FILE)         # Retrieve all config data
+    CreateFromDefault(gs._CONFIG_FILE)                             # Verify the config file exist
+    gs.configList = InitializeConfig(gs._CONFIG_FILE)              # Retrieve all config data
 
     # The main program to check for codes and create the XML files
-    mainThread = threading.Thread(target=CodesHunter, args=(configList,))
+    mainThread = threading.Thread(target=CodesHunter)
     mainThread.daemon = True
     mainThread.start()
 
     # GUI setup
-    root = CreateWindow(_TITLE, _HEIGHT, _WIDTH)
-    HorizontalMenu(root)
+    gs.root = CreateWindow(gs._TITLE, gs._HEIGHT, gs._WIDTH, True)
+    HorizontalMenu(gs.root)
     codesData = RefreshCodes()
-    CreateTreeView(root, codesData, int(configList['gui-delay'])*1000, RefreshCodes)
-    root.mainloop()
+    CreateTreeView(gs.root, codesData, int(gs.configList['gui-delay'])*1000, RefreshCodes)
+
+    gs.root.mainloop()

@@ -4,6 +4,6 @@
     <keyword-start>Log        -  [START]</keyword-start>
     <keyword-end>[END]</keyword-end>
     <keyword-date-end> Log</keyword-date-end>
-    <file-delay>20</file-delay>
+    <file-delay>10</file-delay>
     <gui-delay>1</gui-delay>
 </config>

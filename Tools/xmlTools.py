@@ -73,21 +73,21 @@ def InitializeConfig(i_configFile):
         for key, value in node.items(): 
             if key == 'vrchat-log-path':
                 if value == 'noinit':                       # if it's not initialized, ask for the path
-                    print('Reading config file')
-                    print('Please, set the path to the VRChat logs files')
-                    print('Win: c:/users/<user>/AppData/LocalLow/VRChat/VRChat/') 
-                    print('Ubuntu/Pop!_OS: ~/.steam/debian-installation/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/: ')
-                    print('Arch: ~/.local/share/Steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/: ')
-                    print('Flatpak (this one, not sure): ~/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/')
+                    # print('Reading config file')
+                    # print('Please, set the path to the VRChat logs files')
+                    # print('Win: c:/users/<user>/AppData/LocalLow/VRChat/VRChat/') 
+                    # print('Ubuntu/Pop!_OS: ~/.steam/debian-installation/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/: ')
+                    # print('Arch: ~/.local/share/Steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/: ')
+                    # print('Flatpak (this one, not sure): ~/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/')
 
-                    while True:
-                        vrchatLogPath = input()               # Wait for user input
-                        if vrchatLogPath.strip():             # Check if input is not empty
-                            break
-                        print("Path cannot be empty. Please enter a valid path.")
-                    ModifyNode('config.xml', key, vrchatLogPath)
+                    # while True:
+                    #     vrchatLogPath = input()               # Wait for user input
+                    #     if vrchatLogPath.strip():             # Check if input is not empty
+                    #         break
+                    #     print("Path cannot be empty. Please enter a valid path.")
+                    # ModifyNode(i_configFile, key, vrchatLogPath)
                     result['firstBoot'] = True
-                    result[key] = vrchatLogPath
+                    result[key] = value
                 else:
                     print('Reading config file')
                     result['firstBoot'] = False
@@ -96,6 +96,12 @@ def InitializeConfig(i_configFile):
                 result[key] = value                         # Store the rest of the config data
 
     return result
+
+
+
+def ChangePath(i_configFile, i_path):
+    ModifyNode(i_configFile, 'vrchat-log-path', i_path)
+
 
 
 # This will get all log files in the specified path
