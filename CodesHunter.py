@@ -1,6 +1,6 @@
 from Tools.xmlTools import PopulateCodes, GetAllFiles, ReadCodeFiles
 from Tools.fileTools import GetDateModified, GetModifiedFiles
-import Tools.getSetTools as gs
+import Globals as gs
 from time import sleep
 
 # The main loop that will connect to VRCs logs and check for codes

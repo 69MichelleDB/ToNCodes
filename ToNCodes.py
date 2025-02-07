@@ -4,7 +4,7 @@ from Tools.errorHandler import StartErrorHandler
 from Tools.guiTools import CreateWindow, HorizontalMenu, CreateTreeView, CreateOptionsWindow
 from CodesHunter import CodesHunter
 import threading
-import Tools.getSetTools as gs
+import Globals as gs
 
 '''
 Author: MichelleDB - https://michelledb.com/
