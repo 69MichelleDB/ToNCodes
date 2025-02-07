@@ -4,7 +4,8 @@ from tkinter.ttk import Treeview, Scrollbar, Label, Entry
 import os.path
 import pyperclip
 from Tools.xmlTools import ChangePath, InitializeConfig
-import Tools.getSetTools as gs
+from Tools.fileTools import GetPossibleVRCPath
+import Globals as gs
 
 
 # Create a window
@@ -49,7 +50,8 @@ def CreateOptionsWindow():
 
     # File browser
     def BrowseVRCFolder():
-        folder_selected = filedialog.askdirectory(parent=optionsRoot)   # parent prevents it defaulting to root
+        folder_selected = filedialog.askdirectory(parent=optionsRoot,                   # parent prevents it defaulting to root
+                                        initialdir=gs.configList['vrchat-log-path'])    
         if folder_selected:
             textPath.set(folder_selected)
     # File browser button
@@ -162,8 +164,9 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
         FillTree()
         i_root.after(i_RefreshInterval, refreshTree)
 
-        if gs.configList['firstBoot']==True:        # Open the config window to get the path
+        if gs.configList['firstBoot']==True:        # Open the config window to get the path if this is the first boot
             gs.configList['firstBoot'] = False
+            gs.configList['vrchat-log-path'] = GetPossibleVRCPath()
             CreateOptionsWindow()
 
     tree.bind('<Double-1>', on_row_click)           # Hook the double click event
