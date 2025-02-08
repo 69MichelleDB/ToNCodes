@@ -5,6 +5,7 @@ import os.path
 import pyperclip
 from Tools.xmlTools import ChangePath, InitializeConfig
 from Tools.fileTools import GetPossibleVRCPath
+from screeninfo import get_monitors
 import Globals as gs
 
 
@@ -21,6 +22,15 @@ def CreateWindow(i_title, i_width, i_height, i_resizable, i_modal=False):
 
     return root
 
+# I want the app's windows to be in the middle of the sceen
+def CalculatePosition(i_width, i_height):
+    monitor = get_monitors()[0]
+    
+    # Calculate the center position
+    centerX = int(monitor.width / 2 - i_width / 2)
+    centerY = int(monitor.height / 2 - i_height / 2)
+
+    return centerX, centerY
 
 
 # region Options Win
@@ -28,7 +38,9 @@ def CreateWindow(i_title, i_width, i_height, i_resizable, i_modal=False):
 # Options window
 def CreateOptionsWindow():
     # Window creation
-    optionsRoot = CreateWindow('Options', 500, 120, False, True)
+    optionsRoot = CreateWindow('Options', gs._WIDTH_OPT, gs._HEIGHT_OPT, False, True)
+    auxX,auxY = CalculatePosition(gs._WIDTH_OPT, gs._HEIGHT_OPT)
+    optionsRoot.geometry(f'{gs._WIDTH_OPT}x{gs._HEIGHT_OPT}+{auxX}+{auxY}')
     # Modal stuff
     optionsRoot.grab_set()
     optionsRoot.transient()

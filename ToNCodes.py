@@ -1,7 +1,7 @@
 from Tools.xmlTools import InitializeConfig, ReadCodeFiles
 from Tools.fileTools import CreateFromDefault
 from Tools.errorHandler import StartErrorHandler
-from Tools.guiTools import CreateWindow, HorizontalMenu, CreateTreeView, CreateOptionsWindow
+from Tools.guiTools import CreateWindow, HorizontalMenu, CreateTreeView, CalculatePosition
 from CodesHunter import CodesHunter
 import threading
 import Globals as gs
@@ -42,7 +42,9 @@ if __name__ == "__main__":
     mainThread.start()
 
     # GUI setup
-    gs.root = CreateWindow(gs._TITLE, gs._HEIGHT, gs._WIDTH, True)
+    gs.root = CreateWindow(gs._TITLE, gs._WIDTH, gs._HEIGHT, True)
+    auxX,auxY = CalculatePosition(gs._WIDTH, gs._HEIGHT)
+    gs.root.geometry(f'{gs._WIDTH}x{gs._HEIGHT}+{auxX}+{auxY}')
     HorizontalMenu(gs.root)
     codesData = RefreshCodes()
     CreateTreeView(gs.root, codesData, int(gs.configList['gui-delay'])*1000, RefreshCodes)

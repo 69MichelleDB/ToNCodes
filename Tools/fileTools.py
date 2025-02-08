@@ -1,6 +1,5 @@
 import os
 import platform
-import distro
 import getpass
 
 # To avoid uploading my config files we'll have .defaults and just duplicate them if they don't exist
@@ -45,8 +44,6 @@ def GetPossibleVRCPath():
     if platform.system() == "Windows":
         result = f'c:\\users\\{userName}\\AppData\\LocalLow\\VRChat\\VRChat\\'
     elif platform.system() == "Linux":
-        distroInfo = distro.linux_distribution()
-        print(f'Distro: {distroInfo[0]}, Version: {distroInfo[1]}, Codename: {distroInfo[2]}')
 
         possiblePaths = (
                         f'/home/{userName}/.steam/debian-installation/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/',
