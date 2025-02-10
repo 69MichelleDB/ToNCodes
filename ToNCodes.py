@@ -12,17 +12,9 @@ I have no direct relation with Terrors of Nowhere outside of being a fan and a P
 
 Terrors of Nowhere belongs to Beyond https://www.patreon.com/c/beyondVR
 
-TODO:
-- New field Notes
-- Delete codes feature
-- GUI polish
-- Better exception handling
-- Discord webhook
-
 Outside dependencies:
 Pyperclip: https://pypi.org/project/pyperclip/
 '''
-
 
 
 # This is for the GUI
