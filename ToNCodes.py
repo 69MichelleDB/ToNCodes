@@ -1,5 +1,5 @@
 from Tools.xmlTools import InitializeConfig, ReadCodeFiles
-from Tools.fileTools import CreateFromDefault
+from Tools.fileTools import VerifyInitFileStructure, CreateFromDefault
 from Tools.errorHandler import StartErrorHandler
 from Tools.guiTools import CreateWindow, HorizontalMenu, CreateTreeView, CalculatePosition
 from CodesHunter import CodesHunter
@@ -19,11 +19,13 @@ Pyperclip: https://pypi.org/project/pyperclip/
 
 # This is for the GUI
 def RefreshCodes():
-    return ReadCodeFiles(gs.configList['codes-folder'])
+    return ReadCodeFiles(gs._FOLDER_CODES)
 
 
 if __name__ == "__main__":
     StartErrorHandler()
+
+    VerifyInitFileStructure()
 
     CreateFromDefault(gs._CONFIG_FILE)                             # Verify the config file exist
     gs.configList = InitializeConfig(gs._CONFIG_FILE)              # Retrieve all config data

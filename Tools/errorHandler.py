@@ -2,6 +2,7 @@ import logging
 import sys
 import datetime
 import os
+import Globals as gs
 
 # Set up logging
 def show_error_popup(i_excType, i_excValue, i_excTraceback):
@@ -11,7 +12,7 @@ def show_error_popup(i_excType, i_excValue, i_excTraceback):
         return
 
     # Get the current date and time in the format YYYYMMDD_HHMMSS
-    logFilename = os.path.join('Logs', datetime.datetime.now().strftime("logError_%Y%m%d_%H%M%S.txt"))
+    logFilename = os.path.join(gs._FOLDER_LOGS, datetime.datetime.now().strftime("logError_%Y%m%d_%H%M%S.txt"))
 
     # Set up logging with the dynamically generated filename (at the time of the error)
     logging.basicConfig(filename=logFilename, level=logging.ERROR, 

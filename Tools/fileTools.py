@@ -1,12 +1,31 @@
 import os
+import sys
 import platform
 import getpass
+import Globals as gs
+from tkinter import messagebox
+
+# Verify all folders and files are there
+def VerifyInitFileStructure():
+    # Folders
+    if os.path.exists(gs._FOLDER_TEMPLATES) == False:
+        os.mkdir(gs._FOLDER_TEMPLATES)
+    if os.path.exists(gs._FOLDER_CODES) == False:
+        os.mkdir(gs._FOLDER_CODES)
+    if os.path.exists(gs._FOLDER_LOGS) == False:
+        os.mkdir(gs._FOLDER_LOGS)
+    # Files
+    if os.path.exists(gs._CONFIG_FILE) == False:                # Check if there's a config file, if there's none, if the template is there
+        if os.path.exists(os.path.join(gs._FOLDER_TEMPLATES,f'{gs._CONFIG_FILE}.default')) == False:
+            messagebox.showwarning("Warning", "Templates/config.xml.default not found, please verify your installation")
+            sys.exit()
+    
 
 # To avoid uploading my config files we'll have .defaults and just duplicate them if they don't exist
 def CreateFromDefault(i_file):
     if not os.path.exists(i_file):                    # If the file doesn't exist, duplicate the template
         print(f'The {os.path.basename(i_file)} file does not exist, creating...')
-        defaultConfigFile = os.path.join('Templates'+os.path.sep, i_file+'.default')
+        defaultConfigFile = os.path.join(gs._FOLDER_TEMPLATES+os.path.sep, i_file+'.default')
         if os.path.exists(defaultConfigFile):
             with open(defaultConfigFile, 'r') as src, open(i_file, 'w') as dst:
                 dst.write(src.read())

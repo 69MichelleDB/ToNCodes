@@ -27,6 +27,6 @@ def CodesHunter():
                             gs.configList['keyword-start'],
                             gs.configList['keyword-end'],
                             gs.configList['keyword-date-end'],
-                            gs.configList['codes-folder'])
+                            gs._FOLDER_CODES)
         
         sleep( int(gs.configList['file-delay']) )                      # The program is very eepy, let it rest

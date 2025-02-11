@@ -5,3 +5,4 @@ Codes/*
 Logs/*
 !Logs/Hi.txt
 .venv/
+*.old

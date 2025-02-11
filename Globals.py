@@ -8,6 +8,10 @@ _HEIGHT = 300
 _WIDTH_OPT = 500
 _HEIGHT_OPT = 120
 
+_FOLDER_CODES = 'Codes'
+_FOLDER_LOGS = 'Logs'
+_FOLDER_TEMPLATES = 'Templates'
+
 # Global variables
 configList = {}
 root = None

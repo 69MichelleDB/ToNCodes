@@ -191,7 +191,7 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
             file, date, code, notes = tree.item(selectedItem, 'values')
             answer = messagebox.askquestion("Confirmation", f"Do you want to delete the code {date}?")          # MsgBox to confirm
             if answer == "yes":
-                ModifyCode(os.path.join(gs.configList['codes-folder'],file.replace('.txt','.xml')),date,'')     # Remove from the XML
+                ModifyCode(os.path.join(gs._FOLDER_CODES,file.replace('.txt','.xml')),date,'')     # Remove from the XML
                 print(f'Deleting code {date}')
                 messagebox.showinfo("Deleted!", f'Deleting code {date}')
                 tree.delete(selectedItem)                                                                       # Remove from the TreeView
