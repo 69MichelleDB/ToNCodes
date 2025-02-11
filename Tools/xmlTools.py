@@ -34,6 +34,18 @@ def WriteXml(i_root, i_filePath):
     tree.write(i_filePath)
 
 
+# Function to find specific Date and modify its sibling Code node
+def ModifyCode(i_filePath, i_date, i_code):
+    root = ReadXml(i_filePath)
+    for tonCode in root.findall('.//TON-Code'):
+        dateNode = tonCode.find('Date')
+        if dateNode is not None and dateNode.text == i_date:
+            codeNode = tonCode.find('Code')
+            if codeNode is not None:
+                codeNode.text = i_code
+    WriteXml(root, i_filePath)
+
+
 # Generic function to get all Node values, given a specific node
 def GetNodeValues(i_xmlFile, i_node='.//Date'):
     nodeValues = set()
@@ -55,11 +67,11 @@ def ReadCodeFiles(folder):
             file_path = os.path.join(folder, file_name)
             root = ET.parse(file_path).getroot()
             for ton_code in root.findall('.//TON-Code'):
-                file = ton_code.find('.//File').text if ton_code.find('.//File') is not None else ''
-                data = ton_code.find('.//Date').text if ton_code.find('.//Date') is not None else ''
-                code = ton_code.find('.//Code').text if ton_code.find('.//Code') is not None else ''
-                note = ton_code.find('.//Note').text if ton_code.find('.//Note') is not None else ''
-                if code != '':                  # I plan to allow deleting codes, this will help
+                file = ton_code.find('.//File').text if ton_code.find('.//File') is not None else None
+                data = ton_code.find('.//Date').text if ton_code.find('.//Date') is not None else None
+                code = ton_code.find('.//Code').text if ton_code.find('.//Code') is not None else None
+                note = ton_code.find('.//Note').text if ton_code.find('.//Note') is not None else None
+                if code != None:                  # I plan to allow deleting codes, this will help
                     files_data.append((file, data, code, note))
     return files_data
 

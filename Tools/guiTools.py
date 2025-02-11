@@ -3,7 +3,7 @@ from tkinter import messagebox, Menu, Label, filedialog
 from tkinter.ttk import Treeview, Scrollbar, Label, Entry
 import os.path
 import pyperclip
-from Tools.xmlTools import ChangePath, InitializeConfig
+from Tools.xmlTools import ChangePath, InitializeConfig, ModifyCode
 from Tools.fileTools import GetPossibleVRCPath
 from screeninfo import get_monitors
 import Globals as gs
@@ -165,8 +165,10 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
             selectedItem = selectedItems[0]
             file, date, code, notes = tree.item(selectedItem, 'values')
             pyperclip.copy(code)
+            print("Copied!", f"Code '{date}' copied to clipboard")
             messagebox.showinfo("Copied!", f"Code '{date}' copied to clipboard")
         else:
+            print("Warning", "No item selected")
             messagebox.showwarning("Warning", "No item selected")
 
     # This will handle the data refresh once the mainloop engages
@@ -181,7 +183,26 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
             gs.configList['vrchat-log-path'] = GetPossibleVRCPath()
             CreateOptionsWindow()
 
+    # Event to handle the deletion of a specific code
+    def on_row_del(event):
+        selectedItems = tree.selection()
+        if selectedItems:
+            selectedItem = selectedItems[0]
+            file, date, code, notes = tree.item(selectedItem, 'values')
+            answer = messagebox.askquestion("Confirmation", f"Do you want to delete the code {date}?")          # MsgBox to confirm
+            if answer == "yes":
+                ModifyCode(os.path.join(gs.configList['codes-folder'],file.replace('.txt','.xml')),date,'')     # Remove from the XML
+                print(f'Deleting code {date}')
+                messagebox.showinfo("Deleted!", f'Deleting code {date}')
+                tree.delete(selectedItem)                                                                       # Remove from the TreeView
+        else:
+            print("Warning", "Select a code you want to delete")
+            messagebox.showwarning("Warning", "Select a code you want to delete")
+
+
+
     tree.bind('<Double-1>', on_row_click)           # Hook the double click event
+    tree.bind('<Delete>', on_row_del)               # Hook for deleting rows
     FillTree()                                      # Fill the tree
     if len(tree.get_children()) > 0:
         AdjustColumnSizes()
