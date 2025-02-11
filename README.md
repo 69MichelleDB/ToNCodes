@@ -47,9 +47,8 @@ Make sure you also install all the `requirements.txt`
 pip install -r requirements.txt
 ```
 
-**If you want to compile it into an standalong binary, I used [nuitka](https://nuitka.net/user-documentation/):**. When I compiled it for Windows I used Python 3.12.9, at this moment in time 3.13 is not supported by nuitka.
+**If you want to compile it into an standalong binary, I used [nuitka](https://nuitka.net/user-documentation/)**. When I compiled it for Windows I used Python 3.12.9, at this moment in time 3.13 is not supported by nuitka.
 
-Debian Ubuntu systems:
 ```bash
 pip install nuitka
 ```
