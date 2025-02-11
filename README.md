@@ -21,7 +21,7 @@ This current version was made under `Python 3.10.12`. If you want to run it [you
 
 **This next section is only if you want to run the python code.**
 
-The project requires `tkinter` and `xclip` (only if you're on linux, xclip is not needed on windows) . On most Linux distributions, you can install it via package manager. 
+The project requires `tkinter` and `xclip` (only if you're on linux, xclip is not needed on Windows). On most Linux distributions, you can install it via package manager. 
 
 Debian Ubuntu systems:
 ```bash
@@ -47,15 +47,19 @@ Make sure you also install all the `requirements.txt`
 pip install -r requirements.txt
 ```
 
-**If you want to compile it into an standalong binary, I used [nuitka](https://nuitka.net/user-documentation/)**. When I compiled it for Windows I used Python 3.12.9, at this moment in time 3.13 is not supported by nuitka.
+**If you want to compile it into an standalong binary, I used [nuitka](https://nuitka.net/user-documentation/)**. When I compiled it for Windows I used Python 3.12.9. At this moment in time 3.13 is not supported by it.
 
 ```bash
 pip install nuitka
 ```
 
+Linux 
+
 ```bash
 python3 -m nuitka --standalone --follow-imports --onefile --enable-plugin=tk-inter ToNCodes.py
 ```
+
+Windows
 
 ```powershell
 python -m nuitka --standalone --follow-imports --onefile --enable-plugin=tk-inter --windows-console-mode=disable ToNCodes.py
