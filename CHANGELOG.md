@@ -9,6 +9,9 @@ I'll document all changes here starting from the first release.
 - Added dependencies information.
 - Minor optimizations when handling xml files.
 
+### Fixes
+- Options > Saving doesn't close the window. Fixes #5
+
 
 ## [alpha 0.3.6] - 2025/02/11
 

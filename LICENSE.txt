@@ -1,6 +1,6 @@
 ToNCodes
 
-Copyright (c) 2025, MichelleDB, all rights reserved.
+Copyright (c) 2025, 69MichelleDB, all rights reserved.
 
 Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International (CC BY-NC-ND 4.0)
 

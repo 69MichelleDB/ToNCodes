@@ -7,7 +7,9 @@
 *[Terrors of Nowhere belongs to Beyond](https://www.patreon.com/c/beyondVR)*
 
 Outside dependencies:
-[Pyperclip](https://github.com/asweigart/pyperclip)
+
+[pyperclip](https://github.com/asweigart/pyperclip)
+
 [screeninfo](https://github.com/rr-/screeninfo)
 
 ## Intro
@@ -20,11 +22,11 @@ I don't know if Beyond is or isn't working on a save system using VRC's Persiste
 ## Notes
 This current version was made under `Python 3.10.12`. If you want to run it [you can download the latest standalone release](https://github.com/69MichelleDB/ToNCodes/releases/latest) or if you have python installed you can clone the project and run `ToNCodes.py`.
 
-**This next section is only if you want to run the python code.**
+**This next section is only if you want to run the python code instead of the binary.**
 
 The project requires `tkinter` and `xclip` (only if you're on linux, xclip is not needed on Windows). On most Linux distributions, you can install it via package manager. 
 
-Debian Ubuntu systems:
+Debian systems:
 ```bash
 sudo apt-get install python3-tk xclip
 ```
@@ -48,7 +50,7 @@ Make sure you also install all the `requirements.txt`
 pip install -r requirements.txt
 ```
 
-**If you want to compile it into an standalong binary, I used [nuitka](https://nuitka.net/user-documentation/)**. When I compiled it for Windows I used Python 3.12.9. At this moment in time 3.13 is not supported by it.
+**If you want to compile it into an standalong binary, you can use [nuitka](https://nuitka.net/user-documentation/)**. When I compiled it for Windows, I used Python 3.12.9. At this moment in time 3.13 is not supported by it.
 
 ```bash
 pip install nuitka

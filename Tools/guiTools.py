@@ -81,6 +81,8 @@ def CreateOptionsWindow():
 
         # Reload config variable
         gs.configList = InitializeConfig(gs._CONFIG_FILE)
+        optionsRoot.destroy()
+
     saveButton = tk.Button(framePath, text='Save', command=SaveOptions)
     saveButton.pack(side='left', padx=5)
 
