@@ -1,0 +1,1 @@
+At this moment, this is to store temporary txt files before sent through Discord webhook since there's a character limit of 2000 characters

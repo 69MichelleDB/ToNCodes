@@ -6,4 +6,5 @@
     <keyword-date-end> Log</keyword-date-end>
     <file-delay>10</file-delay>
     <gui-delay>1</gui-delay>
+    <discord-webhook></discord-webhook>
 </config>

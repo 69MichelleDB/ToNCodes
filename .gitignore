@@ -4,6 +4,8 @@ Codes/*
 !Codes/Hi.txt
 Logs/*
 !Logs/Hi.txt
+Temp/*
+!Temp/Hi.txt
 .venv/
 *.old
 .releases/

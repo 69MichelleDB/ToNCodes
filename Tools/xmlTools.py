@@ -2,6 +2,8 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
 import glob
 import os.path
+import Globals as gs
+from Tools.webhookTool import SendWebhook
 
 
 # Function to read XML file
@@ -101,8 +103,8 @@ def GetAllFiles(i_path):
 
 
 # Changes the Path in the XML for the change path gui setting
-def ChangePath(i_configFile, i_path):
-    ModifyNode(i_configFile, 'vrchat-log-path', i_path)
+def ChangeConfigFileValue(i_configFile, i_config, i_path):
+    ModifyNode(i_configFile, i_config, i_path)
 
 # TODO: #8 Optimize log reading, @69MichelleDB
 # I'm considering redoing the way I handle the log reading to avoid reading the whole file
@@ -174,3 +176,7 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
             file.seek(0)
             file.write(prettyXmlString)
             file.truncate()
+
+        # Send the webhook
+        if gs.configList['discord-webhook'] is not None:
+            SendWebhook(dateTime, logContent)

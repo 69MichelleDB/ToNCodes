@@ -1,5 +1,5 @@
 from Tools.xmlTools import InitializeConfig, ReadCodeFiles
-from Tools.fileTools import VerifyInitFileStructure, CreateFromDefault
+from Tools.fileTools import VerifyInitFileStructure, CreateFromDefault, CleanTempFiles
 from Tools.errorHandler import StartErrorHandler
 from Tools.guiTools import CreateWindow, HorizontalMenu, CreateTreeView, CalculatePosition
 from CodesHunter import CodesHunter
@@ -27,6 +27,8 @@ if __name__ == "__main__":
     StartErrorHandler()
 
     VerifyInitFileStructure()
+
+    CleanTempFiles()
 
     CreateFromDefault(gs._CONFIG_FILE)                             # Verify the config file exist
     gs.configList = InitializeConfig(gs._CONFIG_FILE)              # Retrieve all config data

@@ -3,7 +3,7 @@ from tkinter import messagebox, Menu, Label, filedialog
 from tkinter.ttk import Treeview, Scrollbar, Label, Entry
 import os.path
 import pyperclip
-from Tools.xmlTools import ChangePath, InitializeConfig, ModifyCode
+from Tools.xmlTools import ChangeConfigFileValue, InitializeConfig, ModifyCode
 from Tools.fileTools import GetPossibleVRCPath
 from screeninfo import get_monitors
 import Globals as gs
@@ -47,18 +47,28 @@ def CreateOptionsWindow():
     optionsRoot.wait_visibility()
 
     framePath = tk.Frame(optionsRoot)
-    framePath.pack(fill='x', padx=10, pady=10)
+    framePath.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
+
+    # Set weights so they take the window
+    optionsRoot.grid_columnconfigure(0, weight=1)
+    framePath.grid_columnconfigure(0, weight=1)
+    framePath.grid_columnconfigure(1, weight=1)
+    framePath.grid_columnconfigure(2, weight=1)
+    optionsRoot.grid_rowconfigure(0, weight=1)
+    framePath.grid_rowconfigure(0, weight=1)
+    framePath.grid_rowconfigure(1, weight=1)
 
     ## FIRST ROW
+    
     # Label
     labelPath = Label(framePath, text="VRC log Path")
-    labelPath.pack(side='left')
+    labelPath.grid(row=0, column=0, padx=5, pady=5)
 
-    # Textbox/Entry
+    # Textbox/Entry Path
     textPath = tk.StringVar()
-    textPath.set(gs.configList['vrchat-log-path'])
+    textPath.set( gs.configList['vrchat-log-path'] if gs.auxPathFirstBoot is None else gs.auxPathFirstBoot )
     textboxPath = Entry(framePath, textvariable=textPath)
-    textboxPath.pack(side='left', fill='x', padx=5, expand=True)
+    textboxPath.grid(row=0, column=1, padx=5, pady=5, sticky='ew')
 
     # File browser
     def BrowseVRCFolder():
@@ -68,23 +78,44 @@ def CreateOptionsWindow():
             textPath.set(folder_selected)
     # File browser button
     browseButton = tk.Button(framePath, text="Browse", command=BrowseVRCFolder)
-    browseButton.pack(side='left', padx=5)
+    browseButton.grid(row=0, column=2, padx=5, pady=5)
+
+
+    ## SECOND ROW
+
+    # Label webhook
+    labelWH = Label(framePath, text="Discord webhook")
+    labelWH.grid(row=1, column=0, padx=5, pady=5)
+
+    # Textbox Webhook
+    textWebhook = tk.StringVar()
+    textWebhook.set( gs.configList['discord-webhook'] if gs.configList['discord-webhook'] is not None else '' )
+    textboxWH = Entry(framePath, textvariable=textWebhook)
+    textboxWH.grid(row=1, column=1, padx=5, pady=5, sticky='ew')
+
 
     # Save changes
     def SaveOptions():
         # VRC Path
         textPathfix = textPath.get()
-        if textPathfix and not textPathfix.endswith(os.path.sep):
-            textPathfix += os.path.sep
-        print(f'Change VRC path to {textPathfix}')
-        ChangePath(gs._CONFIG_FILE, textPathfix)
+        if textPathfix != gs.configList['vrchat-log-path']:
+            if textPathfix and not textPathfix.endswith(os.path.sep):
+                textPathfix += os.path.sep
+            print(f'Change VRC path to {textPathfix}')
+            ChangeConfigFileValue(gs._CONFIG_FILE, 'vrchat-log-path', textPathfix)
+
+        # Discord Webhook
+        textWebhookfix = textWebhook.get()
+        if textWebhookfix != gs.configList['discord-webhook']:
+            ChangeConfigFileValue(gs._CONFIG_FILE, 'discord-webhook', textWebhookfix)
 
         # Reload config variable
         gs.configList = InitializeConfig(gs._CONFIG_FILE)
         optionsRoot.destroy()
 
+    # Save button
     saveButton = tk.Button(framePath, text='Save', command=SaveOptions)
-    saveButton.pack(side='left', padx=5)
+    saveButton.grid(row=2, column=2, padx=5, pady=5)
 
     optionsRoot.wait_window()
 
@@ -182,7 +213,7 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
 
         if gs.configList['firstBoot']==True:        # Open the config window to get the path if this is the first boot
             gs.configList['firstBoot'] = False
-            gs.configList['vrchat-log-path'] = GetPossibleVRCPath()
+            gs.auxPathFirstBoot = GetPossibleVRCPath()
             CreateOptionsWindow()
 
     # Event to handle the deletion of a specific code

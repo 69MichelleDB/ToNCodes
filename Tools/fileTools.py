@@ -2,6 +2,7 @@ import os
 import sys
 import platform
 import getpass
+import glob
 import Globals as gs
 from tkinter import messagebox
 
@@ -14,6 +15,8 @@ def VerifyInitFileStructure():
         os.mkdir(gs._FOLDER_CODES)
     if os.path.exists(gs._FOLDER_LOGS) == False:
         os.mkdir(gs._FOLDER_LOGS)
+    if os.path.exists(gs._FOLDER_TEMP) == False:
+        os.mkdir(gs._FOLDER_TEMP)
     # Files
     if os.path.exists(gs._CONFIG_FILE) == False:                # Check if there's a config file, if there's none, if the template is there
         if os.path.exists(os.path.join(gs._FOLDER_TEMPLATES,f'{gs._CONFIG_FILE}.default')) == False:
@@ -78,3 +81,16 @@ def GetPossibleVRCPath():
         print('Might be a Mac or something else')
 
     return result
+
+
+# File to be send to discord through the webhook
+def CreateNewTempCodeFile(i_fileName, i_string):
+    with open(i_fileName, 'w') as file:
+        file.write(i_string)
+
+def CleanTempFiles():
+    tempFiles = glob.glob(os.path.join(gs._FOLDER_TEMP, '*_TEMP.txt'))
+
+    # Loop through the .txt files and delete them
+    for file in tempFiles:
+        os.remove(file)
