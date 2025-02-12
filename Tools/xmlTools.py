@@ -114,12 +114,13 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
     for file in i_logFiles:
         currentFilePath = os.path.join(i_codesFolder,os.path.basename(file).replace('.txt', '.xml'))
         auxDates = GetNodeValues(currentFilePath, './/Date')  # Since I'm treating the Date as a PK, we'll use it to discard duplicates
-        addedDates = list(set(addedDates + auxDates))
+        addedDates = list(set(addedDates).union(auxDates))
 
     logEntries = []
     # Read each file in search of all ToN codes
     for file in i_logFiles:
-        print(f'[START] Reading file: {os.path.basename(file)}')
+        fileNameAux = os.path.basename(file)
+        print(f'[START] Reading file: {fileNameAux}')
         with open(file, 'r') as f:
             content = f.read()
             startCursor = 0
@@ -133,15 +134,15 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
                 logContent = content[startCursor + len(i_keywordStart):endIndex]
                 logLineStart = content.rfind('\n', 0, startCursor) + 1
                 dateTime = content[logLineStart:startCursor].strip().split(i_endDateIndex)[0]
-                fileName = os.path.basename(file)
                 note = 'No notes'                                   # TODO: Add logic to process what note goes here
                 if dateTime not in addedDates:                      # check the date is not inserted already
                     print(f'Code {dateTime} is new')
-                    logEntries.append((fileName, dateTime, logContent, note))
+                    logEntries.append((fileNameAux, dateTime, logContent, note))
                 else:
                     print(f'Code {dateTime} is not new')
                 startCursor = endIndex + len(i_keywordEnd)
-            print(f'[END] Reading file: {os.path.basename(file)}')
+
+            print(f'[END] Reading file: {fileNameAux}')
 
     print(f'Saving codes to XML...')
     # Extract all data into the XML
@@ -151,16 +152,13 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
             root = ET.Element('Root')
             root.text = '\n'                    # Make sure it creates <Root></Root> instead of <Root />
             WriteXml(root, currentLogFile)
+
         root = ReadXml(currentLogFile)
         tonCode = ET.Element('TON-Code')
-        fileElement = ET.SubElement(tonCode, 'File')
-        fileElement.text = fileName
-        dateElement = ET.SubElement(tonCode, 'Date')
-        dateElement.text = dateTime
-        codeElement = ET.SubElement(tonCode, 'Code')
-        codeElement.text = logContent
-        noteElement = ET.SubElement(tonCode, 'Note')
-        noteElement.text = note
+        ET.SubElement(tonCode, 'File').text = fileName
+        ET.SubElement(tonCode, 'Date').text = dateTime
+        ET.SubElement(tonCode, 'Code').text = logContent
+        ET.SubElement(tonCode, 'Note').text = note
         root.append(tonCode)
     
         # Let's clean the mess and leave it pretty
