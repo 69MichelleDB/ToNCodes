@@ -13,7 +13,8 @@ I have no direct relation with Terrors of Nowhere outside of being a fan and a P
 Terrors of Nowhere belongs to Beyond https://www.patreon.com/c/beyondVR
 
 Outside dependencies:
-Pyperclip: https://pypi.org/project/pyperclip/
+Pyperclip: https://github.com/asweigart/pyperclip
+screeninfo: https://github.com/rr-/screeninfo
 '''
 
 

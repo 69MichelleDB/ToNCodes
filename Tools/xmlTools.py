@@ -3,6 +3,7 @@ import xml.dom.minidom as minidom
 import glob
 import os.path
 
+
 # Function to read XML file
 def ReadXml(i_filePath):
     tree = ET.parse(i_filePath)
@@ -50,8 +51,7 @@ def ModifyCode(i_filePath, i_date, i_code):
 def GetNodeValues(i_xmlFile, i_node='.//Date'):
     nodeValues = set()
     if os.path.exists(i_xmlFile):
-        tree = ET.parse(i_xmlFile)
-        root = tree.getroot()
+        root = ReadXml(i_xmlFile)
         
         for fileElement in root.findall(i_node):
             nodeValues.add(fileElement.text)
@@ -64,8 +64,8 @@ def ReadCodeFiles(folder):
     files_data = []
     for file_name in os.listdir(folder):
         if file_name.endswith('.xml'):
-            file_path = os.path.join(folder, file_name)
-            root = ET.parse(file_path).getroot()
+            xmlFile = os.path.join(folder, file_name)
+            root = ReadXml(xmlFile)
             for ton_code in root.findall('.//TON-Code'):
                 file = ton_code.find('.//File').text if ton_code.find('.//File') is not None else None
                 data = ton_code.find('.//Date').text if ton_code.find('.//Date') is not None else None
@@ -84,36 +84,11 @@ def InitializeConfig(i_configFile):
     for node in nodes:                                      # iterate each node
         for key, value in node.items(): 
             if key == 'vrchat-log-path':
-                if value == 'noinit':                       # if it's not initialized, ask for the path
-                    # print('Reading config file')
-                    # print('Please, set the path to the VRChat logs files')
-                    # print('Win: c:/users/<user>/AppData/LocalLow/VRChat/VRChat/') 
-                    # print('Ubuntu/Pop!_OS: ~/.steam/debian-installation/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/: ')
-                    # print('Arch: ~/.local/share/Steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/: ')
-                    # print('Flatpak (this one, not sure): ~/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/')
+                result['firstBoot'] = True if value == 'noinit' else False
 
-                    # while True:
-                    #     vrchatLogPath = input()               # Wait for user input
-                    #     if vrchatLogPath.strip():             # Check if input is not empty
-                    #         break
-                    #     print("Path cannot be empty. Please enter a valid path.")
-                    # ModifyNode(i_configFile, key, vrchatLogPath)
-                    result['firstBoot'] = True
-                    result[key] = value
-                else:
-                    print('Reading config file')
-                    result['firstBoot'] = False
-                    result[key] = value
-            else:
-                result[key] = value                         # Store the rest of the config data
+            result[key] = value                             # Store the rest of the config data
 
     return result
-
-
-
-def ChangePath(i_configFile, i_path):
-    ModifyNode(i_configFile, 'vrchat-log-path', i_path)
-
 
 
 # This will get all log files in the specified path
@@ -125,6 +100,13 @@ def GetAllFiles(i_path):
     return logFiles
 
 
+# Changes the Path in the XML for the change path gui setting
+def ChangePath(i_configFile, i_path):
+    ModifyNode(i_configFile, 'vrchat-log-path', i_path)
+
+# TODO: #8 Optimize log reading, @69MichelleDB
+# I'm considering redoing the way I handle the log reading to avoid reading the whole file
+# whenever there's a modification by storing the last cursor position, that way we should be able to also handle things related to the Note's field.
 def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_codesFolder):
     print('Processing modified files, extracting codes...')
     addedDates = []
@@ -153,7 +135,7 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
                 dateTime = content[logLineStart:startCursor].strip().split(i_endDateIndex)[0]
                 fileName = os.path.basename(file)
                 note = 'No notes'                                   # TODO: Add logic to process what note goes here
-                if dateTime not in addedDates:              # check the date is not inserted already
+                if dateTime not in addedDates:                      # check the date is not inserted already
                     print(f'Code {dateTime} is new')
                     logEntries.append((fileName, dateTime, logContent, note))
                 else:
@@ -171,14 +153,14 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
             WriteXml(root, currentLogFile)
         root = ReadXml(currentLogFile)
         tonCode = ET.Element('TON-Code')
-        dateElement = ET.SubElement(tonCode, 'File')
-        dateElement.text = fileName
+        fileElement = ET.SubElement(tonCode, 'File')
+        fileElement.text = fileName
         dateElement = ET.SubElement(tonCode, 'Date')
         dateElement.text = dateTime
         codeElement = ET.SubElement(tonCode, 'Code')
         codeElement.text = logContent
-        codeElement = ET.SubElement(tonCode, 'Note')
-        codeElement.text = note
+        noteElement = ET.SubElement(tonCode, 'Note')
+        noteElement.text = note
         root.append(tonCode)
     
         # Let's clean the mess and leave it pretty

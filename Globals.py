@@ -1,7 +1,7 @@
 # Constants
 _CONFIG_FILE = 'config.xml'
 _VERSION = 'alpha 0.3.6'
-_TITLE = f"ToN Codes {_VERSION} - by MichelleDB //// [Double click to copy]"
+_TITLE = f"ToN Codes {_VERSION} - by MichelleDB"
 _WIDTH = 620
 _HEIGHT = 300
 
