@@ -7,7 +7,8 @@
 *[Terrors of Nowhere belongs to Beyond](https://www.patreon.com/c/beyondVR)*
 
 Outside dependencies:
-[Pyperclip](https://pypi.org/project/pyperclip/)
+[Pyperclip](https://github.com/asweigart/pyperclip)
+[screeninfo](https://github.com/rr-/screeninfo)
 
 ## Intro
 This is a personal application to store all Terrors of Nowhere codes generated while playing, the reason I made it is because the current available solutions don't work on linux. 
