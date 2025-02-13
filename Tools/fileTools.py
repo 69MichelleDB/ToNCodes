@@ -4,6 +4,7 @@ import platform
 import getpass
 import glob
 import Globals as gs
+import re
 from tkinter import messagebox
 
 # Verify all folders and files are there
@@ -84,9 +85,14 @@ def GetPossibleVRCPath():
 
 
 # File to be send to discord through the webhook
-def CreateNewTempCodeFile(i_fileName, i_string):
-    with open(i_fileName, 'w') as file:
+def CreateNewTempCodeFile(i_folder, i_fileName, i_string):
+    forbiddenChars = r'[\\/:*?"<>|]'                        # We can't allow these characters in windows file names
+    fixedName = re.sub(forbiddenChars, '_', i_fileName)
+    fileName = os.path.join(i_folder, fixedName)
+    with open(fileName, 'w') as file:
         file.write(i_string)
+
+    return fileName
 
 def CleanTempFiles():
     tempFiles = glob.glob(os.path.join(gs._FOLDER_TEMP, '*_TEMP.txt'))

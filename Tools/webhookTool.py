@@ -7,8 +7,8 @@ from Tools.fileTools import CreateNewTempCodeFile
 ## Discord Webhook, reused code from my bsky bot, test
 def SendWebhook(i_date, i_code):
 
-    fileName = os.path.join(gs._FOLDER_TEMP, i_date + '_TEMP.txt')      # This will be our temp file to send, discord has a 2000 characters limit, so it has to be a txt file
-    CreateNewTempCodeFile(fileName, i_code)
+    # This will be our temp file to send, discord has a 2000 characters limit, so it has to be as a txt file
+    fileName = CreateNewTempCodeFile(gs._FOLDER_TEMP, i_date + '_TEMP.txt', i_code)
 
     payload = {
         "content": f'New code found: {i_date}',

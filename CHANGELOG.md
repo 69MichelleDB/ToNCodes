@@ -17,7 +17,7 @@ I'll document all changes here starting from the first release.
 ### Fixes
 - Options > Saving doesn't close the window. Fixes [#5](https://github.com/69MichelleDB/ToNCodes/issues/5)
 - Fixed a bug where on first boot it would start checking for logs before VRC's path is saved in the `config.xml` file
-
+- Fixed a bug where the temporal webhook files would be created with forbidden characters [#10](https://github.com/69MichelleDB/ToNCodes/issues/10)
 
 ## [alpha 0.3.6] - 2025/02/11
 
