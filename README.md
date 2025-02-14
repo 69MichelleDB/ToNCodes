@@ -17,7 +17,7 @@ I'm not making it with the intention to replace any current existing solutions m
 
 If you find any bugs or want to make a suggestion, please open a new issue.
 
-I don't know if Beyond is or isn't working on a save system using VRC's Persistence, but in the meantime I'd like to be able to easily store my codes while that feature doesn't get added.
+I don't know if Terrors of Nowhere is getting a save system using VRC's Persistence, but in the meantime I'd like to be able to easily store my codes while that feature doesn't get added.
 
 ## Notes
 
