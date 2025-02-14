@@ -8,7 +8,7 @@
 
 Outside dependencies:
 
-[pyperclip](https://github.com/asweigart/pyperclip) [screeninfo](https://github.com/rr-/screeninfo)
+[pyperclip](https://github.com/asweigart/pyperclip), [screeninfo](https://github.com/rr-/screeninfo)
 
 ## Intro
 This is a personal application to store all Terrors of Nowhere codes generated while playing, the reason I made it is because the current available solutions don't work on linux. 
@@ -20,6 +20,11 @@ If you find any bugs or want to make a suggestion, please open a new issue.
 I don't know if Beyond is or isn't working on a save system using VRC's Persistence, but in the meantime I'd like to be able to easily store my codes while that feature doesn't get added.
 
 ## Notes
+
+> The Notes field has no functionallity yet as of version `alpha-0.4.0`, soon(tm).
+>
+> `Double click` to copy a code. `Delete key` to delete a code.
+
 This current version was made under `Python 3.10.12`. If you want to run it [you can download the latest standalone release](https://github.com/69MichelleDB/ToNCodes/releases/latest) or if you have python installed you can clone the project and run `ToNCodes.py`.
 
 **This next section is only if you want to run the python code instead of the binary.**
