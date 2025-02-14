@@ -5,8 +5,13 @@ _TITLE = f"ToN Codes {_VERSION} - by MichelleDB"
 _WIDTH = 620
 _HEIGHT = 300
 
+# Options window
 _WIDTH_OPT = 550
 _HEIGHT_OPT = 140
+
+# About window
+_WIDTH_ABOUT = 500
+_HEIGHT_ABOUT = 200
 
 _FOLDER_CODES = 'Codes'
 _FOLDER_LOGS = 'Logs'

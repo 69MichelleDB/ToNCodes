@@ -1,10 +1,15 @@
 from Tools.xmlTools import InitializeConfig, ReadCodeFiles
 from Tools.fileTools import VerifyInitFileStructure, CreateFromDefault, CleanTempFiles
-from Tools.errorHandler import StartErrorHandler
 from Tools.guiTools import CreateWindow, HorizontalMenu, CreateTreeView, CalculatePosition
 from CodesHunter import CodesHunter
 import threading
 import Globals as gs
+
+import logging
+import sys
+import datetime
+import os
+
 
 '''
 Author: MichelleDB - https://michelledb.com/
@@ -24,8 +29,6 @@ def RefreshCodes():
 
 
 if __name__ == "__main__":
-    StartErrorHandler()
-
     VerifyInitFileStructure()
 
     CleanTempFiles()

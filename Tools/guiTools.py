@@ -5,6 +5,7 @@ import os.path
 import pyperclip
 from Tools.xmlTools import ChangeConfigFileValue, InitializeConfig, ModifyCode
 from Tools.fileTools import GetPossibleVRCPath
+from Tools.errorHandler import ErrorLoging
 from screeninfo import get_monitors
 import Globals as gs
 
@@ -46,28 +47,28 @@ def CreateOptionsWindow():
     optionsRoot.transient()
     optionsRoot.wait_visibility()
 
-    framePath = tk.Frame(optionsRoot)
-    framePath.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
+    frameOptions = tk.Frame(optionsRoot)
+    frameOptions.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
 
     # Set weights so they take the window
     optionsRoot.grid_columnconfigure(0, weight=1)
-    framePath.grid_columnconfigure(0, weight=1)
-    framePath.grid_columnconfigure(1, weight=1)
-    framePath.grid_columnconfigure(2, weight=1)
+    frameOptions.grid_columnconfigure(0, weight=1)
+    frameOptions.grid_columnconfigure(1, weight=1)
+    frameOptions.grid_columnconfigure(2, weight=1)
     optionsRoot.grid_rowconfigure(0, weight=1)
-    framePath.grid_rowconfigure(0, weight=1)
-    framePath.grid_rowconfigure(1, weight=1)
+    frameOptions.grid_rowconfigure(0, weight=1)
+    frameOptions.grid_rowconfigure(1, weight=1)
 
     ## FIRST ROW
     
     # Label
-    labelPath = Label(framePath, text="VRC log Path")
+    labelPath = Label(frameOptions, text="VRC log Path")
     labelPath.grid(row=0, column=0, padx=5, pady=5)
 
     # Textbox/Entry Path
     textPath = tk.StringVar()
     textPath.set( gs.configList['vrchat-log-path'] if gs.auxPathFirstBoot is None else gs.auxPathFirstBoot )
-    textboxPath = Entry(framePath, textvariable=textPath)
+    textboxPath = Entry(frameOptions, textvariable=textPath)
     textboxPath.grid(row=0, column=1, padx=5, pady=5, sticky='ew')
 
     # File browser
@@ -77,20 +78,20 @@ def CreateOptionsWindow():
         if folder_selected:
             textPath.set(folder_selected)
     # File browser button
-    browseButton = tk.Button(framePath, text="Browse", command=BrowseVRCFolder)
+    browseButton = tk.Button(frameOptions, text="Browse", command=BrowseVRCFolder)
     browseButton.grid(row=0, column=2, padx=5, pady=5)
 
 
     ## SECOND ROW
 
     # Label webhook
-    labelWH = Label(framePath, text="Discord webhook")
+    labelWH = Label(frameOptions, text="Discord webhook")
     labelWH.grid(row=1, column=0, padx=5, pady=5)
 
     # Textbox Webhook
     textWebhook = tk.StringVar()
     textWebhook.set( gs.configList['discord-webhook'] if gs.configList['discord-webhook'] is not None else '' )
-    textboxWH = Entry(framePath, textvariable=textWebhook)
+    textboxWH = Entry(frameOptions, textvariable=textWebhook)
     textboxWH.grid(row=1, column=1, padx=5, pady=5, sticky='ew')
 
 
@@ -114,11 +115,43 @@ def CreateOptionsWindow():
         optionsRoot.destroy()
 
     # Save button
-    saveButton = tk.Button(framePath, text='Save', command=SaveOptions)
+    saveButton = tk.Button(frameOptions, text='Save', command=SaveOptions)
     saveButton.grid(row=2, column=2, padx=5, pady=5)
 
     optionsRoot.wait_window()
 
+
+# region About win
+
+def CreateAboutWindow():
+    try:
+        # Window creation
+        aboutRoot = CreateWindow('About...', gs._WIDTH_ABOUT, gs._HEIGHT_ABOUT, False, True)
+        auxX,auxY = CalculatePosition(gs._WIDTH_ABOUT, gs._HEIGHT_ABOUT)
+        aboutRoot.geometry(f'{gs._WIDTH_ABOUT}x{gs._HEIGHT_ABOUT}+{auxX}+{auxY}')
+        # Modal stuff
+        aboutRoot.grab_set()
+        aboutRoot.transient()
+        aboutRoot.wait_visibility()
+
+        frameAbout = tk.Frame(aboutRoot)
+        frameAbout.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
+
+        # Set weights so they take the window
+        aboutRoot.grid_columnconfigure(0, weight=1)
+        frameAbout.grid_columnconfigure(0, weight=1)
+
+        # Textr
+        bgColor = aboutRoot.cget("bg")  # Get the default background color of the window
+        text = tk.Text(aboutRoot, wrap=tk.WORD, bg=bgColor)
+        text.insert(tk.END,     f"ToN Codes: https://github.com/69MichelleDB/ToNCodes\n" +
+                                f"By 69MichelleDB: https://michelledb.com\n" +
+                                f"Version: {gs._VERSION}")
+        text.config(state=tk.DISABLED)  # Make the text uneditable
+        text.grid(row=0, column=0, padx=5, pady=5, sticky='ew')
+
+    except Exception as e:
+        ErrorLoging(f"Error in CreateAboutWindow: {e}")
 
 
 # region Main Win
@@ -143,13 +176,7 @@ def HorizontalMenu(i_root):
     )
 
     # About...
-    aboutMenu = Menu(menubar, tearoff=False)
-    aboutMenu.add_command(label='About')
-    menubar.add_cascade(
-        label='About',
-        menu=aboutMenu,
-        underline=0
-    )
+    menubar.add_command(label='About',  command=CreateAboutWindow)
 
 
 # This will allow us to display the XMLs data
