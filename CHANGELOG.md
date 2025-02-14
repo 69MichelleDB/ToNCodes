@@ -1,6 +1,6 @@
 # Changelog
 
-## [WIP] - 2025..
+## [alpha-0.4.0] - 2025.02.14
 
 ### New
 - Added discord webhook integration, fill up the text box with the webhook and whenever there's a new code, it'd be sent through that webhook. To stop using it, empty that text box. [#2](https://github.com/69MichelleDB/ToNCodes/issues/2)
