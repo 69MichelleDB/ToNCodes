@@ -5,14 +5,15 @@
 ### New
 - Added discord webhook integration, fill up the text box with the webhook and whenever there's a new code, it'd be sent through that webhook. To stop using it, empty that text box. [#2](https://github.com/69MichelleDB/ToNCodes/issues/2)
 - Added Temp folder to store the txt files containing the ToN code before being sent to discord via webhook. These files get cleaned up on boot.
-- Added info to the About menu.
+- Added info to the About menu. [#9](https://github.com/69MichelleDB/ToNCodes/issues/9)
 
 ### Changes
 - Removed "//// [Double click to copy]" from the window's title.
 - Added dependencies information.
 - Minor optimizations when handling xml files.
 - Changed how the gui is organized for the configuration window, from pack to grid.
-- About no longer is a cascade menu but a single item.
+- About no longer is a cascade menu but a single item.  [#9](https://github.com/69MichelleDB/ToNCodes/issues/9)
+- Better error handling and logging. [#6](https://github.com/69MichelleDB/ToNCodes/issues/6)
 
 ### Fixes
 - Options > Saving doesn't close the window. Fixes [#5](https://github.com/69MichelleDB/ToNCodes/issues/5)
