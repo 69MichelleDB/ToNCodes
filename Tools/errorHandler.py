@@ -5,7 +5,7 @@ import os
 import Globals as gs
 from tkinter import messagebox
 
-def ErrorLogging(i_exception):
+def ErrorLogging(i_exception, i_silent=False):
     # Get the current date and time in the format YYYYMMDD_HHMMSS
     logFilename = os.path.join(gs._FOLDER_LOGS, datetime.datetime.now().strftime("logError_%Y%m%d_%H%M%S.txt"))
 
@@ -14,6 +14,6 @@ def ErrorLogging(i_exception):
                     format='%(asctime)s - %(levelname)s - %(message)s',
                     filename=logFilename, 
                     filemode='a')  # a, for appending
-    
-    messagebox.showinfo("Error", f'{i_exception}\nMore information in the Log folder')
+    if i_silent == False:
+        messagebox.showinfo("Error", f'{i_exception}\nMore information in the Log folder')
     logging.error(i_exception, exc_info=True)

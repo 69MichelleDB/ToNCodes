@@ -7,4 +7,6 @@
     <file-delay>10</file-delay>
     <gui-delay>1</gui-delay>
     <discord-webhook></discord-webhook>
+    <check-updates>1</check-updates>
+    <check-updates-warned>0</check-updates-warned>
 </config>

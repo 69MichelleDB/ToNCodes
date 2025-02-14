@@ -1,11 +1,12 @@
 import tkinter as tk
-from tkinter import messagebox, Menu, Label, filedialog
+from tkinter import messagebox, Menu, Label, filedialog, Checkbutton
 from tkinter.ttk import Treeview, Scrollbar, Label, Entry
 import os.path
 import pyperclip
 from Tools.xmlTools import ModifyNode, InitializeConfig, ModifyCode
 from Tools.fileTools import GetPossibleVRCPath
 from Tools.errorHandler import ErrorLogging
+from Tools.webhookTool import CheckForUpdates
 from screeninfo import get_monitors
 import Globals as gs
 
@@ -65,12 +66,14 @@ def CreateOptionsWindow():
         optionsRoot.grid_rowconfigure(0, weight=1)
         frameOptions.grid_rowconfigure(0, weight=1)
         frameOptions.grid_rowconfigure(1, weight=1)
+        frameOptions.grid_rowconfigure(2, weight=1)
+        frameOptions.grid_rowconfigure(3, weight=1)
 
         ## FIRST ROW
         
         # Label
         labelPath = Label(frameOptions, text="VRC log Path")
-        labelPath.grid(row=0, column=0, padx=5, pady=5)
+        labelPath.grid(row=0, column=0, padx=5, pady=5, sticky='w')
 
         # Textbox/Entry Path
         textPath = tk.StringVar()
@@ -93,7 +96,7 @@ def CreateOptionsWindow():
 
         # Label webhook
         labelWH = Label(frameOptions, text="Discord webhook")
-        labelWH.grid(row=1, column=0, padx=5, pady=5)
+        labelWH.grid(row=1, column=0, padx=5, pady=5, sticky='w')
 
         # Textbox Webhook
         textWebhook = tk.StringVar()
@@ -102,20 +105,36 @@ def CreateOptionsWindow():
         textboxWH.grid(row=1, column=1, padx=5, pady=5, sticky='ew')
 
 
+        # THIRD ROW
+        # Label
+        labelUpdate = Label(frameOptions, text="When ToN Codes starts:")
+        labelUpdate.grid(row=2, column=0, padx=5, pady=5, sticky='w')
+
+        #Checkbox
+        cbVar = tk.IntVar()
+        cbVar.set(gs.configList['check-updates'])
+        cbUpdates = Checkbutton(frameOptions, text="Check for updates ", variable=cbVar)
+        cbUpdates.grid(row=2, column=1, padx=5, pady=5, sticky='w')
+
         # Save changes
         def SaveOptions():
             # VRC Path
-            textPathfix = textPath.get()
-            if textPathfix != gs.configList['vrchat-log-path']:
-                if textPathfix and not textPathfix.endswith(os.path.sep):
-                    textPathfix += os.path.sep
-                print(f'Change VRC path to {textPathfix}')
-                ModifyNode(gs._CONFIG_FILE, 'vrchat-log-path', textPathfix)
+            textPathAux = textPath.get()
+            if textPathAux != gs.configList['vrchat-log-path']:
+                if textPathAux and not textPathAux.endswith(os.path.sep):
+                    textPathAux += os.path.sep
+                print(f'Change VRC path to {textPathAux}')
+                ModifyNode(gs._CONFIG_FILE, 'vrchat-log-path', textPathAux)
 
             # Discord Webhook
-            textWebhookfix = textWebhook.get()
-            if textWebhookfix != gs.configList['discord-webhook']:
-                ModifyNode(gs._CONFIG_FILE, 'discord-webhook', textWebhookfix)
+            textWebhookAux = textWebhook.get()
+            if textWebhookAux != gs.configList['discord-webhook']:
+                ModifyNode(gs._CONFIG_FILE, 'discord-webhook', textWebhookAux)
+
+            # Check for updates
+            cbVarAux = str(cbVar.get())
+            if cbVarAux != gs.configList['check-updates']:
+                ModifyNode(gs._CONFIG_FILE, 'check-updates', cbVarAux)
 
             # Reload config variable
             gs.configList = InitializeConfig(gs._CONFIG_FILE)
@@ -123,7 +142,7 @@ def CreateOptionsWindow():
 
         # Save button
         saveButton = tk.Button(frameOptions, text='Save', command=SaveOptions)
-        saveButton.grid(row=2, column=2, padx=5, pady=5)
+        saveButton.grid(row=3, column=2, padx=5, pady=5)
 
         optionsRoot.wait_window()
     except Exception as e:
@@ -173,7 +192,8 @@ def HorizontalMenu(i_root):
         
         # File...
         fileMenu = Menu(menubar, tearoff=False) # New Menu
-        fileMenu.add_command(label='Options',  command=CreateOptionsWindow)
+        fileMenu.add_command(label='Options', command=CreateOptionsWindow)
+        fileMenu.add_command(label='Check for updates...', command=lambda: CheckForUpdates(True))
         fileMenu.add_separator()
         fileMenu.add_command(
             label='Exit',

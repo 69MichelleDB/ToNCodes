@@ -8,14 +8,14 @@
 
 Outside dependencies:
 
-[pyperclip](https://github.com/asweigart/pyperclip)
-
-[screeninfo](https://github.com/rr-/screeninfo)
+[pyperclip](https://github.com/asweigart/pyperclip) [screeninfo](https://github.com/rr-/screeninfo)
 
 ## Intro
 This is a personal application to store all Terrors of Nowhere codes generated while playing, the reason I made it is because the current available solutions don't work on linux. 
 
 I'm not making it with the intention to replace any current existing solutions made for the public. This is mostly for personal use and as an excuse to mess with python. You are welcome to use it if you please though.
+
+If you find any bugs or want to make a suggestion, please open a new issue.
 
 I don't know if Beyond is or isn't working on a save system using VRC's Persistence, but in the meantime I'd like to be able to easily store my codes while that feature doesn't get added.
 
