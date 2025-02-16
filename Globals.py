@@ -1,7 +1,7 @@
 # Constants
 _CONFIG_FILE = 'config.xml'
 _VERSION = 'alpha-0.4.0'
-_TITLE = f"ToN Codes {_VERSION} - by MichelleDB"
+_TITLE = f"ToNCodes {_VERSION} - by MichelleDB"
 _WIDTH = 620
 _HEIGHT = 300
 _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
