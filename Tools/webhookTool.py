@@ -32,6 +32,7 @@ def SendWebhook(i_date, i_code):
             print(response.text)
 
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in SendWebhook: {e}")
 
 
@@ -80,4 +81,5 @@ def CheckForUpdates(i_checkForcedUpdate=False):
         WarningHandler(result)
         
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in CheckForUpdates: {e}")

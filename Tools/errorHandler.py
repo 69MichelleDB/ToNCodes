@@ -16,4 +16,4 @@ def ErrorLogging(i_exception, i_silent=False):
                     filemode='a')  # a, for appending
     if i_silent == False:
         messagebox.showinfo("Error", f'{i_exception}\nMore information in the Log folder')
-    logging.error(i_exception, exc_info=True)
+    logging.error(i_exception+'\n\n', exc_info=True)

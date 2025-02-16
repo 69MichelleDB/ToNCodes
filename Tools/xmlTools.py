@@ -14,6 +14,7 @@ def ReadXml(i_filePath):
         root = tree.getroot()
         return root
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in ReadXml: {e}")
 
 
@@ -27,6 +28,7 @@ def ReadXmlNodes(i_filePath):
             nodesContent.append(nodeData)
         return nodesContent
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in ReadXmlNodes: {e}")
 
 
@@ -38,6 +40,7 @@ def ModifyNode(i_filePath, i_nodeTag, i_newText):
             node.text = i_newText
         WriteXml(root, i_filePath)
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in ModifyNode: {e}")
 
 
@@ -47,6 +50,7 @@ def WriteXml(i_root, i_filePath):
         tree = ET.ElementTree(i_root)
         tree.write(i_filePath)
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in WriteXml: {e}")
 
 
@@ -62,6 +66,7 @@ def ModifyCode(i_filePath, i_date, i_code):
                     codeNode.text = i_code
         WriteXml(root, i_filePath)
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in ModifyCode: {e}")
 
 
@@ -77,6 +82,7 @@ def GetNodeValues(i_xmlFile, i_node='.//Date'):
             
         return list(nodeValues)
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in GetNodeValues: {e}")
 
 
@@ -97,6 +103,7 @@ def ReadCodeFiles(folder):
                         files_data.append((file, data, code, note))
         return files_data
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in ReadCodeFiles: {e}")
 
 
@@ -115,6 +122,7 @@ def InitializeConfig(i_configFile):
 
         return result
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in InitializeConfig: {e}")
 
 
@@ -127,53 +135,121 @@ def GetAllFiles(i_path):
 
         return logFiles
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in GetAllFiles: {e}")
 
 
-# Changes the Path in the XML for the change path gui setting
-# def ChangeConfigFileValue(i_configFile, i_config, i_path):
-#     ModifyNode(i_configFile, i_config, i_path)
-
-# TODO: #8 Optimize log reading, @69MichelleDB
-# I'm considering redoing the way I handle the log reading to avoid reading the whole file
-# whenever there's a modification by storing the last cursor position, that way we should be able to also handle things related to the Note's field.
-def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_codesFolder):
+# Read all data in contro.xml
+def ReadControlFile(i_controlFile):
     try:
+        controlCursors = []
+
+        xmlFile = i_controlFile
+        root = ReadXml(xmlFile)
+        for ton_code in root.findall('.//TON-File'):
+            file = ton_code.find('.//File').text if ton_code.find('.//File') is not None else None
+            date = ton_code.find('.//Date').text if ton_code.find('.//Date') is not None else None
+            cursor = ton_code.find('.//Cursor').text if ton_code.find('.//Cursor') is not None else None
+            controlCursors.append((file, date, cursor))
+        return controlCursors
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in ControlFileDates: {e}")
+
+
+# Insert a new entry to the Control file
+def ControlFileInsert(i_controlFile, i_file, i_date, i_cursor):
+    try:
+        if not os.path.exists(i_controlFile):
+            root = ET.Element('Root')
+            root.text = '\n'                    # Make sure it creates <Root></Root> instead of <Root />
+            WriteXml(root, i_controlFile)
+
+        root = ReadXml(i_controlFile)
+        tonCode = ET.Element('TON-File')
+        ET.SubElement(tonCode, 'File').text = str(i_file)
+        ET.SubElement(tonCode, 'Date').text = str(i_date)
+        ET.SubElement(tonCode, 'Cursor').text = str(i_cursor)
+        root.append(tonCode)
+    
+        # Let's clean the mess and leave it pretty
+        tree = ET.ElementTree(root)
+        tree.write(i_controlFile, encoding='utf-8', xml_declaration=True)
+
+        # Add indentations and save it...
+        with open(i_controlFile, 'r+') as file:
+            xmlContent = file.read()
+            xmlDom = minidom.parseString(xmlContent)
+            prettyXmlString = xmlDom.toprettyxml(indent="  ")  # Add indentations
+            prettyXmlString = "\n".join([line for line in prettyXmlString.split('\n') if line.strip()])   # Remove empty lines
+            file.seek(0)
+            file.write(prettyXmlString)
+            file.truncate()
+
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in ControlFileUpdate: {e}")
+
+def ControlFileUpdate(i_controlFile, i_file, i_date, i_cursor):
+    try:
+        found = False
+        root = ReadXml(i_controlFile)
+        for tonCode in root.findall('.//TON-File'):
+            fileNode = tonCode.find('File')
+            if fileNode.text == i_file:
+                found = True
+                dateNode = tonCode.find('Date')
+                dateNode.text = i_date
+                cursorNode = tonCode.find('Cursor')
+                cursorNode.text = str(i_cursor)
+                break
+        if found:
+            WriteXml(root, i_controlFile)
+        else:
+           ControlFileInsert(i_controlFile, i_file, i_date, i_cursor)
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in ModifyCode: {e}")
+
+
+def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
+    try:
+        cursor = int(i_cursor)
+
         print('Processing modified files, extracting codes...')
         addedDates = []
         
-        for file in i_logFiles:
-            currentFilePath = os.path.join(i_codesFolder,os.path.basename(file).replace('.txt', '.xml'))
-            auxDates = GetNodeValues(currentFilePath, './/Date')  # Since I'm treating the Date as a PK, we'll use it to discard duplicates
-            addedDates = list(set(addedDates).union(auxDates))
+        currentFilePath = os.path.join(i_codesFolder,os.path.basename(i_logFile).replace('.txt', '.xml'))
+        auxDates = GetNodeValues(currentFilePath, './/Date')  # Since I'm treating the Date as a PK, we'll use it to discard duplicates
+        addedDates = list(set(addedDates).union(auxDates))
 
         logEntries = []
         # Read each file in search of all ToN codes
-        for file in i_logFiles:
-            fileNameAux = os.path.basename(file)
-            print(f'[START] Reading file: {fileNameAux}')
-            with open(file, 'r') as f:
-                content = f.read()
-                startCursor = 0
-                while True:                                     # There might be multiple codes in the same file, iterate until done
-                    startCursor = content.find(i_keywordStart, startCursor)
-                    if startCursor == -1:                       # If there's no codes, get out
-                        break
-                    # If we find codes, otherwise start parsing the data to split code and datetime
-                    print('Code found...')
-                    endIndex = content.find(i_keywordEnd, startCursor)
-                    logContent = content[startCursor + len(i_keywordStart):endIndex]
-                    logLineStart = content.rfind('\n', 0, startCursor) + 1
-                    dateTime = content[logLineStart:startCursor].strip().split(i_endDateIndex)[0]
-                    note = 'No notes'                                   # TODO: Add logic to process what note goes here
-                    if dateTime not in addedDates:                      # check the date is not inserted already
-                        print(f'Code {dateTime} is new')
-                        logEntries.append((fileNameAux, dateTime, logContent, note))
-                    else:
-                        print(f'Code {dateTime} is not new')
-                    startCursor = endIndex + len(i_keywordEnd)
+        fileNameAux = os.path.basename(i_logFile)
+        print(f'[START] Reading file: {fileNameAux}')
+        with open(i_logFile, 'r') as f:
+            content = f.read()
+            while True:                                     # There might be multiple codes in the same file, iterate until done
+                cursorLastPos = cursor
+                cursor = content.find("Log        -  [START]", cursorLastPos)
+                if cursor == -1:                       # If there's no codes, get out
+                    cursor = cursorLastPos
+                    break
+                # If we find codes, otherwise start parsing the data to split code and datetime
+                print('Code found...')
+                endIndex = content.find("[END]", cursor)
+                logContent = content[cursor + len("Log        -  [START]"):endIndex]
+                logLineStart = content.rfind('\n', 0, cursor) + 1
+                dateTime = content[logLineStart:cursor].strip().split(" Log")[0]
+                note = 'No notes'                                   # TODO: Add logic to process what note goes here
+                if dateTime not in addedDates:                      # check the date is not inserted already
+                    print(f'Code {dateTime} is new')
+                    logEntries.append((fileNameAux, dateTime, logContent, note))
+                else:
+                    print(f'Code {dateTime} is not new')
+                cursor = endIndex + len("[END]")
 
-                print(f'[END] Reading file: {fileNameAux}')
+            print(f'[END] Reading file: {fileNameAux}')
 
         print(f'Saving codes to XML...')
         # Extract all data into the XML
@@ -209,5 +285,8 @@ def PopulateCodes(i_logFiles, i_keywordStart, i_keywordEnd, i_endDateIndex, i_co
             # Send the webhook
             if gs.configList['discord-webhook'] is not None:
                 SendWebhook(dateTime, logContent)
+
+        return cursor
     except Exception as e:
-        ErrorLogging(f"Error in PopulateCodes: {e}")
+        print(e)
+        ErrorLogging(f"Error in PopulateCodes2: {e}")

@@ -25,6 +25,7 @@ def CreateWindow(i_title, i_width, i_height, i_resizable, i_modal=False):
 
         return root
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in CreateWindow: {e}")
 
 # I want the app's windows to be in the middle of the sceen
@@ -38,6 +39,7 @@ def CalculatePosition(i_width, i_height):
 
         return centerX, centerY
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in CalculatePosition: {e}")
 
 
@@ -124,20 +126,20 @@ def CreateOptionsWindow():
                 if textPathAux and not textPathAux.endswith(os.path.sep):
                     textPathAux += os.path.sep
                 print(f'Change VRC path to {textPathAux}')
-                ModifyNode(gs._CONFIG_FILE, 'vrchat-log-path', textPathAux)
+                ModifyNode(gs._FILE_CONFIG, 'vrchat-log-path', textPathAux)
 
             # Discord Webhook
             textWebhookAux = textWebhook.get()
             if textWebhookAux != gs.configList['discord-webhook']:
-                ModifyNode(gs._CONFIG_FILE, 'discord-webhook', textWebhookAux)
+                ModifyNode(gs._FILE_CONFIG, 'discord-webhook', textWebhookAux)
 
             # Check for updates
             cbVarAux = str(cbVar.get())
             if cbVarAux != gs.configList['check-updates']:
-                ModifyNode(gs._CONFIG_FILE, 'check-updates', cbVarAux)
+                ModifyNode(gs._FILE_CONFIG, 'check-updates', cbVarAux)
 
             # Reload config variable
-            gs.configList = InitializeConfig(gs._CONFIG_FILE)
+            gs.configList = InitializeConfig(gs._FILE_CONFIG)
             optionsRoot.destroy()
 
         # Save button
@@ -146,6 +148,7 @@ def CreateOptionsWindow():
 
         optionsRoot.wait_window()
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in CreateOptionsWindow: {e}")
 
 
@@ -179,6 +182,7 @@ def CreateAboutWindow():
         text.grid(row=0, column=0, padx=5, pady=5, sticky='ew')
 
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in CreateAboutWindow: {e}")
 
 
@@ -208,6 +212,7 @@ def HorizontalMenu(i_root):
         # About...
         menubar.add_command(label='About',  command=CreateAboutWindow)
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in HorizontalMenu: {e}")
 
 
@@ -301,4 +306,5 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
             AdjustColumnSizes()
         i_root.after(i_RefreshInterval, refreshTree)    # Hook the data refresh event
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in CreateTreeView: {e}")

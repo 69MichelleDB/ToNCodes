@@ -3,7 +3,7 @@ from Tools.fileTools import VerifyInitFileStructure, CreateFromDefault, CleanTem
 from Tools.guiTools import CreateWindow, HorizontalMenu, CreateTreeView, CalculatePosition
 from Tools.errorHandler import ErrorLogging
 from Tools.webhookTool import CheckForUpdates
-from CodesHunter import CodesHunter
+from CodesHunter2 import CodesHunter2
 import threading
 import Globals as gs
 
@@ -30,13 +30,13 @@ if __name__ == "__main__":
 
     CleanTempFiles()
 
-    CreateFromDefault(gs._CONFIG_FILE)                              # Verify the config file exist
-    gs.configList = InitializeConfig(gs._CONFIG_FILE)               # Retrieve all config data
+    CreateFromDefault(gs._FILE_CONFIG)                              # Verify the config file exist
+    gs.configList = InitializeConfig(gs._FILE_CONFIG)               # Retrieve all config data
 
     CheckForUpdates()                                               # Check for new updates logic
 
     # The main program to check for codes and create the XML files
-    mainThread = threading.Thread(target=CodesHunter)
+    mainThread = threading.Thread(target=CodesHunter2)
     mainThread.daemon = True
     mainThread.start()
 

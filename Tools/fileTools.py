@@ -21,11 +21,12 @@ def VerifyInitFileStructure():
         if os.path.exists(gs._FOLDER_TEMP) == False:
             os.mkdir(gs._FOLDER_TEMP)
         # Files
-        if os.path.exists(gs._CONFIG_FILE) == False:                # Check if there's a config file, if there's none, if the template is there
-            if os.path.exists(os.path.join(gs._FOLDER_TEMPLATES,f'{gs._CONFIG_FILE}.default')) == False:
+        if os.path.exists(gs._FILE_CONFIG) == False:                # Check if there's a config file, if there's none, if the template is there
+            if os.path.exists(os.path.join(gs._FOLDER_TEMPLATES,f'{gs._FILE_CONFIG}.default')) == False:
                 messagebox.showwarning("Warning", "Templates/config.xml.default not found, please verify your installation")
                 sys.exit()
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in VerifyInitFileStructure: {e}")
     
 
@@ -41,6 +42,7 @@ def CreateFromDefault(i_file):
             else:
                 raise FileNotFoundError(f"Default template file '{defaultConfigFile}' not found.")
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in CreateFromDefault: {e}")
 
 
@@ -49,10 +51,11 @@ def GetDateModified(i_files):
     try:
         filesDict = {}    
         for file in i_files:
-            filesDict[file] = os.path.getmtime(file)
+            filesDict[file] = str(os.path.getmtime(file))
 
         return filesDict
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in GetDateModified: {e}")
 
 
@@ -62,11 +65,12 @@ def GetModifiedFiles(i_currentDates, i_previousDates):
         filesToCheck = []    
         for file in i_currentDates:
             if file not in i_previousDates or i_currentDates[file] != i_previousDates[file]:    # if the file is new or if the date has changed
-                filesToCheck.append(file)
+                filesToCheck.append((file, i_currentDates[file]))
                 print(f'{os.path.basename(file)} was modified({i_currentDates[file]}), adding to list')
 
         return filesToCheck
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in GetModifiedFiles: {e}")
 
 
@@ -98,6 +102,7 @@ def GetPossibleVRCPath():
 
         return result
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in GetPossibleVRCPath: {e}")
 
 
@@ -112,6 +117,7 @@ def CreateNewTempCodeFile(i_folder, i_fileName, i_string):
 
         return fileName
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in CreateNewTempCodeFile: {e}")
 
 
@@ -124,4 +130,19 @@ def CleanTempFiles():
         for file in tempFiles:
             os.remove(file)
     except Exception as e:
+        print(e)
         ErrorLogging(f"Error in CleanTempFiles: {e}")
+
+# Check if the Control file (we'll store file, mod. date and cursor position here) exists and returns the full path
+def ControlFile():
+    try:
+        # Make sure the Control file exists
+        filePath = os.path.join(gs.configList['codes-folder'], gs._FILE_CONTROL)
+        if not os.path.exists(filePath):
+            with open(filePath, 'w') as file:
+                file.write('<Root></Root>')
+
+        return filePath
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in ControlFile: {e}")

@@ -1,9 +1,9 @@
 <config>
     <vrchat-log-path>noinit</vrchat-log-path>
     <codes-folder>Codes</codes-folder>
-    <keyword-start>Log        -  [START]</keyword-start>
-    <keyword-end>[END]</keyword-end>
-    <keyword-date-end> Log</keyword-date-end>
+    <!--<keyword-start>Log        -  [START]</keyword-start>-->
+    <!--<keyword-end>[END]</keyword-end>-->
+    <!--<keyword-date-end> Log</keyword-date-end>-->
     <file-delay>10</file-delay>
     <gui-delay>1</gui-delay>
     <discord-webhook></discord-webhook>

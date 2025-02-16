@@ -1,0 +1,52 @@
+import os.path
+import Globals as gs
+from time import sleep
+from Tools.fileTools import ControlFile, GetDateModified, GetModifiedFiles
+from Tools.xmlTools import GetAllFiles, ReadControlFile, PopulateCodes2, ControlFileUpdate
+from Tools.errorHandler import ErrorLogging
+
+
+# The main loop that will connect to VRCs logs and check for codes
+def CodesHunter2():
+    try:
+        # Variables
+        logFiles = []
+        currentDateFiles = {}
+        previousDateFiles = {}
+        controlData = []
+        logFilesToCheck = []
+        
+        # Make sure the Control file exists
+        controlFile = ControlFile()
+
+        # Initialize with control file's dates
+        controlData = ReadControlFile(controlFile)
+        for item in controlData:
+            currentDateFiles[item[0]] = item[1]                         # 0 File, 1 Date
+
+        while True:
+            # Let's retrieve all files again, just in case VRC crashed or was restarted, it creates a new log file
+            logFiles = GetAllFiles(gs.configList['vrchat-log-path']+'output_log_*.txt')
+
+            previousDateFiles = currentDateFiles                        # Move the old dates
+            currentDateFiles = GetDateModified(logFiles)                # Obtain the new dates
+            if currentDateFiles != previousDateFiles:
+                print('Modified files detected, checking...')
+                logFilesToCheck = GetModifiedFiles(currentDateFiles, previousDateFiles)      # Compare them and see what files we need to check
+                logFilesToCheckCursor = []
+                
+                for log in logFilesToCheck:
+                    cursorOld = '0'
+                    for item in controlData:
+                        if item[0]==log[0]:
+                            cursorOld = item[2]
+                            break
+                    cursorAux = PopulateCodes2(log[0], gs._FOLDER_CODES, cursorOld)
+                    ControlFileUpdate(controlFile, log[0], log[1], cursorAux)
+                    controlData = ReadControlFile(controlFile)
+                    print('Updated Control file')
+
+            sleep( int(gs.configList['file-delay']) )                      # The program is very eepy, let it rest
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in CodesHunter2: {e}")
