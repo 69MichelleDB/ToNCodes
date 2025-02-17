@@ -8,7 +8,9 @@
 ### Changes
 - Fixed main window's title.
 - Optimizations reading log files. The old algorythm would read a modified file from start to finish every single time, I changed it so in control.xml the file's path, the modification date and the cursor's last position gets stored. That way, if we need to check the log file, we can start from the last position and on boot, we don't need to check all files again. [#8](https://github.com/69MichelleDB/ToNCodes/issues/8) [#13](https://github.com/69MichelleDB/ToNCodes/issues/13)
-- About page updated. 
+- About page updated.
+- Option window's size changed.
+- Option window's webhook text field expanded.
 
 ## [alpha-0.4.0] - 2025.02.14
 

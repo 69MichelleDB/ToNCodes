@@ -8,8 +8,8 @@ _WIDTH = 620
 _HEIGHT = 300
 
 # Options window
-_WIDTH_OPT = 550
-_HEIGHT_OPT = 180
+_WIDTH_OPT = 600
+_HEIGHT_OPT = 200
 
 # About window
 _WIDTH_ABOUT = 550

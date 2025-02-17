@@ -106,12 +106,12 @@ def CreateOptionsWindow():
         textWebhook = tk.StringVar()
         textWebhook.set( gs.configList['discord-webhook'] if gs.configList['discord-webhook'] is not None else '' )
         textboxWH = Entry(frameOptions, textvariable=textWebhook)
-        textboxWH.grid(row=1, column=1, padx=5, pady=5, sticky='ew')
+        textboxWH.grid(row=1, column=1, columnspan=2, padx=5, pady=5, sticky='ew')
 
 
         # THIRD ROW
         # Label
-        labelUpdate = Label(frameOptions, text="When ToN Codes starts:")
+        labelUpdate = Label(frameOptions, text="When ToNCodes starts:")
         labelUpdate.grid(row=2, column=0, padx=5, pady=5, sticky='w')
 
         #Checkbox
