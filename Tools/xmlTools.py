@@ -41,6 +41,9 @@ def ModifyNode(i_filePath, i_nodeTag, i_newText):
         for node in root.iter(i_nodeTag):
             node.text = i_newText
         WriteXml(root, i_filePath)
+        
+        # Let's clean the mess and leave it pretty
+        PrettifyXML(root, i_filePath)
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in ModifyNode: {e}")
@@ -141,6 +144,45 @@ def GetAllFiles(i_path):
         ErrorLogging(f"Error in GetAllFiles: {e}")
 
 
+def PrettifyXML(i_root, i_file):
+    # Let's clean the mess and leave it pretty
+        tree = ET.ElementTree(i_root)
+        tree.write(i_file, encoding='utf-8', xml_declaration=True)
+
+        # Add indentations and save it...
+        with open(i_file, 'r+') as file:
+            xmlContent = file.read()
+            xmlDom = minidom.parseString(xmlContent)
+            prettyXmlString = xmlDom.toprettyxml(indent="  ")  # Add indentations
+            prettyXmlString = "\n".join([line for line in prettyXmlString.split('\n') if line.strip()])   # Remove empty lines
+            file.seek(0)
+            file.write(prettyXmlString)
+            file.truncate()
+
+
+def VerifyConfigFields(i_file):
+    defaultConfigFile = os.path.join(gs._FOLDER_TEMPLATES, i_file+'.default')
+    
+    rootDefault = ReadXml(defaultConfigFile)
+    rootConfig = ReadXml(i_file)
+    
+    for nodeD in rootDefault:
+        found = False
+        for nodeC in rootConfig:
+            if nodeD.tag == nodeC.tag:
+                found = True
+                break
+        # If the loop ends and doesn't find a match, inser it 
+        if not found:
+            print(f"Node {nodeD.tag} not found in {i_file}, adding...")
+            newNode = ET.Element(nodeD.tag)
+            newNode.text = nodeD.text
+            rootConfig.append(newNode)
+
+    WriteXml(rootConfig, i_file)
+    PrettifyXML(rootConfig, i_file)
+
+
 # region Control File
 
 # Read all data in contro.xml
@@ -164,11 +206,6 @@ def ReadControlFile(i_controlFile):
 # Insert a new entry to the Control file
 def ControlFileInsert(i_controlFile, i_file, i_date, i_cursor):
     try:
-        if not os.path.exists(i_controlFile):
-            root = ET.Element('Root')
-            root.text = '\n'                    # Make sure it creates <Root></Root> instead of <Root />
-            WriteXml(root, i_controlFile)
-
         root = ReadXml(i_controlFile)
         tonCode = ET.Element('TON-File')
         ET.SubElement(tonCode, 'File').text = str(i_file)
@@ -177,18 +214,7 @@ def ControlFileInsert(i_controlFile, i_file, i_date, i_cursor):
         root.append(tonCode)
     
         # Let's clean the mess and leave it pretty
-        tree = ET.ElementTree(root)
-        tree.write(i_controlFile, encoding='utf-8', xml_declaration=True)
-
-        # Add indentations and save it...
-        with open(i_controlFile, 'r+') as file:
-            xmlContent = file.read()
-            xmlDom = minidom.parseString(xmlContent)
-            prettyXmlString = xmlDom.toprettyxml(indent="  ")  # Add indentations
-            prettyXmlString = "\n".join([line for line in prettyXmlString.split('\n') if line.strip()])   # Remove empty lines
-            file.seek(0)
-            file.write(prettyXmlString)
-            file.truncate()
+        PrettifyXML(root, i_controlFile)
 
     except Exception as e:
         print(e)
@@ -290,18 +316,7 @@ def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
             root.append(tonCode)
         
             # Let's clean the mess and leave it pretty
-            tree = ET.ElementTree(root)
-            tree.write(currentLogFile, encoding='utf-8', xml_declaration=True)
-
-            # Add indentations and save it...
-            with open(currentLogFile, 'r+') as file:
-                xmlContent = file.read()
-                xmlDom = minidom.parseString(xmlContent)
-                prettyXmlString = xmlDom.toprettyxml(indent="  ")  # Add indentations
-                prettyXmlString = "\n".join([line for line in prettyXmlString.split('\n') if line.strip()])   # Remove empty lines
-                file.seek(0)
-                file.write(prettyXmlString)
-                file.truncate()
+            PrettifyXML(root, currentLogFile)
 
             # Send the webhook
             if gs.configList['discord-webhook'] is not None:

@@ -14,6 +14,7 @@
 ### Fixes
 - Fixed main window's title.
 - Fixed sorting files issue. [#14](https://github.com/69MichelleDB/ToNCodes/issues/14)
+- Future proofing in case a new update adds fields to config.xml, add them. [#15](https://github.com/69MichelleDB/ToNCodes/issues/15)
 
 ## [alpha-0.4.0] - 2025.02.14
 

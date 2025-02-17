@@ -1,5 +1,5 @@
-from Tools.xmlTools import InitializeConfig, ReadCodeFiles, ModifyNode
-from Tools.fileTools import VerifyInitFileStructure, CreateFromDefault, CleanTempFiles
+from Tools.xmlTools import InitializeConfig, ReadCodeFiles, ModifyNode, VerifyConfigFields
+from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles
 from Tools.guiTools import CreateWindow, HorizontalMenu, CreateTreeView, CalculatePosition
 from Tools.errorHandler import ErrorLogging
 from Tools.webhookTool import CheckForUpdates
@@ -30,7 +30,8 @@ if __name__ == "__main__":
 
     CleanTempFiles()                                                # Delete temp files from last session
 
-    CreateFromDefault(gs._FILE_CONFIG)                              # Verify the config file exist
+    VerifyConfigExists(gs._FILE_CONFIG)                             # Verify the config file exist
+    VerifyConfigFields(gs._FILE_CONFIG)
     gs.configList = InitializeConfig(gs._FILE_CONFIG)               # Retrieve all config data
 
     CheckForUpdates()                                               # Check for new updates logic
