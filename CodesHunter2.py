@@ -35,10 +35,11 @@ def CodesHunter2():
             currentDateFiles = GetDateModified(logFiles)                # Obtain the new dates
             if currentDateFiles != previousDateFiles:
                 print('Modified files detected, checking...')
-                logFilesToCheck = GetModifiedFiles(currentDateFiles, previousDateFiles)      # Compare them and see what files we need to check
+                logFilesToCheck = GetModifiedFiles(currentDateFiles, previousDateFiles)             # Compare them and see what files we need to check
+                logFilesToCheckSorted = sorted(logFilesToCheck, key=lambda x: x[0])                 # If we don't sort, on first boot we risk a mess
                 logFilesToCheckCursor = []
                 
-                for log in logFilesToCheck:
+                for log in logFilesToCheckSorted:
                     cursorOld = '0'
                     for item in controlData:
                         if item[0]==log[0]:
