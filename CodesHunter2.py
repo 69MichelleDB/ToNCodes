@@ -46,7 +46,7 @@ def CodesHunter2():
                     controlData = ReadControlFile(controlFile)
                     print('Updated Control file')
 
-            sleep( int(gs.configList['file-delay']) )                      # The program is very eepy, let it rest
+            sleep( float(gs.configList['file-delay']) )                      # The program is very eepy, let it rest
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in CodesHunter2: {e}")

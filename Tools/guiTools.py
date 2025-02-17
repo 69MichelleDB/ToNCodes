@@ -9,6 +9,7 @@ from Tools.errorHandler import ErrorLogging
 from Tools.webhookTool import CheckForUpdates
 from screeninfo import get_monitors
 import Globals as gs
+from math import isnan
 
 
 # Create a window
@@ -70,6 +71,7 @@ def CreateOptionsWindow():
         frameOptions.grid_rowconfigure(1, weight=1)
         frameOptions.grid_rowconfigure(2, weight=1)
         frameOptions.grid_rowconfigure(3, weight=1)
+        frameOptions.grid_rowconfigure(4, weight=1)
 
         ## FIRST ROW
         
@@ -118,6 +120,20 @@ def CreateOptionsWindow():
         cbUpdates = Checkbutton(frameOptions, text="Check for updates ", variable=cbVar)
         cbUpdates.grid(row=2, column=1, padx=5, pady=5, sticky='w')
 
+
+        # FOURTH ROW
+
+        # Label check delay
+        labelFD = Label(frameOptions, text="VRC log frequency (seconds)")
+        labelFD.grid(row=3, column=0, padx=5, pady=5, sticky='w')
+
+        # Textbox check delay
+        textFileDelay = tk.StringVar()
+        textFileDelay.set( gs.configList['file-delay'] if gs.configList['file-delay'] is not None else '' )
+        textboxFD = Entry(frameOptions, textvariable=textFileDelay)
+        textboxFD.grid(row=3, column=1, padx=5, pady=5, sticky='ew')
+
+
         # Save changes
         def SaveOptions():
             # VRC Path
@@ -138,13 +154,21 @@ def CreateOptionsWindow():
             if cbVarAux != gs.configList['check-updates']:
                 ModifyNode(gs._FILE_CONFIG, 'check-updates', cbVarAux)
 
+            # File delay
+            textFileDelayAux = textFileDelay.get()
+            if not isnan(float(textFileDelayAux)):                 # Make sure it's a number
+                if textFileDelayAux != gs.configList['file-delay']:
+                    ModifyNode(gs._FILE_CONFIG, 'file-delay', textFileDelayAux)
+
             # Reload config variable
             gs.configList = InitializeConfig(gs._FILE_CONFIG)
             optionsRoot.destroy()
 
+        # LAST ROW
+
         # Save button
         saveButton = tk.Button(frameOptions, text='Save', command=SaveOptions)
-        saveButton.grid(row=3, column=2, padx=5, pady=5)
+        saveButton.grid(row=4, column=2, padx=5, pady=5)
 
         optionsRoot.wait_window()
     except Exception as e:
