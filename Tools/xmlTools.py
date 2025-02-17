@@ -230,10 +230,9 @@ def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
         with open(i_logFile, 'r') as f:
             content = f.read()
             while True:                                     # There might be multiple codes in the same file, iterate until done
-                cursorLastPos = cursor
-                cursor = content.find("Log        -  [START]", cursorLastPos)
-                if cursor == -1:                       # If there's no codes, get out
-                    cursor = cursorLastPos
+                cursor = content.find("Log        -  [START]", cursor)
+                if cursor == -1:                        # If there's no codes, get out
+                    cursor = len(content)               # Place the cursor at the end of the file
                     break
                 # If we find codes, otherwise start parsing the data to split code and datetime
                 print('Code found...')
