@@ -12,7 +12,7 @@ _WIDTH_OPT = 550
 _HEIGHT_OPT = 180
 
 # About window
-_WIDTH_ABOUT = 500
+_WIDTH_ABOUT = 550
 _HEIGHT_ABOUT = 200
 
 # Folders

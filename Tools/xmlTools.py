@@ -7,6 +7,8 @@ from Tools.webhookTool import SendWebhook
 from Tools.errorHandler import ErrorLogging
 
 
+#region Common XML
+
 # Function to read XML file
 def ReadXml(i_filePath):
     try: 
@@ -139,6 +141,8 @@ def GetAllFiles(i_path):
         ErrorLogging(f"Error in GetAllFiles: {e}")
 
 
+# region Control File
+
 # Read all data in contro.xml
 def ReadControlFile(i_controlFile):
     try:
@@ -190,6 +194,7 @@ def ControlFileInsert(i_controlFile, i_file, i_date, i_cursor):
         print(e)
         ErrorLogging(f"Error in ControlFileUpdate: {e}")
 
+# Try to update an entry in the control file, if there's no entry, insert a new entry
 def ControlFileUpdate(i_controlFile, i_file, i_date, i_cursor):
     try:
         found = False
@@ -211,6 +216,23 @@ def ControlFileUpdate(i_controlFile, i_file, i_date, i_cursor):
         print(e)
         ErrorLogging(f"Error in ModifyCode: {e}")
 
+# Loop the xml file and if there's a file that doesn't exist anymore, delete it from control
+def CleanControlEntries(i_controlFile, i_logFiles):
+    try: 
+        print('Checking for old entries in Control file...')
+        root = ReadXml(i_controlFile)
+        for tonCode in root.findall('.//TON-File'):
+            fileNode = tonCode.find('File')
+            if fileNode.text not in i_logFiles:
+                print(f"{fileNode.text} doesn't exist anymore, deleting entry from control file.")
+                root.remove(tonCode)
+        WriteXml(root, i_controlFile)
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in CleanControlEntries: {e}")
+
+
+# region Populate codes
 
 def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
     try:

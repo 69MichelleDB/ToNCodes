@@ -28,7 +28,7 @@ def RefreshCodes():
 if __name__ == "__main__":
     VerifyInitFileStructure()
 
-    CleanTempFiles()
+    CleanTempFiles()                                                # Delete temp files from last session
 
     CreateFromDefault(gs._FILE_CONFIG)                              # Verify the config file exist
     gs.configList = InitializeConfig(gs._FILE_CONFIG)               # Retrieve all config data

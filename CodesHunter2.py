@@ -2,7 +2,7 @@ import os.path
 import Globals as gs
 from time import sleep
 from Tools.fileTools import ControlFile, GetDateModified, GetModifiedFiles
-from Tools.xmlTools import GetAllFiles, ReadControlFile, PopulateCodes2, ControlFileUpdate
+from Tools.xmlTools import GetAllFiles, ReadControlFile, PopulateCodes2, ControlFileUpdate, CleanControlEntries
 from Tools.errorHandler import ErrorLogging
 
 
@@ -18,6 +18,9 @@ def CodesHunter2():
         
         # Make sure the Control file exists
         controlFile = ControlFile()
+        
+        # Clean the control file of non existent log files
+        CleanControlEntries(controlFile, GetAllFiles(gs.configList['vrchat-log-path']+'output_log_*.txt'))
 
         # Initialize with control file's dates
         controlData = ReadControlFile(controlFile)

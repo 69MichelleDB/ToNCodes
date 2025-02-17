@@ -200,8 +200,12 @@ def CreateAboutWindow():
         bgColor = aboutRoot.cget("bg")  # Get the default background color of the window
         text = tk.Text(aboutRoot, wrap=tk.WORD, bg=bgColor)
         text.insert(tk.END,     f"ToN Codes: https://github.com/69MichelleDB/ToNCodes\n" +
-                                f"By 69MichelleDB: https://michelledb.com\n" +
-                                f"Version: {gs._VERSION}")
+                                f"Version: {gs._VERSION}\n" + 
+                                f"By 69MichelleDB: https://michelledb.com\n\n" +
+                                f"Terrors of Nowhere by Beyond: https://www.patreon.com/c/beyondVR\n\n" + 
+                                f"Dependencies:\n" + 
+                                f"pyperclip: https://github.com/asweigart/pyperclip\n" + 
+                                f"screeninfo: https://github.com/rr-/screeninfo")
         text.config(state=tk.DISABLED)  # Make the text uneditable
         text.grid(row=0, column=0, padx=5, pady=5, sticky='ew')
 
