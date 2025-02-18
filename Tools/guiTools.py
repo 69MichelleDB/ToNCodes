@@ -299,10 +299,11 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
 
         # This will handle the data refresh once the mainloop engages
         def refreshTree():
-            nonlocal i_CodesData
-            i_CodesData = i_RefreshCallback()
-            FillTree()
-            i_root.after(i_RefreshInterval, refreshTree)
+            if not gs.writingFlag:
+                nonlocal i_CodesData
+                i_CodesData = i_RefreshCallback()
+                FillTree()
+                i_root.after(i_RefreshInterval, refreshTree)
 
             if gs.configList['firstBoot']==True:        # Open the config window to get the path if this is the first boot
                 gs.configList['firstBoot'] = False

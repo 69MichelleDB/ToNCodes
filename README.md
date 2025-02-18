@@ -1,27 +1,15 @@
 # ToNCodes
 
-**Author:** MichelleDB - https://michelledb.com
-
-*I have no direct relation with Terrors of Nowhere outside of being a fan and a Patreon supporter.*
-
-*[Terrors of Nowhere belongs to Beyond](https://www.patreon.com/c/beyondVR)*
-
-Outside dependencies:
-
-[pyperclip](https://github.com/asweigart/pyperclip), [screeninfo](https://github.com/rr-/screeninfo)
-
 ## Intro
 <p align="center">
   <img src="https://github.com/user-attachments/assets/c09909b1-27c4-49af-93e1-97f4baea5367" />
 </p>
 
-This is a personal application to store all Terrors of Nowhere codes generated while playing, the reason I made it is because the current available solutions don't work on linux. 
+This started as a personal application to store all Terrors of Nowhere codes generated while playing, the main reason I made it is because the current available solutions don't work on linux.
 
-I'm not making it with the intention to replace any current existing solutions made for the public. This is mostly for personal use and as an excuse to mess with python. You are welcome to use it if you please though.
+I'm not working on it with the intention to replace any current existing solutions made for the public. It's mostly an excuse for me to mess with python and because I believe having multiple choices is always good. You are welcome to use it if you please.
 
-If you find any bugs or want to make a suggestion, please open a new issue.
-
-I don't know if Terrors of Nowhere is getting a save system using VRC's Persistence, but in the meantime I'd like to be able to easily store my codes while that feature doesn't get added.
+If you find any bugs or want to make a suggestion, please open a new issue or let me know in https://discord.com/channels/983240485529337856/1340340722011734169.
 
 ## Notes
 
@@ -76,3 +64,17 @@ Windows
 ```powershell
 python -m nuitka --standalone --follow-imports --onefile --enable-plugin=tk-inter --windows-console-mode=disable ToNCodes.py
 ```
+
+## Credits
+
+**Author:** MichelleDB - https://michelledb.com
+
+*I have no direct relation with Terrors of Nowhere outside of being a fan and a Patreon supporter.*
+
+*[Terrors of Nowhere belongs to Beyond](https://www.patreon.com/c/beyondVR)*
+
+*Special thanks to Cinnosu for their support facilitating the killer data, please support their site https://tontrack.me/*
+
+Outside dependencies:
+
+[pyperclip](https://github.com/asweigart/pyperclip), [screeninfo](https://github.com/rr-/screeninfo)

@@ -66,7 +66,7 @@ def CheckForUpdates(i_checkForcedUpdate=False):
                             print("Not opening GitHub link")
                     else:
                         result = 3  
-                        print("User was already alterted, don't show promt again")
+                        print("User was already alerted, don't show promt again")
                 else:
                     print("No new update, no need to prompt anything")
                     if i_checkForcedUpdate == True:

@@ -29,6 +29,7 @@ _FILE_CONTROL = 'control.xml'
 configList = {}
 root = None
 titleMessage = ''
+writingFlag = False
 
 # Round variables
 roundMap = ''

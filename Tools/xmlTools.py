@@ -283,15 +283,18 @@ def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
         logEntries = []
         # Read each file in search of all ToN codes
         fileNameAux = os.path.basename(i_logFile)
-        print(f'[START] Reading file: {fileNameAux}')
         with open(i_logFile, 'r') as f:
+            print(f'[START] Reading file: {fileNameAux}')
             cursor, logEntriesAux = ParseContent(f.read(), fileNameAux, cursor)
             logEntries += logEntriesAux
-        print(f'[END] Reading file: {fileNameAux}')
+            print(f'[END] Reading file: {fileNameAux}')
 
         print(f'Saving codes to XML...')
         # Extract all data into the XML
         for fileName, dateTime, logContent, note in logEntries:
+
+            gs.writingFlag = True
+            
             currentLogFile = i_codesFolder + os.path.sep + os.path.basename(fileName).replace('.txt', '.xml')
             if not os.path.exists(currentLogFile):
                 root = ET.Element('Root')
@@ -308,6 +311,8 @@ def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
         
             # Let's clean the mess and leave it pretty
             PrettifyXML(root, currentLogFile)
+
+            gs.writingFlag = False
 
             # Send the webhook
             if gs.configList['discord-webhook'] is not None:
