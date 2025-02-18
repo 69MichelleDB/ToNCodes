@@ -1,10 +1,10 @@
 # Constants
-_VERSION = 'alpha-0.4.0'
+_VERSION = 'alpha-0.5.0'
 _TITLE = f"ToNCodes {_VERSION} - by MichelleDB"
 _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
 
 # Main window
-_WIDTH = 620
+_WIDTH = 720
 _HEIGHT = 300
 
 # Options window
@@ -29,6 +29,11 @@ _FILE_CONTROL = 'control.xml'
 configList = {}
 root = None
 titleMessage = ''
+
+# Round variables
+roundMap = ''
+roundKiller = ''
+roundCondition = ''
 
 # TEMP
 auxPathFirstBoot = None

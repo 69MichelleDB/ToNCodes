@@ -5,6 +5,7 @@ import os.path
 import Globals as gs
 from Tools.webhookTool import SendWebhook
 from Tools.errorHandler import ErrorLogging
+from Tools.notesTools import ParseContent
 
 
 #region Common XML
@@ -145,6 +146,7 @@ def GetAllFiles(i_path):
 
 
 def PrettifyXML(i_root, i_file):
+    try:
     # Let's clean the mess and leave it pretty
         tree = ET.ElementTree(i_root)
         tree.write(i_file, encoding='utf-8', xml_declaration=True)
@@ -158,29 +160,36 @@ def PrettifyXML(i_root, i_file):
             file.seek(0)
             file.write(prettyXmlString)
             file.truncate()
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in PrettifyXML: {e}")
 
 
 def VerifyConfigFields(i_file):
-    defaultConfigFile = os.path.join(gs._FOLDER_TEMPLATES, i_file+'.default')
-    
-    rootDefault = ReadXml(defaultConfigFile)
-    rootConfig = ReadXml(i_file)
-    
-    for nodeD in rootDefault:
-        found = False
-        for nodeC in rootConfig:
-            if nodeD.tag == nodeC.tag:
-                found = True
-                break
-        # If the loop ends and doesn't find a match, inser it 
-        if not found:
-            print(f"Node {nodeD.tag} not found in {i_file}, adding...")
-            newNode = ET.Element(nodeD.tag)
-            newNode.text = nodeD.text
-            rootConfig.append(newNode)
+    try:
+        defaultConfigFile = os.path.join(gs._FOLDER_TEMPLATES, i_file+'.default')
+        
+        rootDefault = ReadXml(defaultConfigFile)
+        rootConfig = ReadXml(i_file)
+        
+        for nodeD in rootDefault:
+            found = False
+            for nodeC in rootConfig:
+                if nodeD.tag == nodeC.tag:
+                    found = True
+                    break
+            # If the loop ends and doesn't find a match, inser it 
+            if not found:
+                print(f"Node {nodeD.tag} not found in {i_file}, adding...")
+                newNode = ET.Element(nodeD.tag)
+                newNode.text = nodeD.text
+                rootConfig.append(newNode)
 
-    WriteXml(rootConfig, i_file)
-    PrettifyXML(rootConfig, i_file)
+        WriteXml(rootConfig, i_file)
+        PrettifyXML(rootConfig, i_file)
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in VerifyConfigFields: {e}")
 
 
 # region Control File
@@ -276,27 +285,9 @@ def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
         fileNameAux = os.path.basename(i_logFile)
         print(f'[START] Reading file: {fileNameAux}')
         with open(i_logFile, 'r') as f:
-            content = f.read()
-            while True:                                     # There might be multiple codes in the same file, iterate until done
-                cursor = content.find("Log        -  [START]", cursor)
-                if cursor == -1:                        # If there's no codes, get out
-                    cursor = len(content)               # Place the cursor at the end of the file
-                    break
-                # If we find codes, otherwise start parsing the data to split code and datetime
-                print('Code found...')
-                endIndex = content.find("[END]", cursor)
-                logContent = content[cursor + len("Log        -  [START]"):endIndex]
-                logLineStart = content.rfind('\n', 0, cursor) + 1
-                dateTime = content[logLineStart:cursor].strip().split(" Log")[0]
-                note = 'No notes'                                   # TODO: Add logic to process what note goes here
-                if dateTime not in addedDates:                      # check the date is not inserted already
-                    print(f'Code {dateTime} is new')
-                    logEntries.append((fileNameAux, dateTime, logContent, note))
-                else:
-                    print(f'Code {dateTime} is not new')
-                cursor = endIndex + len("[END]")
-
-            print(f'[END] Reading file: {fileNameAux}')
+            cursor, logEntriesAux = ParseContent(f.read(), fileNameAux, cursor)
+            logEntries += logEntriesAux
+        print(f'[END] Reading file: {fileNameAux}')
 
         print(f'Saving codes to XML...')
         # Extract all data into the XML
