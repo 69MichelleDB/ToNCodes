@@ -9,13 +9,13 @@ from Tools.updateHandler import WarningHandler
 
 
 ## Discord Webhook, reused code from my bsky bot
-def SendWebhook(i_date, i_code):
+def SendWebhook(i_date, i_note, i_code):
     try:
         # This will be our temp file to send, discord has a 2000 characters limit, so it has to be as a txt file
         fileName = CreateNewTempCodeFile(gs._FOLDER_TEMP, i_date + '_TEMP.txt', i_code)
 
         payload = {
-            "content": f'New code found: {i_date}',
+            "content": f'New code found: {i_date}, Notes: {i_note}',
         }
 
         with open(fileName, "rb") as file:

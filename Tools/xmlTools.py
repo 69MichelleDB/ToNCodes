@@ -311,7 +311,7 @@ def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
 
             # Send the webhook
             if gs.configList['discord-webhook'] is not None:
-                SendWebhook(dateTime, logContent)
+                SendWebhook(dateTime, note, logContent)
 
         return cursor
     except Exception as e:

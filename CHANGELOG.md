@@ -11,6 +11,7 @@
 - About page updated.
 - Option window's size changed.
 - Option window's webhook text field expanded.
+- Webhook also sends note's details.
 
 ### Fixes
 - Fixed main window's title.
