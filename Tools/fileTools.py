@@ -7,6 +7,9 @@ import Globals as gs
 import re
 from tkinter import messagebox
 from Tools.errorHandler import ErrorLogging
+from cryptography.fernet import Fernet
+import json
+import Tools.Items.Killer as agent
 
 # Verify all folders and files are there
 def VerifyInitFileStructure():
@@ -146,3 +149,26 @@ def ControlFile():
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in ControlFile: {e}")
+
+
+# If you're reading this and trying to datamine killer's info I'm not gonna stop you, this is just so it's not in plain text
+def GetKillers():
+    result = []
+
+    with open(gs._FILE_DATAK, 'r') as file:
+        key = file.read()
+
+    cipher = Fernet(key)
+
+    with open(gs._FILE_DATA, 'r') as file:
+        data = file.read()
+
+    killerList = json.loads(cipher.decrypt(data).decode('utf-8'))
+
+    for typeList in killerList:
+        print(typeList)
+        for killers in killerList[typeList]:
+            print(f'{killers['id']},{killers['value']},{killers['name']}')
+            result.append( agent.Killer(typeList, killers['id'], killers['value'], killers['name']) )
+
+    return result

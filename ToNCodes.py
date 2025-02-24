@@ -1,5 +1,5 @@
 from Tools.xmlTools import InitializeConfig, ReadCodeFiles, ModifyNode, VerifyConfigFields
-from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles
+from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles, GetKillers
 from Tools.guiTools import CreateWindow, HorizontalMenu, CreateTreeView, CalculatePosition
 from Tools.errorHandler import ErrorLogging
 from Tools.webhookTool import CheckForUpdates
@@ -41,12 +41,13 @@ if __name__ == "__main__":
     mainThread.daemon = True
     mainThread.start()
 
-    # GUI setup
-    gs.root = CreateWindow(gs._TITLE + gs.titleMessage, gs._WIDTH, gs._HEIGHT, True)
-    auxX,auxY = CalculatePosition(gs._WIDTH, gs._HEIGHT)
-    gs.root.geometry(f'{gs._WIDTH}x{gs._HEIGHT}+{auxX}+{auxY}')
-    HorizontalMenu(gs.root)
-    codesData = RefreshCodes()
-    CreateTreeView(gs.root, codesData, int(gs.configList['gui-delay'])*1100, RefreshCodes)
+    # # GUI setup
+    # # gs.killersList = GetKillers()
+    # gs.root = CreateWindow(gs._TITLE + gs.titleMessage, gs._WIDTH, gs._HEIGHT, True)
+    # auxX,auxY = CalculatePosition(gs._WIDTH, gs._HEIGHT)
+    # gs.root.geometry(f'{gs._WIDTH}x{gs._HEIGHT}+{auxX}+{auxY}')
+    # HorizontalMenu(gs.root)
+    # codesData = RefreshCodes()
+    # CreateTreeView(gs.root, codesData, int(gs.configList['gui-delay'])*1100, RefreshCodes)
 
-    gs.root.mainloop()
+    # gs.root.mainloop()

@@ -24,12 +24,15 @@ _FOLDER_TEMP = 'Temp'
 # Files
 _FILE_CONFIG = 'config.xml'
 _FILE_CONTROL = 'control.xml'
+_FILE_DATA = 'Tools/Items/data'
+_FILE_DATAK = 'Tools/Items/datak'
 
 # Global variables
 configList = {}
 root = None
 titleMessage = ''
 writingFlag = False
+killersList = []
 
 # Round variables
 roundMap = ''
