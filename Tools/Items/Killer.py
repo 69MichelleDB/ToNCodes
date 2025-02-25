@@ -38,7 +38,7 @@ def DecodeNote(i_input):
                     roundAux='alternates'
 
             killersRaw = dataRaw[2].split(' ')
-            eventR = dataRaw[3]
+            eventR = dataRaw[3] if len(dataRaw)>3 else ''
             if round.lower() in ['midnight','bloodbath','double trouble','ex','unbound']:    # These rounds have multiple killers
                 count = 0
                 for killer in killersRaw:

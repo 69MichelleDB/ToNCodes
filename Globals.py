@@ -1,7 +1,7 @@
 import os.path
 
 # Constants
-_VERSION = 'alpha-0.5.2'
+_VERSION = 'alpha-0.5.3'
 _TITLE = f"ToNCodes {_VERSION} - by MichelleDB"
 _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
 
