@@ -1,6 +1,6 @@
 # Changelog
 
-## [WIP] - 2025..
+## [alpha-0.5.0] - 2025.02.25
 
 ### New
 - New entry in the options window to configure the delay between each time ToNCodes checks VRChat's logs files for new codes. [#12](https://github.com/69MichelleDB/ToNCodes/issues/12)
