@@ -9,7 +9,7 @@ This started as a personal application to store all Terrors of Nowhere codes gen
 
 I'm not working on it with the intention to replace any existing solutions made for the public. It's mostly an excuse for me to mess with Python and because I believe having multiple choices is always good. You are welcome to use it if you please.
 
-If you find any bugs or want to make a suggestion, please open a new issue or let me know in https://discord.com/channels/983240485529337856/1340340722011734169.
+If you find any bugs or want to make a suggestion, please open a new issue or let me know on [Discord](https://discord.com/channels/983240485529337856/1340340722011734169).
 
 ## Notes
 
