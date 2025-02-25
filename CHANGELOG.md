@@ -1,5 +1,13 @@
 # Changelog
 
+## [alpha-0.5.2] - 2025.02.25
+
+## New
+- Added Neo Pilot, it gets detected during Winterfest.
+
+## Fixes
+- Alternates were not showing the correct name.
+
 ## [alpha-0.5.1] - 2025.02.25
 
 ### Fixes

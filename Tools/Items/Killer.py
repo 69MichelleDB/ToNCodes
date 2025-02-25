@@ -15,8 +15,10 @@ def DecodeNote(i_input):
         print(f'Reviewing note: {i_input}')
 
         result = ''
+        eventR = ''
         map = ''
         round = ''
+        roundAux = ''
         killers = []
         matched = []
         killerStr = ''
@@ -30,16 +32,22 @@ def DecodeNote(i_input):
             dataRaw = i_input.split(', ')
             map = dataRaw[0]
             round = dataRaw[1]
+            
+            match round:
+                case 'Alternate':
+                    roundAux='alternates'
+
             killersRaw = dataRaw[2].split(' ')
+            eventR = dataRaw[3]
             if round.lower() in ['midnight','bloodbath','double trouble','ex','unbound']:    # These rounds have multiple killers
                 count = 0
                 for killer in killersRaw:
                     match round.lower():
                         case 'midnight':
                             if count == 2:
-                                matched = [i for i in gs.killersList if i.type==round.lower() and i.id==int(killer)]        # Check for variants
+                                matched = [i for i in gs.killersList if i.type==roundAux and i.id==int(killer)]        # Check for variants
                                 if len(matched) == 0:
-                                    matched = [i for i in gs.killersList if i.type=='alternates' and i.id==int(killer)]     # Check for the alternate
+                                    matched = [i for i in gs.killersList if i.type==roundAux and i.id==int(killer)]     # Check for the alternate
 
                     # Regular terrors
                     if len(matched) == 0:
@@ -63,8 +71,12 @@ def DecodeNote(i_input):
                         killers.append('Meatball Man')
             else:                                                                                               # Single killer rounds
                 killer = killersRaw[0]
-                matched = [i for i in gs.killersList if i.type==round.lower() and i.id==int(killer)]            # Check for variants
-                                                                                                                # TODO: we need to check for Neo Pilot
+                matched = [i for i in gs.killersList if i.type==roundAux and i.id==int(killer)]            # Check for variants
+
+                if eventR!='' and len(matched)>0:                                                                                  # Special event replacements
+                    match eventR:
+                        case 'Winterfest':
+                            matched[0].name = 'Neo Pilot' if matched[0].value=='fusion_pilot' else matched[0].name
 
                 if len(matched) == 0:                                                                           # Regular terrors
                     matched = [i for i in gs.killersList if i.type=='terrors' and i.id==int(killer)]

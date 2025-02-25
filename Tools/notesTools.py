@@ -22,6 +22,14 @@ def ParseContent(i_content, i_fileName, i_cursor):
 
         codesArray = []
 
+        strEventWinter = "winter!"
+
+        cursorEventWinter = i_content.find(strEventWinter, 0)
+        if cursorEventWinter != -1:
+            gs.roundEvent = "Winterfest"
+        else:
+            gs.roundEvent = ""
+
         strCodeStart = "Debug      -  [START]"
         strKillerSet = "Killers have been set - "
         strMapSet = "This round is taking place at "
@@ -168,7 +176,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
                     codeFound = i_content[cursor + len(strCodeStart):endIndex]
                     logLineStart = i_content.rfind('\n', 0, cursor) + 1
                     dateTime = i_content[logLineStart:cursor].strip().split(" Log")[0]
-                    note = gs.roundCondition if gs.roundCondition == 'RESPAWN' else f"{gs.roundMap}, {gs.roundKiller}"
+                    note = gs.roundCondition if gs.roundCondition == 'RESPAWN' else f"{gs.roundMap}, {gs.roundKiller}, {gs.roundEvent}"
                     codesArray.append((i_fileName, dateTime, codeFound, note))
                     cursor = endIndex + len("[END]")
 
