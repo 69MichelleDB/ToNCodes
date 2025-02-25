@@ -2,7 +2,7 @@
 
 ## Intro
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/c09909b1-27c4-49af-93e1-97f4baea5367" />
+  <img src="https://github.com/user-attachments/assets/f7215a47-92af-4f57-9ccc-85f2b679b152" />
 </p>
 
 This started as a personal application to store all Terrors of Nowhere codes generated while playing, the main reason I made it is because the currently available solutions don't work on Linux.
@@ -13,7 +13,7 @@ If you find any bugs or want to make a suggestion, please open a new issue or le
 
 ## Notes
 
-> The Notes field has no functionality previous to version `alpha-0.5.0`. I'll post a release soon.
+> The Notes field was added on version `alpha-0.5.0`. It's still in development but I hope to have it stable soon as I do more tests.
 >
 > `Double click` to copy a code. `Delete key` to delete a code.
 
