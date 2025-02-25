@@ -3,10 +3,10 @@
 ## [alpha-0.5.2] - 2025.02.25
 
 ## New
-- Added Neo Pilot, it gets detected during Winterfest.
+- Added Neo Pilot, it gets detected during Winterfest. [#19](https://github.com/69MichelleDB/ToNCodes/issues/19)
 
 ## Fixes
-- Alternates were not showing the correct name.
+- Alternates were not showing the correct name. [#19](https://github.com/69MichelleDB/ToNCodes/issues/19)
 
 ## [alpha-0.5.1] - 2025.02.25
 
