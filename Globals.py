@@ -1,5 +1,7 @@
+import os.path
+
 # Constants
-_VERSION = 'alpha-0.5.0'
+_VERSION = 'alpha-0.5.1'
 _TITLE = f"ToNCodes {_VERSION} - by MichelleDB"
 _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
 
@@ -24,8 +26,8 @@ _FOLDER_TEMP = 'Temp'
 # Files
 _FILE_CONFIG = 'config.xml'
 _FILE_CONTROL = 'control.xml'
-_FILE_DATA = 'Tools/Items/data'
-_FILE_DATAK = 'Tools/Items/datak'
+_FILE_DATA = os.path.join('Tools','Items','data')
+_FILE_DATAK = os.path.join('Tools','Items','datak')
 
 # Global variables
 configList = {}

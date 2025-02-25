@@ -21,7 +21,10 @@ def DecodeNote(i_input):
         matched = []
         killerStr = ''
 
-        if i_input == 'RESPAWN':
+        if i_input == 'No notes':
+            print('This is a code from a version without Note integration (< 0.5.0)')
+            result = '[No note, code prior to alpha-0.5.0]'
+        elif i_input == 'RESPAWN':
             result = 'Respawned'
         else:
             dataRaw = i_input.split(', ')

@@ -1,5 +1,11 @@
 # Changelog
 
+## [alpha-0.5.1] - 2025.02.25
+
+### Fixes
+- Fixed Note decoding to include the case of files created before version `alpha-0.5.0`.
+- Fixed os path for the killer data.
+
 ## [alpha-0.5.0] - 2025.02.25
 
 ### New
