@@ -22,13 +22,20 @@ def ParseContent(i_content, i_fileName, i_cursor):
 
         codesArray = []
 
+        strCodeStart = "Debug      -  [START]"
+        strKillerSet = "Killers have been set - "
+        strMapSet = "This round is taking place at "
+        strDed = "You died."
+        strWin = "Lived in round."
+        strRespawn = "Respawned? Coward."
+
         # First check if there's anything in the log
-        cursorRespawn = i_content.find("Respawned? Coward.", cursor)
-        cursorWin = i_content.find("Lived in round.", cursor)
-        cursorDead = i_content.find("You died.", cursor)
-        cursorMap = i_content.find("This round is taking place at ", cursor)
-        cursorKiller = i_content.find("Killers have been set - ", cursor)
-        cursorCode = i_content.find("Log        -  [START]", cursor)
+        cursorRespawn = i_content.find(strRespawn, cursor)
+        cursorWin = i_content.find(strWin, cursor)
+        cursorDead = i_content.find(strDed, cursor)
+        cursorMap = i_content.find(strMapSet, cursor)
+        cursorKiller = i_content.find(strKillerSet, cursor)
+        cursorCode = i_content.find(strCodeStart, cursor)
         
         # If there's nothing after the cursor, move on
         if cursorRespawn == -1 and cursorWin == -1 and cursorDead == -1 and cursorMap == -1 and cursorKiller == -1 and cursorCode == -1:
@@ -37,15 +44,15 @@ def ParseContent(i_content, i_fileName, i_cursor):
         # So, there's something, let's read the file
         while cursor < len(i_content):
             # The player can respawn at any point, I need to know if the next respawn is before or after the next condition to find
-            cursorRespawn = i_content.find("Respawned? Coward.", cursor)            # Rewpawning can happen at any point
+            cursorRespawn = i_content.find(strRespawn, cursor)            # Rewpawning can happen at any point
 #region MAP
             if gs.roundMap == '':           # If map wasn't defined, search for it...                   ## FINDING MAP
                 print("Map's not defined, searching...")
-                cursor = i_content.find("This round is taking place at ", cursor)
+                cursor = i_content.find(strMapSet, cursor)
                 if cursor != -1 and cursorRespawn !=-1:             # Map and Respawn
                     if cursor < cursorRespawn:                      # Is map or respawn first?
                         endIndex = i_content.find("\n", cursor)
-                        newMapRaw = i_content[cursor + len("This round is taking place at "):endIndex]
+                        newMapRaw = i_content[cursor + len(strMapSet):endIndex]
                         gs.roundMap = newMapRaw.replace(' and the round type is ',', ')
                         print(f"New map found: [{gs.roundMap}] round started.")
                     else: 
@@ -54,7 +61,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
                         cursor = cursorRespawn
                 elif cursor != -1 and cursorRespawn == -1:          # Only map
                     endIndex = i_content.find("\n", cursor)
-                    newMapRaw = i_content[cursor + len("This round is taking place at "):endIndex]
+                    newMapRaw = i_content[cursor + len(strMapSet):endIndex]
                     gs.roundMap = newMapRaw.replace(' and the round type is ',', ')
                     print(f"New map found: [{gs.roundMap}] round started.")
                 elif cursor == -1 and cursorRespawn != -1:          # Only respawn
@@ -67,20 +74,20 @@ def ParseContent(i_content, i_fileName, i_cursor):
 # region KILLER
             elif gs.roundKiller == '':                                                                  ## MAP FOUND
                 print(f"Searching for killer...")                      ## FINDING KILLER
-                cursor = i_content.find("Killers have been set - ", cursor)
+                cursor = i_content.find(strKillerSet, cursor)
                 if cursor == -1:                        # If no killer's found, out
                     cursor = len(i_content)             # Place the cursor at the end of the file
                 else:                                   # Map found...
                     endIndex = i_content.find(" // Round type is", cursor)
-                    newKillerRaw = i_content[cursor + len("Killers have been set - "):endIndex]
+                    newKillerRaw = i_content[cursor + len(strKillerSet):endIndex]
                     gs.roundKiller = newKillerRaw
                     print(f"New killer found: [{gs.roundKiller}].")
                     cursor = i_content.find("\n", endIndex)
 # region CONDITION
             elif gs.roundCondition == '':
                 # We need to check what's the closest condition
-                cursorWin = i_content.find("Lived in round.", cursor)
-                cursorDead = i_content.find("You died.", cursor)
+                cursorWin = i_content.find(strWin, cursor)
+                cursorDead = i_content.find(strDed, cursor)
                 
                 if cursorWin != -1 and cursorDead != -1 and cursorRespawn != -1:            # W D R
                     if cursorWin<cursorDead and cursorWin<cursorRespawn:
@@ -151,14 +158,14 @@ def ParseContent(i_content, i_fileName, i_cursor):
 #region Code
             if gs.roundCondition in ['WIN','RESPAWN']:                          # As far as I know only winning and respawning generate a code
                 print(f'Code condition fulfilled: {gs.roundCondition}, finding new code.')
-                cursor = i_content.find("Log        -  [START]", cursor)
+                cursor = i_content.find(strCodeStart, cursor)
                 if cursor == -1:                            # If there's no codes yet, get out
                     cursor = len(i_content)                 # Place the cursor at the end of the file
                 else:
                     # If we find codes, otherwise start parsing the data to split code and datetime
                     print('Code found...')
                     endIndex = i_content.find("[END]", cursor)
-                    codeFound = i_content[cursor + len("Log        -  [START]"):endIndex]
+                    codeFound = i_content[cursor + len(strCodeStart):endIndex]
                     logLineStart = i_content.rfind('\n', 0, cursor) + 1
                     dateTime = i_content[logLineStart:cursor].strip().split(" Log")[0]
                     note = gs.roundCondition if gs.roundCondition == 'RESPAWN' else f"{gs.roundMap}, {gs.roundKiller}"

@@ -41,13 +41,13 @@ if __name__ == "__main__":
     mainThread.daemon = True
     mainThread.start()
 
-    # # GUI setup
-    # # gs.killersList = GetKillers()
-    # gs.root = CreateWindow(gs._TITLE + gs.titleMessage, gs._WIDTH, gs._HEIGHT, True)
-    # auxX,auxY = CalculatePosition(gs._WIDTH, gs._HEIGHT)
-    # gs.root.geometry(f'{gs._WIDTH}x{gs._HEIGHT}+{auxX}+{auxY}')
-    # HorizontalMenu(gs.root)
-    # codesData = RefreshCodes()
-    # CreateTreeView(gs.root, codesData, int(gs.configList['gui-delay'])*1100, RefreshCodes)
+    # GUI setup
+    gs.killersList = GetKillers()
+    gs.root = CreateWindow(gs._TITLE + gs.titleMessage, gs._WIDTH, gs._HEIGHT, True)
+    auxX,auxY = CalculatePosition(gs._WIDTH, gs._HEIGHT)
+    gs.root.geometry(f'{gs._WIDTH}x{gs._HEIGHT}+{auxX}+{auxY}')
+    HorizontalMenu(gs.root)
+    codesData = RefreshCodes()
+    CreateTreeView(gs.root, codesData, 1500, RefreshCodes)
 
-    # gs.root.mainloop()
+    gs.root.mainloop()

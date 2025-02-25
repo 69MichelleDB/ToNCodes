@@ -13,7 +13,7 @@ If you find any bugs or want to make a suggestion, please open a new issue or le
 
 ## Notes
 
-> The Notes field has no functionallity yet as of version `alpha-0.4.0`, soon(tm).
+> The Notes field has no functionality yet as of version `alpha-0.4.0`, soon(tm).
 >
 > `Double click` to copy a code. `Delete key` to delete a code.
 

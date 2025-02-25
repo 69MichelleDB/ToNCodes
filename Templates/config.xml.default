@@ -3,7 +3,6 @@
     <vrchat-log-path>noinit</vrchat-log-path>
     <codes-folder>Codes</codes-folder>
     <file-delay>5</file-delay>
-    <gui-delay>1</gui-delay>
     <discord-webhook></discord-webhook>
     <check-updates>1</check-updates>
     <check-updates-warned>0</check-updates-warned>
