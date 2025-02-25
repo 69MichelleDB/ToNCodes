@@ -25,7 +25,7 @@ I don't know if Terrors of Nowhere is getting a save system using VRC's Persiste
 
 ## Notes
 
-> The Notes field has no functionallity yet as of version `alpha-0.4.0`, soon(tm).
+> The Notes field has no functionality yet as of version `alpha-0.4.0`, soon(tm).
 >
 > `Double click` to copy a code. `Delete key` to delete a code.
 
