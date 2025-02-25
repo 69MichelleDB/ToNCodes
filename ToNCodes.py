@@ -17,6 +17,8 @@ Terrors of Nowhere belongs to Beyond https://www.patreon.com/c/beyondVR
 Outside dependencies:
 Pyperclip: https://github.com/asweigart/pyperclip
 screeninfo: https://github.com/rr-/screeninfo
+cryptography: https://github.com/pyca/cryptography
+requests: https://github.com/psf/requests
 '''
 
 

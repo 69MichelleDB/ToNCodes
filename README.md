@@ -76,5 +76,4 @@ python -m nuitka --standalone --follow-imports --onefile --enable-plugin=tk-inte
 *Special thanks to Cinnosu for their support in facilitating the killer data. https://tontrack.me/*
 
 Outside dependencies:
-
-[pyperclip](https://github.com/asweigart/pyperclip), [screeninfo](https://github.com/rr-/screeninfo)
+[pyperclip](https://github.com/asweigart/pyperclip), [screeninfo](https://github.com/rr-/screeninfo), [cryptography](https://github.com/pyca/cryptography), [requests](https://github.com/psf/requests)
