@@ -6,16 +6,19 @@ from tkinter import messagebox
 from Tools.fileTools import CreateNewTempCodeFile
 from Tools.errorHandler import ErrorLogging
 from Tools.updateHandler import WarningHandler
+from Tools.Items.Killer import DecodeNote
 
 
 ## Discord Webhook, reused code from my bsky bot
 def SendWebhook(i_date, i_note, i_code):
     try:
+        note = DecodeNote(i_note)
+
         # This will be our temp file to send, discord has a 2000 characters limit, so it has to be as a txt file
         fileName = CreateNewTempCodeFile(gs._FOLDER_TEMP, i_date + '_TEMP.txt', i_code)
 
         payload = {
-            "content": f'New code found: {i_date}, Notes: {i_note}',
+            "content": f'New code found: {i_date}, Notes: {note}',
         }
 
         with open(fileName, "rb") as file:

@@ -5,6 +5,8 @@
 ### New
 - New entry in the options window to configure the delay between each time ToNCodes checks VRChat's logs files for new codes. [#12](https://github.com/69MichelleDB/ToNCodes/issues/12)
 - Redid the logic to parse VRC logs and now we can finally feed the `Notes` field with raw data. [#16](https://github.com/69MichelleDB/ToNCodes/issues/16)
+- First draft of the Notes logic added [#3](https://github.com/69MichelleDB/ToNCodes/issues/3)
+    - Special thanks to Cinnosu for their support facilitating the killer data~
 
 ### Changes
 - Optimizations reading log files. The old algorythm would read a modified file from start to finish every single time, I changed it so in control.xml the file's path, the modification date and the cursor's last position gets stored. That way, if we need to check the log file, we can start from the last position and on boot, we don't need to check all files again. [#8](https://github.com/69MichelleDB/ToNCodes/issues/8) [#13](https://github.com/69MichelleDB/ToNCodes/issues/13)
@@ -12,11 +14,15 @@
 - Option window's size changed.
 - Option window's webhook text field expanded.
 - Webhook also sends note's details.
+- Notes in webhook have the same format as in the gui. [#3](https://github.com/69MichelleDB/ToNCodes/issues/3)
+- Removed gui-delay entry from config file.
+- Changed column sizes.
 
 ### Fixes
 - Fixed main window's title.
 - Fixed sorting files issue. [#14](https://github.com/69MichelleDB/ToNCodes/issues/14)
 - Future proofing in case a new update adds fields to config.xml, add them. [#15](https://github.com/69MichelleDB/ToNCodes/issues/15)
+- Fixed small typo on README (thanks eltociear [#17](https://github.com/69MichelleDB/ToNCodes/pull/17))
 
 ## [alpha-0.4.0] - 2025.02.14
 

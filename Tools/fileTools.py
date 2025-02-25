@@ -155,7 +155,7 @@ def ControlFile():
 def GetKillers():
     result = []
 
-    with open(gs._FILE_DATAK, 'r') as file:
+    with open(gs._FILE_DATAK, 'r') as file:     
         key = file.read()
 
     cipher = Fernet(key)
@@ -166,9 +166,9 @@ def GetKillers():
     killerList = json.loads(cipher.decrypt(data).decode('utf-8'))
 
     for typeList in killerList:
-        print(typeList)
+        #print(typeList)
         for killers in killerList[typeList]:
-            print(f'{killers['id']},{killers['value']},{killers['name']}')
+            #print(f'{killers['id']},{killers['value']},{killers['name']}')
             result.append( agent.Killer(typeList, killers['id'], killers['value'], killers['name']) )
 
     return result

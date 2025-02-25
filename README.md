@@ -5,23 +5,23 @@
   <img src="https://github.com/user-attachments/assets/c09909b1-27c4-49af-93e1-97f4baea5367" />
 </p>
 
-This started as a personal application to store all Terrors of Nowhere codes generated while playing, the main reason I made it is because the current available solutions don't work on linux.
+This started as a personal application to store all Terrors of Nowhere codes generated while playing, the main reason I made it is because the currently available solutions don't work on Linux.
 
-I'm not working on it with the intention to replace any current existing solutions made for the public. It's mostly an excuse for me to mess with python and because I believe having multiple choices is always good. You are welcome to use it if you please.
+I'm not working on it with the intention to replace any existing solutions made for the public. It's mostly an excuse for me to mess with Python and because I believe having multiple choices is always good. You are welcome to use it if you please.
 
 If you find any bugs or want to make a suggestion, please open a new issue or let me know in https://discord.com/channels/983240485529337856/1340340722011734169.
 
 ## Notes
 
-> The Notes field has no functionality yet as of version `alpha-0.4.0`, soon(tm).
+> The Notes field has no functionality previous to version `alpha-0.5.0`. I'll post a release soon.
 >
 > `Double click` to copy a code. `Delete key` to delete a code.
 
-This current version was made under `Python 3.10.12`. If you want to run it [you can download the latest standalone release](https://github.com/69MichelleDB/ToNCodes/releases/latest) or if you have python installed you can clone the project and run `ToNCodes.py`.
+This current version was made under `Python 3.10.12`. If you want to run it, [you can download the latest standalone release](https://github.com/69MichelleDB/ToNCodes/releases/latest) or if you have Python installed, you can clone the project and run `ToNCodes.py`.
 
-**This next section is only if you want to run the python code instead of the binary.**
+**This next section is only if you want to run the Python code instead of the binary.**
 
-The project requires `tkinter` and `xclip` (only if you're on linux, xclip is not needed on Windows). On most Linux distributions, you can install it via package manager. 
+The project requires `tkinter` and `xclip` (only if you're on Linux, xclip is not needed on Windows). On most Linux distributions, you can install it via package manager. 
 
 Debian systems:
 ```bash
@@ -47,7 +47,7 @@ Make sure you also install all the `requirements.txt`
 pip install -r requirements.txt
 ```
 
-**If you want to compile it into an standalong binary, you can use [nuitka](https://nuitka.net/user-documentation/)**. When I compiled it for Windows, I used Python 3.12.9. At this moment in time 3.13 is not supported by it.
+**If you want to compile it into an standalone binary, you can use [nuitka](https://nuitka.net/user-documentation/)**. When I compiled it for Windows, I used Python 3.12.9. At this moment in time, 3.13 is not supported by it.
 
 ```bash
 pip install nuitka
@@ -73,7 +73,7 @@ python -m nuitka --standalone --follow-imports --onefile --enable-plugin=tk-inte
 
 *[Terrors of Nowhere belongs to Beyond](https://www.patreon.com/c/beyondVR)*
 
-*Special thanks to Cinnosu for their support facilitating the killer data, please support their site https://tontrack.me/*
+*Special thanks to Cinnosu for their support in facilitating the killer data. https://tontrack.me/*
 
 Outside dependencies:
 

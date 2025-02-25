@@ -1,3 +1,6 @@
+import Globals as gs
+from Tools.errorHandler import ErrorLogging
+
 class Killer:
 
     def __init__ (self, i_type, i_id, i_value, i_name):
@@ -6,5 +9,73 @@ class Killer:
         self.value = i_value
         self.name = i_name
 
+# Function to translate the raw note data, to something the user can understand
+def DecodeNote(i_input):
+    try:
+        print(f'Reviewing note: {i_input}')
 
-#def DecodeNote(i_input):
+        result = ''
+        map = ''
+        round = ''
+        killers = []
+        matched = []
+        killerStr = ''
+
+        if i_input == 'RESPAWN':
+            result = 'Respawned'
+        else:
+            dataRaw = i_input.split(', ')
+            map = dataRaw[0]
+            round = dataRaw[1]
+            killersRaw = dataRaw[2].split(' ')
+            if round.lower() in ['midnight','bloodbath','double trouble','ex','unbound']:    # These rounds have multiple killers
+                count = 0
+                for killer in killersRaw:
+                    match round.lower():
+                        case 'midnight':
+                            if count == 2:
+                                matched = [i for i in gs.killersList if i.type==round.lower() and i.id==int(killer)]        # Check for variants
+                                if len(matched) == 0:
+                                    matched = [i for i in gs.killersList if i.type=='alternates' and i.id==int(killer)]     # Check for the alternate
+
+                    # Regular terrors
+                    if len(matched) == 0:
+                        matched = [i for i in gs.killersList if i.type=='terrors' and i.id==int(killer)]
+                    killers.append(matched[0].name)
+                    count += 1
+                    matched = []
+            elif round.lower() in ['mystic moon','blood moon','twilight','solstice','cold night','run']:        # Special rounds
+                match round.lower():
+                    case 'mystic moon':
+                        killers.append('Psychosis')
+                    case 'blood moon':
+                        killers.append('Virus')
+                    case 'twilight':
+                        killers.append('Apocalypse Bird')
+                    case 'solstice':
+                        killers.append('Pandora')
+                    case 'cold night':
+                        killers.append('Rift Monsters')
+                    case 'run':
+                        killers.append('Meatball Man')
+            else:                                                                                               # Single killer rounds
+                killer = killersRaw[0]
+                matched = [i for i in gs.killersList if i.type==round.lower() and i.id==int(killer)]            # Check for variants
+                                                                                                                # TODO: we need to check for Neo Pilot
+
+                if len(matched) == 0:                                                                           # Regular terrors
+                    matched = [i for i in gs.killersList if i.type=='terrors' and i.id==int(killer)]
+                killers.append(matched[0].name)
+                matched = []
+
+            for killerName in killers:
+                killerStr += killerName + ', '
+            killerStr = killerStr[:len(killerStr)-2]            # Remove the last separator from the killers string
+            result = f'Won: {map}; {round}; {killerStr}'
+
+        print(f'Note reviewed: {result}')
+
+        return result
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in DecodeNote: {e}")

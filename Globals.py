@@ -4,7 +4,7 @@ _TITLE = f"ToNCodes {_VERSION} - by MichelleDB"
 _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
 
 # Main window
-_WIDTH = 720
+_WIDTH = 770
 _HEIGHT = 300
 
 # Options window
@@ -32,6 +32,7 @@ configList = {}
 root = None
 titleMessage = ''
 writingFlag = False
+newCodeAdded = True
 killersList = []
 
 # Round variables

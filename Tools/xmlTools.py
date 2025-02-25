@@ -293,7 +293,8 @@ def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
         # Extract all data into the XML
         for fileName, dateTime, logContent, note in logEntries:
 
-            gs.writingFlag = True
+            gs.writingFlag = True                   # Prevents the gui from accessing while the file is open
+            gs.newCodeAdded = True                  # Alerts the gui that there's a new Code
             
             currentLogFile = i_codesFolder + os.path.sep + os.path.basename(fileName).replace('.txt', '.xml')
             if not os.path.exists(currentLogFile):
