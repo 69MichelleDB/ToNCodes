@@ -75,7 +75,7 @@ python -m nuitka --standalone --follow-imports --onefile --enable-plugin=tk-inte
 
 *Special thanks to Cinnosu for their support in facilitating the killer data. https://tontrack.me/*
 
-**Big shout to the Linux VR Adventures community**: If you're on a Linux distro and want to setup your VR hardware, visit https://lvra.gitlab.io/ for a lot of useful information.
+**Big shoutout to the Linux VR Adventures community**: If you're on a Linux distro and want to set up your VR hardware, visit https://lvra.gitlab.io/ for a lot of useful information.
 
 Outside dependencies:
 [pyperclip](https://github.com/asweigart/pyperclip), [screeninfo](https://github.com/rr-/screeninfo), [cryptography](https://github.com/pyca/cryptography), [requests](https://github.com/psf/requests)
