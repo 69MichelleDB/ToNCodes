@@ -1,3 +1,4 @@
+import os.path
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
 import glob
@@ -16,6 +17,21 @@ def ReadXml(i_filePath):
         tree = ET.parse(i_filePath)
         root = tree.getroot()
         return root
+    except ET.ParseError as e:                          # I want to check specifically for the control file
+        if(i_filePath == os.path.join(gs.configList['codes-folder'], gs._FILE_CONTROL)):
+            error = f'Your {gs._FILE_CONTROL} is corrupted, we are going to attempt to regenerate it'
+            fileOg = os.path.join(gs.configList['codes-folder'], gs._FILE_CONTROL)
+            if os.path.exists(fileOg):                  # Delete the corrupted control file and create a new one
+                os.remove(fileOg)
+                with open(fileOg, 'w') as file:
+                    file.write('<?xml version="1.0" ?><Root></Root>')
+            print(error)
+            ErrorLogging(error, True)                   # Recover and continue the process as normal
+            tree = ET.parse(i_filePath)
+            root = tree.getroot()
+            return root
+        else:
+            raise Exception
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in ReadXml: {e}")
@@ -286,7 +302,9 @@ def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
         with open(i_logFile, 'r') as f:
             print(f'[START] Reading file: {fileNameAux}')
             cursor, logEntriesAux = ParseContent(f.read(), fileNameAux, cursor)
-            logEntries += logEntriesAux
+            if len(logEntriesAux)>0:
+                if logEntriesAux[0][1] not in addedDates:
+                    logEntries += logEntriesAux
             print(f'[END] Reading file: {fileNameAux}')
 
         print(f'Saving codes to XML...')
