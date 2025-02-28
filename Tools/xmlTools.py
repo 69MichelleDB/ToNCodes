@@ -23,8 +23,8 @@ def ReadXml(i_filePath):
             fileOg = os.path.join(gs.configList['codes-folder'], gs._FILE_CONTROL)
             if os.path.exists(fileOg):                  # Delete the corrupted control file and create a new one
                 os.remove(fileOg)
-                with open(fileOg, 'w') as file:
-                    file.write('<?xml version="1.0" ?><Root></Root>')
+            with open(fileOg, 'w') as file:
+                file.write('<?xml version="1.0" ?><Root></Root>')
             print(error)
             ErrorLogging(error, True)                   # Recover and continue the process as normal
             tree = ET.parse(i_filePath)
