@@ -17,21 +17,29 @@ def ReadXml(i_filePath):
         tree = ET.parse(i_filePath)
         root = tree.getroot()
         return root
-    except ET.ParseError as e:                          # I want to check specifically for the control file
-        if(i_filePath == os.path.join(gs.configList['codes-folder'], gs._FILE_CONTROL)):
-            error = f'Your {gs._FILE_CONTROL} is corrupted, we are going to attempt to regenerate it'
-            fileOg = os.path.join(gs.configList['codes-folder'], gs._FILE_CONTROL)
+    except ET.ParseError as e:
+        if i_filePath == gs._FILE_CONFIG:            # Config file corruption
+            error = f'Your {gs._FILE_CONFIG} is corrupted, we are going to attempt to regenerate it'
+            fileOg = gs._FILE_CONFIG
             if os.path.exists(fileOg):                  # Delete the corrupted control file and create a new one
                 os.remove(fileOg)
-            with open(fileOg, 'w') as file:
+            defaultConfigFile = os.path.join(gs._FOLDER_TEMPLATES, gs._FILE_CONFIG+'.default')
+            with open(defaultConfigFile, 'r') as src, open(gs._FILE_CONFIG, 'w') as dst:
+                dst.write(src.read())
+        elif i_filePath == os.path.join(gs.configList['codes-folder'], gs._FILE_CONTROL):            # Control file corruption
+            error = f'Your {gs._FILE_CONTROL} is corrupted, we are going to attempt to regenerate it'
+            fileControl = os.path.join(gs.configList['codes-folder'], gs._FILE_CONTROL)
+            if os.path.exists(fileControl):                  # Delete the corrupted control file and create a new one
+                os.remove(fileControl)
+            with open(fileControl, 'w') as file:
                 file.write('<?xml version="1.0" ?><Root></Root>')
-            print(error)
-            ErrorLogging(error, True)                   # Recover and continue the process as normal
-            tree = ET.parse(i_filePath)
-            root = tree.getroot()
-            return root
         else:
             raise Exception
+        print(error)
+        ErrorLogging(error, True)
+        tree = ET.parse(i_filePath)                   # Recover and continue the process as normal
+        root = tree.getroot()
+        return root
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in ReadXml: {e}")
@@ -181,6 +189,7 @@ def PrettifyXML(i_root, i_file):
         ErrorLogging(f"Error in PrettifyXML: {e}")
 
 
+# This is in case the user updated and their config file is old and missing new fields, it'll add them
 def VerifyConfigFields(i_file):
     try:
         defaultConfigFile = os.path.join(gs._FOLDER_TEMPLATES, i_file+'.default')
@@ -194,7 +203,7 @@ def VerifyConfigFields(i_file):
                 if nodeD.tag == nodeC.tag:
                     found = True
                     break
-            # If the loop ends and doesn't find a match, inser it 
+            # If the loop ends and doesn't find a match, insert it 
             if not found:
                 print(f"Node {nodeD.tag} not found in {i_file}, adding...")
                 newNode = ET.Element(nodeD.tag)
