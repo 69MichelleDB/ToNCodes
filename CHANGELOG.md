@@ -6,7 +6,7 @@
 - Added Unbound data. [#20](https://github.com/69MichelleDB/ToNCodes/issues/20)
 
 ### Fixes
-- In case the `control file` gets corrupted or lost, it'll be deleted and a fresh one will be created. Next, ToNCodes will read all available Log files to first find and insert any missing codes and second to regenerate the `control file` with the missing cursor and dates data.
+- In case the `control file` gets corrupted or lost, it'll be deleted and a fresh one will be created. Next, ToNCodes will read all available Log files to first find and insert any missing codes and second to regenerate the `control file` with the missing cursor and dates data. [#21](https://github.com/69MichelleDB/ToNCodes/issues/21)
 
 
 ## [alpha-0.5.3] - 2025.02.25
