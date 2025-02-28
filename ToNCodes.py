@@ -1,5 +1,5 @@
 from Tools.xmlTools import InitializeConfig, ReadCodeFiles, ModifyNode, VerifyConfigFields
-from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles, GetKillers
+from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles, GetKeyData
 from Tools.guiTools import CreateWindow, HorizontalMenu, CreateTreeView, CalculatePosition
 from Tools.errorHandler import ErrorLogging
 from Tools.webhookTool import CheckForUpdates
@@ -44,7 +44,8 @@ if __name__ == "__main__":
     mainThread.start()
 
     # GUI setup
-    gs.killersList = GetKillers()
+    gs.killersList = GetKeyData(gs._FILE_DATAK, gs._FILE_DATA, 'K')
+    gs.unboundsDict = GetKeyData(gs._FILE_DATAUK, gs._FILE_DATAU, 'U')
     gs.root = CreateWindow(gs._TITLE + gs.titleMessage, gs._WIDTH, gs._HEIGHT, True)
     auxX,auxY = CalculatePosition(gs._WIDTH, gs._HEIGHT)
     gs.root.geometry(f'{gs._WIDTH}x{gs._HEIGHT}+{auxX}+{auxY}')

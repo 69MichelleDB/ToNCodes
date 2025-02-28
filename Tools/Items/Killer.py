@@ -45,9 +45,14 @@ def DecodeNote(i_input):
                     match round.lower():
                         case 'midnight':
                             if count == 2:
-                                matched = [i for i in gs.killersList if i.type==roundAux and i.id==int(killer)]        # Check for variants
+                                matched = [i for i in gs.killersList if i.type==roundAux and i.id==int(killer)]         # Check for variants
                                 if len(matched) == 0:
                                     matched = [i for i in gs.killersList if i.type==roundAux and i.id==int(killer)]     # Check for the alternate
+                        case 'unbound':
+                            if count == 0:
+                                matched = [Killer('unbound', killer, gs.unboundsDict[killer], f'{int(killer)+1}. {gs.unboundsDict[killer]}')]
+                            else:               # There's likely only going to be 1 id for unbounds, so exit after getting the first one
+                                break
 
                     # Regular terrors
                     if len(matched) == 0:

@@ -1,7 +1,7 @@
 import os.path
 
 # Constants
-_VERSION = 'alpha-0.5.3'
+_VERSION = 'alpha-0.5.4'
 _TITLE = f"ToNCodes {_VERSION} - by MichelleDB"
 _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
 
@@ -28,6 +28,8 @@ _FILE_CONFIG = 'config.xml'
 _FILE_CONTROL = 'control.xml'
 _FILE_DATA = os.path.join('Tools','Items','data')
 _FILE_DATAK = os.path.join('Tools','Items','datak')
+_FILE_DATAU = os.path.join('Tools','Items','datau')
+_FILE_DATAUK = os.path.join('Tools','Items','datauk')
 
 # Global variables
 configList = {}
@@ -36,6 +38,7 @@ titleMessage = ''
 writingFlag = False
 newCodeAdded = True
 killersList = []
+unboundsDict = {}
 
 # Round variables
 roundEvent = ''

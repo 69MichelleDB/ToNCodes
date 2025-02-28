@@ -152,23 +152,29 @@ def ControlFile():
 
 
 # If you're reading this and trying to datamine killer's info I'm not gonna stop you, this is just so it's not in plain text
-def GetKillers():
-    result = []
+def GetKeyData(i_key, i_data, i_type):
+    result = None
 
-    with open(gs._FILE_DATAK, 'r') as file:     
+    with open(i_key, 'r') as file:     
         key = file.read()
 
     cipher = Fernet(key)
 
-    with open(gs._FILE_DATA, 'r') as file:
+    with open(i_data, 'r') as file:
         data = file.read()
 
-    killerList = json.loads(cipher.decrypt(data).decode('utf-8'))
+    match i_type:
+        case 'K':
+            result = []
+            killerList = json.loads(cipher.decrypt(data).decode('utf-8'))
 
-    for typeList in killerList:
-        #print(typeList)
-        for killers in killerList[typeList]:
-            #print(f'{killers['id']},{killers['value']},{killers['name']}')
-            result.append( agent.Killer(typeList, killers['id'], killers['value'], killers['name']) )
+            for typeList in killerList:
+                #print(typeList)
+                for killers in killerList[typeList]:
+                    #print(f'{killers['id']},{killers['value']},{killers['name']}')
+                    result.append( agent.Killer(typeList, killers['id'], killers['value'], killers['name']) )
+        case 'U':
+            result = {}
+            result = json.loads(cipher.decrypt(data).decode('utf-8'))
 
     return result
