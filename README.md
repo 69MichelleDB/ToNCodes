@@ -13,17 +13,17 @@ If you find any bugs or want to make a suggestion, please open a new issue or le
 
 ## IMPORTANT WARNING
 
-This tool is currently in alpha stages and in development, so expect instability and bugs. I'd suggest keeping backups of at least the `Codes` folder inside the `ToNCodes folder`.
+This tool is currently in alpha stages and in development, so expect instability and bugs. I'd suggest keeping backups of at least the `Codes` folder where all the xml files are inside the app's folder.
 
 ## Notes
 
-> The Notes field was added on version `alpha-0.5.0`. It's still in development but I hope to have it stable soon as I do more tests.
+> `To run` double click `ToNCode.bin` (or `ToNCode.exe` if on Windows).
 >
-> `To execute` just double click the `ToNCode.bin` (or `ToNCode.exe` if on Windows).
+> `Double click` to copy a code.
+> 
+> `Delete key` to delete a code.
 >
-> `Double click` to copy a code. `Delete key` to delete a code.
->
-> `To update` I'd recommend making a backup of the `ToNCodes folder`, just in case you may need to rollback. Then just unzip the new version, extract the contents inside your `ToNCodes folder` and replace the files.
+> `To update` I'd recommend making a backup of the app's folder, just in case you may need to rollback. Then just unzip the new version, extract the contents inside your app's folder and replace the files.
 
 This current version was made under `Python 3.13.02`. If you want to run it, [you can download the latest standalone release](https://github.com/69MichelleDB/ToNCodes/releases/latest) or if you have Python installed, you can clone the project and run `ToNCodes.py`.
 
@@ -81,7 +81,9 @@ python -m nuitka --standalone --follow-imports --onefile --enable-plugin=tk-inte
 
 *[Terrors of Nowhere belongs to Beyond](https://www.patreon.com/c/beyondVR)*
 
-*Special thanks to Cinnosu for their support in facilitating the killer data. https://tontrack.me/*
+*[Special thanks to Cinnosu for their support in facilitating the killer data](https://tontrack.me/)*
+
+*[Thanks MaraRizer and the community for creating and maintaining this neatly organized wiki](https://terror.moe/)*
 
 **Big shoutout to the Linux VR Adventures community**: If you're on a Linux distro and want to set up your VR hardware, visit https://lvra.gitlab.io/ for a lot of useful information.
 
