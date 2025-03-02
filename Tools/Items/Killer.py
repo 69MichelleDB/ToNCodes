@@ -33,9 +33,8 @@ def DecodeNote(i_input):
             map = dataRaw[0]
             round = dataRaw[1]
             
-            match round:
-                case 'Alternate':
-                    roundAux='alternates'
+            if round in ['Alternate', 'Fog (Alternate)', 'Ghost (Alternate)']:
+                roundAux='alternates'
 
             killersRaw = dataRaw[2].split(' ')
             eventR = dataRaw[3] if len(dataRaw)>3 else ''
@@ -74,7 +73,7 @@ def DecodeNote(i_input):
                         killers.append('Rift Monsters')
                     case 'run':
                         killers.append('Meatball Man')
-            else:                                                                                               # Single killer rounds
+            else:                                                                                          # Single killer rounds
                 killer = killersRaw[0]
                 matched = [i for i in gs.killersList if i.type==roundAux and i.id==int(killer)]            # Check for variants
 

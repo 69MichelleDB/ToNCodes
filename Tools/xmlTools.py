@@ -133,17 +133,18 @@ def GetNodeValues(i_xmlFile, i_node='.//Date'):
 def ReadCodeFiles(folder):
     try:
         files_data = []
-        for file_name in os.listdir(folder):
-            if file_name.endswith('.xml'):
-                xmlFile = os.path.join(folder, file_name)
-                root = ReadXml(xmlFile)
-                for ton_code in root.findall('.//TON-Code'):
-                    file = ton_code.find('.//File').text if ton_code.find('.//File') is not None else None
-                    data = ton_code.find('.//Date').text if ton_code.find('.//Date') is not None else None
-                    code = ton_code.find('.//Code').text if ton_code.find('.//Code') is not None else None
-                    note = ton_code.find('.//Note').text if ton_code.find('.//Note') is not None else None
-                    if code != None:                  # I plan to allow deleting codes, this will help
-                        files_data.append((file, data, code, note))
+        if not gs.writingFlag:
+            for file_name in os.listdir(folder):
+                if file_name.endswith('.xml'):
+                    xmlFile = os.path.join(folder, file_name)
+                    root = ReadXml(xmlFile)
+                    for ton_code in root.findall('.//TON-Code'):
+                        file = ton_code.find('.//File').text if ton_code.find('.//File') is not None else None
+                        data = ton_code.find('.//Date').text if ton_code.find('.//Date') is not None else None
+                        code = ton_code.find('.//Code').text if ton_code.find('.//Code') is not None else None
+                        note = ton_code.find('.//Note').text if ton_code.find('.//Note') is not None else None
+                        if code != None:                  # I plan to allow deleting codes, this will help
+                            files_data.append((file, data, code, note))
         return files_data
     except Exception as e:
         print(e)

@@ -35,6 +35,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
         strNotJoinedRound = "Not opted in. Not joining this round."
         strCodeStart = "Debug      -  [START]"
         strKillerSet = "Killers have been set - "
+        strKillerSetFog = "Killers have been revealed - "
         strMapSet = "This round is taking place at "
         strDed = "You died."
         strWin = "Lived in round."
@@ -46,11 +47,13 @@ def ParseContent(i_content, i_fileName, i_cursor):
         cursorDead = i_content.find(strDed, cursor)
         cursorMap = i_content.find(strMapSet, cursor)
         cursorKiller = i_content.find(strKillerSet, cursor)
+        cursorKillerFog = i_content.find(strKillerSetFog, cursor)
         cursorCode = i_content.find(strCodeStart, cursor)
         cursorNotJoined = i_content.find(strNotJoinedRound, cursor)
         
         # If there's nothing after the cursor, move on
-        if cursorRespawn == -1 and cursorWin == -1 and cursorDead == -1 and cursorMap == -1 and cursorKiller == -1 and cursorCode == -1 and cursorNotJoined == -1:
+        if cursorRespawn == -1 and cursorWin == -1 and cursorDead == -1 and cursorMap == -1 \
+            and cursorKiller == -1 and cursorKillerFog == -1 and cursorCode == -1 and cursorNotJoined == -1:
             cursor = len(i_content)
 
         # So, there's something, let's read the file
@@ -73,7 +76,10 @@ def ParseContent(i_content, i_fileName, i_cursor):
                         if cursor < cursorRespawn:                      # Is map or respawn first?
                             endIndex = i_content.find("\n", cursor)
                             newMapRaw = i_content[cursor + len(strMapSet):endIndex]
-                            gs.roundMap = newMapRaw.replace(' and the round type is ',', ')
+                            newMapAux = newMapRaw.replace(' and the round type is ','%')
+                            newMapAuxSplit = newMapAux.split('%')
+                            gs.roundMap = newMapAuxSplit[0]
+                            gs.roundType = newMapAuxSplit[1]
                             print(f"New map found: [{gs.roundMap}] round started.")
                         else: 
                             print("User respawned!!!")
@@ -82,7 +88,10 @@ def ParseContent(i_content, i_fileName, i_cursor):
                     elif cursor != -1 and cursorRespawn == -1:          # Only map
                         endIndex = i_content.find("\n", cursor)
                         newMapRaw = i_content[cursor + len(strMapSet):endIndex]
-                        gs.roundMap = newMapRaw.replace(' and the round type is ',', ')
+                        newMapAux = newMapRaw.replace(' and the round type is ','%')
+                        newMapAuxSplit = newMapAux.split('%')
+                        gs.roundMap = newMapAuxSplit[0]
+                        gs.roundType = newMapAuxSplit[1]
                         print(f"New map found: [{gs.roundMap}] round started.")
                     elif cursor == -1 and cursorRespawn != -1:          # Only respawn
                         print("User respawned!!!")
@@ -94,14 +103,21 @@ def ParseContent(i_content, i_fileName, i_cursor):
 # region KILLER
             elif gs.roundKiller == '':                                                                  ## MAP FOUND
                 print(f"Searching for killer...")                      ## FINDING KILLER
-                cursor = i_content.find(strKillerSet, cursor)
+                strKiller = ''
+                if gs.roundType == 'Fog':
+                    cursor = i_content.find(strKillerSetFog, cursor)
+                    strKiller = strKillerSetFog
+                else: 
+                    cursor = i_content.find(strKillerSet, cursor)
+                    strKiller = strKillerSet
                 if cursor == -1:                        # If no killer's found, out
                     cursor = len(i_content)             # Place the cursor at the end of the file
                 else:                                   # Map found...
-                    endIndex = i_content.find(" // Round type is", cursor)
-                    newKillerRaw = i_content[cursor + len(strKillerSet):endIndex]
+                    endIndex = i_content.find(" // Round type is ", cursor)
+                    newKillerRaw = i_content[cursor + len(strKiller):endIndex]
                     gs.roundKiller = newKillerRaw
-                    print(f"New killer found: [{gs.roundKiller}].")
+                    gs.roundType = i_content[i_content.find(" is ", cursor):i_content.find("\n", endIndex)].replace(" is ", "") # Replace the round type with the killer's
+                    print(f"New killer found: [{gs.roundKiller}], round type: {gs.roundType}.")
                     cursor = i_content.find("\n", endIndex)
 # region CONDITION
             elif gs.roundCondition == '':
@@ -119,8 +135,10 @@ def ParseContent(i_content, i_fileName, i_cursor):
                         gs.roundCondition = 'LOSE'
                         cursor = cursorDead
                         gs.roundMap = ''
+                        gs.roundType = ''
                         gs.roundKiller = ''
                         gs.roundCondition = ''
+                        gs.roundNotJoined = -1
                     elif cursorRespawn<cursorWin and cursorRespawn<cursorDead:
                         print("User respawned!!!")
                         gs.roundCondition = 'RESPAWN'
@@ -135,8 +153,10 @@ def ParseContent(i_content, i_fileName, i_cursor):
                         gs.roundCondition = 'LOSE'
                         cursor = cursorDead
                         gs.roundMap = ''
+                        gs.roundType = ''
                         gs.roundKiller = ''
                         gs.roundCondition = ''
+                        gs.roundNotJoined = -1
                 elif cursorWin != -1 and cursorDead == -1 and cursorRespawn != -1:          # W R
                     if cursorWin<cursorRespawn:
                         print("Player won the round.")
@@ -152,8 +172,10 @@ def ParseContent(i_content, i_fileName, i_cursor):
                         gs.roundCondition = 'LOSE'
                         cursor = cursorDead
                         gs.roundMap = ''
+                        gs.roundType = ''
                         gs.roundKiller = ''
                         gs.roundCondition = ''
+                        gs.roundNotJoined = -1
                     else:
                         print("User respawned!!!")
                         gs.roundCondition = 'RESPAWN'
@@ -167,8 +189,10 @@ def ParseContent(i_content, i_fileName, i_cursor):
                     gs.roundCondition = 'LOSE'
                     cursor = cursorDead
                     gs.roundMap = ''
+                    gs.roundType = ''
                     gs.roundKiller = ''
                     gs.roundCondition = ''
+                    gs.roundNotJoined = -1
                 elif cursorWin == -1 and cursorDead == -1 and cursorRespawn != -1:          # R
                     print("User respawned!!!")
                     gs.roundCondition = 'RESPAWN'
@@ -188,14 +212,16 @@ def ParseContent(i_content, i_fileName, i_cursor):
                     codeFound = i_content[cursor + len(strCodeStart):endIndex]
                     logLineStart = i_content.rfind('\n', 0, cursor) + 1
                     dateTime = i_content[logLineStart:cursor].strip().split(" Log")[0]
-                    note = gs.roundCondition if gs.roundCondition == 'RESPAWN' else f"{gs.roundMap}, {gs.roundKiller}, {gs.roundEvent}"
+                    note = gs.roundCondition if gs.roundCondition == 'RESPAWN' else f"{gs.roundMap}, {gs.roundType}, {gs.roundKiller}, {gs.roundEvent}"
                     codesArray.append((i_fileName, dateTime, codeFound, note))
                     cursor = endIndex + len("[END]")
 
                     print("Code stored. Restarting variables...")
                     gs.roundMap = ''
+                    gs.roundType = ''
                     gs.roundKiller = ''
                     gs.roundCondition = ''
+                    gs.roundNotJoined = -1
 
         return cursor, codesArray
     except Exception as e:

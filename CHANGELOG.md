@@ -10,6 +10,7 @@
 - If the `config file` gets corrupted, it'll be deleted and a new one will be created, prompting the user to review the options. [#29](https://github.com/69MichelleDB/ToNCodes/issues/29)
 - If a `code xml file` gets corrupted, it'll be deleted, a new one will be created and it'll scan for codes again. [#28](https://github.com/69MichelleDB/ToNCodes/issues/28)
 - Detect if the player didn't join the round. [#22](https://github.com/69MichelleDB/ToNCodes/issues/22)
+- Type Fog, Fog (Alternate) and Ghost (Alternate) rounds now detected. [#23](https://github.com/69MichelleDB/ToNCodes/issues/23)
 
 
 ## [alpha-0.5.3] - 2025.02.25
