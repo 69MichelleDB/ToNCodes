@@ -17,22 +17,35 @@ def ReadXml(i_filePath):
         tree = ET.parse(i_filePath)
         root = tree.getroot()
         return root
+    # In case of XML corruption...
     except ET.ParseError as e:
-        if i_filePath == gs._FILE_CONFIG:            # Config file corruption
+        if i_filePath == gs._FILE_CONFIG:               # CONFIG FILE corruption
             error = f'Your {gs._FILE_CONFIG} is corrupted, we are going to attempt to regenerate it'
             fileOg = gs._FILE_CONFIG
-            if os.path.exists(fileOg):                  # Delete the corrupted control file and create a new one
+            if os.path.exists(fileOg):                  # Delete the corrupted config file and create a new one
                 os.remove(fileOg)
             defaultConfigFile = os.path.join(gs._FOLDER_TEMPLATES, gs._FILE_CONFIG+'.default')
             with open(defaultConfigFile, 'r') as src, open(gs._FILE_CONFIG, 'w') as dst:
                 dst.write(src.read())
-        elif i_filePath == os.path.join(gs.configList['codes-folder'], gs._FILE_CONTROL):            # Control file corruption
+        elif i_filePath == os.path.join(gs.configList['codes-folder'], gs._FILE_CONTROL):            # CONTROL FILE corruption
             error = f'Your {gs._FILE_CONTROL} is corrupted, we are going to attempt to regenerate it'
             fileControl = os.path.join(gs.configList['codes-folder'], gs._FILE_CONTROL)
             if os.path.exists(fileControl):                  # Delete the corrupted control file and create a new one
                 os.remove(fileControl)
             with open(fileControl, 'w') as file:
                 file.write('<?xml version="1.0" ?><Root></Root>')
+        elif i_filePath[len(gs.configList['codes-folder'])+1:len(gs.configList['codes-folder'])+11] == 'output_log':    # CODE FILE corruption
+            fileCode = i_filePath
+            error = f'{fileCode} is corrupted, we are going to attempt to regenerate it'
+            if os.path.exists(fileCode):                    # Delete the corrupted code file
+                os.remove(fileCode)
+            allLogs = GetAllFiles(gs.configList['vrchat-log-path']+'output_log_*.txt')                  # I want control to forget the corrupted file
+            fileCodeXML = os.path.join(gs.configList['vrchat-log-path'] ,fileCode.replace('Codes/','').replace('.xml','.txt'))
+            allLogs.remove(fileCodeXML)
+            CleanControlEntries(os.path.join(gs.configList['codes-folder'], gs._FILE_CONTROL), allLogs) # And we do that here
+            with open(fileCode, 'w') as file:
+                file.write('<?xml version="1.0" ?><Root></Root>')
+            gs.forceRefreshCodes = True                     # We need to tell CodesHunter to refresh and read the Codes again
         else:
             raise Exception
         print(error)

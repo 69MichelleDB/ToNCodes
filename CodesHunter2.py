@@ -33,6 +33,10 @@ def CodesHunter2():
 
             previousDateFiles = currentDateFiles                        # Move the old dates
             currentDateFiles = GetDateModified(logFiles)                # Obtain the new dates
+            if gs.forceRefreshCodes:                                    # In case of a Code.xml file corruption this will force a refresh
+                previousDateFiles = []
+                controlData = ReadControlFile(controlFile)              # Refresh the control data to update the cursors
+                gs.forceRefreshCodes = False
             if currentDateFiles != previousDateFiles:
                 print('Modified files detected, checking...')
                 logFilesToCheck = GetModifiedFiles(currentDateFiles, previousDateFiles)             # Compare them and see what files we need to check

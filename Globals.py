@@ -37,6 +37,7 @@ root = None
 titleMessage = ''
 writingFlag = False
 newCodeAdded = True
+forceRefreshCodes = False
 killersList = []
 unboundsDict = {}
 
