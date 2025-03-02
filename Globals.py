@@ -43,6 +43,7 @@ unboundsDict = {}
 
 # Round variables
 roundEvent = ''
+roundNotJoined = -1
 roundMap = ''
 roundKiller = ''
 roundCondition = ''

@@ -4,7 +4,9 @@ from Tools.errorHandler import ErrorLogging
 # Check the content of a log and parse all data
 def ParseContent(i_content, i_fileName, i_cursor):
     try: 
+    # 2025.02.27 18:41:01 Debug      -  Not opted in. Not joining this round.
         # 2025.02.16 23:58:03 Log        -  This round is taking place at Inner Tower (24) and the round type is Classic
+    # 2025.02.27 18:41:01 Debug      -  opted in
         # 2025.02.16 23:58:13 Log        -  Killers have been set - 120 0 0 // Round type is Classic
         
         # 2025.02.16 23:59:04 Log        -  You died.
@@ -30,6 +32,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
         else:
             gs.roundEvent = ""
 
+        strNotJoinedRound = "Not opted in. Not joining this round."
         strCodeStart = "Debug      -  [START]"
         strKillerSet = "Killers have been set - "
         strMapSet = "This round is taking place at "
@@ -44,9 +47,10 @@ def ParseContent(i_content, i_fileName, i_cursor):
         cursorMap = i_content.find(strMapSet, cursor)
         cursorKiller = i_content.find(strKillerSet, cursor)
         cursorCode = i_content.find(strCodeStart, cursor)
+        cursorNotJoined = i_content.find(strNotJoinedRound, cursor)
         
         # If there's nothing after the cursor, move on
-        if cursorRespawn == -1 and cursorWin == -1 and cursorDead == -1 and cursorMap == -1 and cursorKiller == -1 and cursorCode == -1:
+        if cursorRespawn == -1 and cursorWin == -1 and cursorDead == -1 and cursorMap == -1 and cursorKiller == -1 and cursorCode == -1 and cursorNotJoined == -1:
             cursor = len(i_content)
 
         # So, there's something, let's read the file
@@ -55,30 +59,38 @@ def ParseContent(i_content, i_fileName, i_cursor):
             cursorRespawn = i_content.find(strRespawn, cursor)            # Rewpawning can happen at any point
 #region MAP
             if gs.roundMap == '':           # If map wasn't defined, search for it...                   ## FINDING MAP
+                cursorNotJoined = i_content.find(strNotJoinedRound, cursor)         # First check if the player joined the round
+                if cursorNotJoined != -1:
+                    gs.roundNotJoined = cursorNotJoined
                 print("Map's not defined, searching...")
                 cursor = i_content.find(strMapSet, cursor)
-                if cursor != -1 and cursorRespawn !=-1:             # Map and Respawn
-                    if cursor < cursorRespawn:                      # Is map or respawn first?
+                if gs.roundNotJoined != -1 and gs.roundNotJoined < cursor:                          # If they didn't join the round, out
+                    print("Player didn't join this round, skipping map...")
+                    gs.roundNotJoined = -1
+                    cursor = i_content.find('\n', cursor)
+                else: 
+                    if cursor != -1 and cursorRespawn !=-1:             # Map and Respawn
+                        if cursor < cursorRespawn:                      # Is map or respawn first?
+                            endIndex = i_content.find("\n", cursor)
+                            newMapRaw = i_content[cursor + len(strMapSet):endIndex]
+                            gs.roundMap = newMapRaw.replace(' and the round type is ',', ')
+                            print(f"New map found: [{gs.roundMap}] round started.")
+                        else: 
+                            print("User respawned!!!")
+                            gs.roundCondition = 'RESPAWN'
+                            cursor = cursorRespawn
+                    elif cursor != -1 and cursorRespawn == -1:          # Only map
                         endIndex = i_content.find("\n", cursor)
                         newMapRaw = i_content[cursor + len(strMapSet):endIndex]
                         gs.roundMap = newMapRaw.replace(' and the round type is ',', ')
                         print(f"New map found: [{gs.roundMap}] round started.")
-                    else: 
+                    elif cursor == -1 and cursorRespawn != -1:          # Only respawn
                         print("User respawned!!!")
                         gs.roundCondition = 'RESPAWN'
                         cursor = cursorRespawn
-                elif cursor != -1 and cursorRespawn == -1:          # Only map
-                    endIndex = i_content.find("\n", cursor)
-                    newMapRaw = i_content[cursor + len(strMapSet):endIndex]
-                    gs.roundMap = newMapRaw.replace(' and the round type is ',', ')
-                    print(f"New map found: [{gs.roundMap}] round started.")
-                elif cursor == -1 and cursorRespawn != -1:          # Only respawn
-                    print("User respawned!!!")
-                    gs.roundCondition = 'RESPAWN'
-                    cursor = cursorRespawn
-                else:                                               # Neither
-                    print("No map, no respawn, move along.")
-                    cursor = len(i_content)               # Place the cursor at the end of the file
+                    else:                                               # Neither
+                        print("No map, no respawn, move along.")
+                        cursor = len(i_content)               # Place the cursor at the end of the file
 # region KILLER
             elif gs.roundKiller == '':                                                                  ## MAP FOUND
                 print(f"Searching for killer...")                      ## FINDING KILLER
