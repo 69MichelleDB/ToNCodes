@@ -134,11 +134,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
                         print("Player died during the round. Restarting variables...")
                         gs.roundCondition = 'LOSE'
                         cursor = cursorDead
-                        gs.roundMap = ''
-                        gs.roundType = ''
-                        gs.roundKiller = ''
-                        gs.roundCondition = ''
-                        gs.roundNotJoined = -1
+                        ResetRound()
                     elif cursorRespawn<cursorWin and cursorRespawn<cursorDead:
                         print("User respawned!!!")
                         gs.roundCondition = 'RESPAWN'
@@ -152,11 +148,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
                         print("Player died during the round. Restarting variables...")
                         gs.roundCondition = 'LOSE'
                         cursor = cursorDead
-                        gs.roundMap = ''
-                        gs.roundType = ''
-                        gs.roundKiller = ''
-                        gs.roundCondition = ''
-                        gs.roundNotJoined = -1
+                        ResetRound()
                 elif cursorWin != -1 and cursorDead == -1 and cursorRespawn != -1:          # W R
                     if cursorWin<cursorRespawn:
                         print("Player won the round.")
@@ -171,11 +163,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
                         print("Player died during the round. Restarting variables...")
                         gs.roundCondition = 'LOSE'
                         cursor = cursorDead
-                        gs.roundMap = ''
-                        gs.roundType = ''
-                        gs.roundKiller = ''
-                        gs.roundCondition = ''
-                        gs.roundNotJoined = -1
+                        ResetRound()
                     else:
                         print("User respawned!!!")
                         gs.roundCondition = 'RESPAWN'
@@ -188,11 +176,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
                     print("Player died during the round. Restarting variables...")
                     gs.roundCondition = 'LOSE'
                     cursor = cursorDead
-                    gs.roundMap = ''
-                    gs.roundType = ''
-                    gs.roundKiller = ''
-                    gs.roundCondition = ''
-                    gs.roundNotJoined = -1
+                    ResetRound()
                 elif cursorWin == -1 and cursorDead == -1 and cursorRespawn != -1:          # R
                     print("User respawned!!!")
                     gs.roundCondition = 'RESPAWN'
@@ -217,13 +201,17 @@ def ParseContent(i_content, i_fileName, i_cursor):
                     cursor = endIndex + len("[END]")
 
                     print("Code stored. Restarting variables...")
-                    gs.roundMap = ''
-                    gs.roundType = ''
-                    gs.roundKiller = ''
-                    gs.roundCondition = ''
-                    gs.roundNotJoined = -1
+                    ResetRound()
 
         return cursor, codesArray
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in ParseContent: {e}")
+
+# Reset all Round variables
+def ResetRound():
+    gs.roundMap = ''
+    gs.roundType = ''
+    gs.roundKiller = ''
+    gs.roundCondition = ''
+    gs.roundNotJoined = -1
