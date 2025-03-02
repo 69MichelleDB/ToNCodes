@@ -37,7 +37,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
         strKillerSet = "Killers have been set - "
         strKillerSetFog = "Killers have been revealed - "
         strMapSet = "This round is taking place at "
-        strDed = "You died."
+        strDed = "Died in round."
         strWin = "Lived in round."
         strRespawn = "Respawned? Coward."
 
