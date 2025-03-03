@@ -12,6 +12,7 @@
 - Detect if the player didn't join the round. [#22](https://github.com/69MichelleDB/ToNCodes/issues/22)
 - Type Fog, Fog (Alternate) and Ghost (Alternate) rounds now detected. [#23](https://github.com/69MichelleDB/ToNCodes/issues/23)
 - Getting killed while holding Maxwell doesn't count as losing the round. [#24](https://github.com/69MichelleDB/ToNCodes/issues/24)
+- Double Trouble rounds now return which killer is powered up. [#25](https://github.com/69MichelleDB/ToNCodes/issues/25)
 
 
 ## [alpha-0.5.3] - 2025.02.25

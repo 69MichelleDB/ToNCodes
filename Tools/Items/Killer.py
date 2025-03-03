@@ -57,6 +57,8 @@ def DecodeNote(i_input):
                     if len(matched) == 0:
                         matched = [i for i in gs.killersList if i.type=='terrors' and i.id==int(killer)]
                     killers.append(matched[0].name)
+                    if round.lower() == 'double trouble' and count == 2:        # In case of double trouble, one of the killers is there twice
+                        killers = DoubleTrouble(killers)
                     count += 1
                     matched = []
             elif round.lower() in ['mystic moon','blood moon','twilight','solstice','cold night','run']:        # Special rounds
@@ -98,3 +100,29 @@ def DecodeNote(i_input):
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in DecodeNote: {e}")
+
+# In case of double trouble, a Bloodbath round tries to happen but one of the killers spawn twice but stronger.
+# I'm not sure if the repeated killer's place in the log changes or it's always the same, I'll assume it changes to prevent issues later and make this function.
+def DoubleTrouble (i_killers):
+    result = []
+
+    k1 = ''
+    k1Count = 0
+    k2 = ''
+    k2Count = 0
+    for killerDT in i_killers:                              # We just look for which killer is there twice
+        if k1 == '':
+            k1 = killerDT
+            k1Count = 1
+        elif k2 == '':
+            k2 = killerDT
+            k2Count = 1
+        elif k1 == killerDT:
+            k1Count += 1
+        elif k2 == killerDT:
+            k2Count += 1
+
+    result.append(k1 if k1Count == 1 else f'{k1} Lv.2')     # Send a new list with the killers properly parsed
+    result.append(k2 if k2Count == 1 else f'{k2} Lv.2')
+
+    return result
