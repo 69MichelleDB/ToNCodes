@@ -252,7 +252,7 @@ def DebugWindow():
         text.config(state=tk.NORMAL)    # Allow edits
         text.delete("1.0", tk.END)
         text.insert(tk.END,     f"Round Event: {gs.roundEvent} \n" +
-                                f"Round joined: {True if gs.roundNotJoined==-1 else False}\n" + 
+                                #f"Round joined: {True if gs.roundNotJoined==-1 else False}\n" + 
                                 f"Round Map: {gs.roundMap} \n" +
                                 f"Round Type: {gs.roundType} \n" +
                                 f"Round Killer: {killer} \n" +
