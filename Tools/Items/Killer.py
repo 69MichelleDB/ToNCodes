@@ -10,10 +10,8 @@ class Killer:
         self.name = i_name
 
 # Function to translate the raw note data, to something the user can understand
-def DecodeNote(i_input):
+def DecodeNote(i_input, nameOnly=False):
     try:
-        print(f'Reviewing note: {i_input}')
-
         result = ''
         eventR = ''
         map = ''
@@ -92,9 +90,11 @@ def DecodeNote(i_input):
             for killerName in killers:
                 killerStr += killerName + ', '
             killerStr = killerStr[:len(killerStr)-2]            # Remove the last separator from the killers string
-            result = f'Won: {map}; {round}; {killerStr}'
-
-        print(f'Note reviewed: {result}')
+            if not nameOnly:
+                result = f'Won: {map}; {round}; {killerStr}'
+                print(f'Note reviewed: {result}')
+            else:
+                result = killerStr
 
         return result
     except Exception as e:

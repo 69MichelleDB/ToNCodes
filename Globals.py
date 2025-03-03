@@ -15,7 +15,11 @@ _HEIGHT_OPT = 200
 
 # About window
 _WIDTH_ABOUT = 550
-_HEIGHT_ABOUT = 200
+_HEIGHT_ABOUT = 225
+
+# Debug window
+_WIDTH_DEBUG = 500
+_HEIGHT_DEBUG = 300
 
 # Folders
 _FOLDER_CODES = 'Codes'
@@ -34,6 +38,7 @@ _FILE_DATAUK = os.path.join('Tools','Items','datauk')
 # Global variables
 configList = {}
 root = None
+debugRoot = None
 titleMessage = ''
 writingFlag = False
 newCodeAdded = True

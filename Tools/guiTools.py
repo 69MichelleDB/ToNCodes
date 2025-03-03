@@ -11,6 +11,7 @@ from screeninfo import get_monitors
 import Globals as gs
 from math import isnan
 from Tools.Items.Killer import DecodeNote
+import datetime
 
 
 # Create a window
@@ -199,20 +200,70 @@ def CreateAboutWindow():
 
         # Textr
         bgColor = aboutRoot.cget("bg")  # Get the default background color of the window
-        text = tk.Text(aboutRoot, wrap=tk.WORD, bg=bgColor)
+        text = tk.Text(aboutRoot, wrap=tk.WORD, bg=bgColor, height=11)
         text.insert(tk.END,     f"ToN Codes: https://github.com/69MichelleDB/ToNCodes\n" +
                                 f"Version: {gs._VERSION}\n" + 
                                 f"By 69MichelleDB: https://michelledb.com\n\n" +
                                 f"Terrors of Nowhere by Beyond: https://www.patreon.com/c/beyondVR\n\n" + 
                                 f"Dependencies:\n" + 
                                 f"pyperclip: https://github.com/asweigart/pyperclip\n" + 
-                                f"screeninfo: https://github.com/rr-/screeninfo")
+                                f"screeninfo: https://github.com/rr-/screeninfo\n"+
+                                f"cryptography: https://github.com/pyca/cryptography\n" + 
+                                f"requests: https://github.com/psf/requests" 
+                                )
+
         text.config(state=tk.DISABLED)  # Make the text uneditable
         text.grid(row=0, column=0, padx=5, pady=5, sticky='ew')
 
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in CreateAboutWindow: {e}")
+
+
+# region Debug Win
+
+# This window will only show up if the debug-window flag is 1
+def DebugWindow():
+    # Window creation
+    debugRoot = CreateWindow('DEBUG', gs._WIDTH_DEBUG, gs._HEIGHT_DEBUG, True, True)
+    auxX,auxY = CalculatePosition(gs._WIDTH_DEBUG, gs._HEIGHT_DEBUG)
+    debugRoot.geometry(f'{gs._WIDTH_DEBUG}x{gs._HEIGHT_DEBUG}+{auxX}+{auxY}')
+
+    gs.debugRoot = debugRoot
+
+    frameDebug = tk.Frame(debugRoot)
+    frameDebug.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
+
+    # Set weights so they take the window
+    debugRoot.grid_columnconfigure(0, weight=1)
+    frameDebug.grid_columnconfigure(0, weight=1)
+
+    # Textr
+    bgColor = debugRoot.cget("bg")  # Get the default background color of the window
+    text = tk.Text(debugRoot, wrap=tk.WORD, bg=bgColor, height=15)
+
+    text.grid(row=0, column=0, padx=5, pady=5, sticky='ew')
+
+    def DebugWindowRefresh():
+        killer = ''
+        if gs.roundMap!='' and gs.roundType!='' and gs.roundKiller!='':
+            killer = DecodeNote(f"{gs.roundMap}, {gs.roundType}, {gs.roundKiller}, {gs.roundEvent}", True)
+
+        text.config(state=tk.NORMAL)    # Allow edits
+        text.delete("1.0", tk.END)
+        text.insert(tk.END,     f"Round Event: {gs.roundEvent} \n" +
+                                f"Round joined: {True if gs.roundNotJoined==-1 else False}\n" + 
+                                f"Round Map: {gs.roundMap} \n" +
+                                f"Round Type: {gs.roundType} \n" +
+                                f"Round Killer: {killer} \n" +
+                                f"Round Condition: {gs.roundCondition} \n\n" 
+
+                                f"Last update: {datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")}"
+                                )
+        text.config(state=tk.DISABLED)  # Make the text uneditable
+        gs.debugRoot.after(int(gs.configList['file-delay'])*1000, DebugWindowRefresh)
+    
+    DebugWindowRefresh()
 
 
 # region Main Win
@@ -340,6 +391,11 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
         tree.bind('<Delete>', on_row_del)               # Hook for deleting rows
         FillTree()                                      # Fill the tree
         i_root.after(i_RefreshInterval, refreshTree)    # Hook the data refresh event
+
+        # Debug window
+        if gs.configList['debug-window'] == '1':
+            DebugWindow()
+
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in CreateTreeView: {e}")
