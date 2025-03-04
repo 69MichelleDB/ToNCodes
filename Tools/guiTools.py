@@ -227,7 +227,7 @@ def DebugWindow():
     # Window creation
     debugRoot = CreateWindow('DEBUG', gs._WIDTH_DEBUG, gs._HEIGHT_DEBUG, True, True)
     auxX,auxY = CalculatePosition(gs._WIDTH_DEBUG, gs._HEIGHT_DEBUG)
-    debugRoot.geometry(f'{gs._WIDTH_DEBUG}x{gs._HEIGHT_DEBUG}+{auxX}+{auxY}')
+    debugRoot.geometry(f'{gs._WIDTH_DEBUG}x{gs._HEIGHT_DEBUG}+{auxX+int(gs._WIDTH/1.2)}+{auxY}')
 
     gs.debugRoot = debugRoot
 
@@ -252,18 +252,22 @@ def DebugWindow():
         text.config(state=tk.NORMAL)    # Allow edits
         text.delete("1.0", tk.END)
         text.insert(tk.END,     f"Round Event: {gs.roundEvent} \n" +
-                                #f"Round joined: {True if gs.roundNotJoined==-1 else False}\n" + 
                                 f"Round Map: {gs.roundMap} \n" +
                                 f"Round Type: {gs.roundType} \n" +
                                 f"Round Killer: {killer} \n" +
                                 f"Round Condition: {gs.roundCondition} \n\n" 
-
                                 f"Last update: {datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")}"
                                 )
         text.config(state=tk.DISABLED)  # Make the text uneditable
         gs.debugRoot.after(int(gs.configList['file-delay'])*1000, DebugWindowRefresh)
-    
+
+    # If the debug window closes, close the main window and with it everything else
+    def on_closing():
+        if messagebox.askokcancel("Exit", "Would you like to close ToNCodes?", parent=gs.debugRoot):
+            gs.root.destroy()
+
     DebugWindowRefresh()
+    gs.debugRoot.protocol("WM_DELETE_WINDOW", on_closing)   # Handle what to do during a delete window event for the debug window
 
 
 # region Main Win

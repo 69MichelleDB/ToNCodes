@@ -51,6 +51,6 @@ if __name__ == "__main__":
     gs.root.geometry(f'{gs._WIDTH}x{gs._HEIGHT}+{auxX}+{auxY}')
     HorizontalMenu(gs.root)
     codesData = RefreshCodes()
-    CreateTreeView(gs.root, codesData, int(gs.configList['file-delay'])*1100, RefreshCodes)
+    CreateTreeView(gs.root, codesData, int(gs.configList['file-delay'])*1000, RefreshCodes)
 
     gs.root.mainloop()
