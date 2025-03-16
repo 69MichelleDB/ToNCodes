@@ -31,7 +31,7 @@ def DecodeNote(i_input, nameOnly=False):
             map = dataRaw[0]
             round = dataRaw[1]
             
-            if round in ['Alternate', 'Fog (Alternate)', 'Ghost (Alternate)']:
+            if round in ['Alternate', 'Fog (Alternate)', 'Ghost (Alternate)','Midnight']:
                 roundAux='alternates'
 
             killersRaw = dataRaw[2].split(' ')
