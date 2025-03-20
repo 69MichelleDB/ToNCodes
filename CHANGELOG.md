@@ -1,6 +1,6 @@
 # Changelog
 
-## [alpha-0.5.4] - 
+## [alpha-0.5.4] - 2025.03.20
 
 ### New
 - Added Unbound data. [#20](https://github.com/69MichelleDB/ToNCodes/issues/20)
