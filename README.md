@@ -5,7 +5,7 @@
 Terrors of Nowhere by Beyond is a VRChat horror world where you and other players try to survive different monsters for a period of time. Your progress gets stored as codes that you can copy and paste whenever you want to restore your session. ToNCodes automates the process of storing those codes as they generate within VRChat's logs.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/f7215a47-92af-4f57-9ccc-85f2b679b152" />
+  <img src="https://github.com/user-attachments/assets/96fd3c5b-38e8-4537-81a8-5c196adcca8d" />
 </p>
 
 This started as a personal application to store all Terrors of Nowhere codes generated while playing, since current available solutions don't work on Linux. I'm not working on it with the intention to replace any existing solutions made for the public, it's mostly an excuse for me to mess with Python and because I believe having multiple choices is always good. You are welcome to use it if you please.
@@ -25,6 +25,8 @@ This tool is currently in alpha stages and in development, so expect instability
 > `Delete key` to delete a code.
 >
 > `To update` I'd recommend making a backup of the app's folder, just in case you may need to rollback. Then just unzip the new version, extract the contents inside your app's folder and replace the files.
+>
+> `To enable the DEBUG`, in the config.xml file, change the debug-window node value from 0 to 1.
 
 This current version was made under `Python 3.13.02`. If you want to run it, [you can download the latest standalone release](https://github.com/69MichelleDB/ToNCodes/releases/latest) or if you have Python installed, you can clone the project and run `ToNCodes.py`.
 
