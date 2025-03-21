@@ -3,7 +3,7 @@ from tkinter import messagebox, Menu, Label, filedialog, Checkbutton
 from tkinter.ttk import Treeview, Scrollbar, Label, Entry
 import os.path
 import pyperclip
-from Tools.xmlTools import ModifyNode, InitializeConfig, ModifyCode
+from Tools.xmlTools import ModifyNode, InitializeConfig, ModifyCode, WriteNewCode
 from Tools.fileTools import GetPossibleVRCPath
 from Tools.errorHandler import ErrorLogging
 from Tools.webhookTool import CheckForUpdates
@@ -45,6 +45,54 @@ def CalculatePosition(i_width, i_height):
         print(e)
         ErrorLogging(f"Error in CalculatePosition: {e}")
 
+
+# region Manual Code Win
+
+# Manual code window
+def CreateManualCodeWindow():
+    try:
+        # Window creation
+        mCodeRoot = CreateWindow('Manual code...', gs._WIDTH_MC, gs._HEIGHT_MC, False, True)
+        auxX,auxY = CalculatePosition(gs._WIDTH_MC, gs._HEIGHT_MC)
+        mCodeRoot.geometry(f'{gs._WIDTH_MC}x{gs._HEIGHT_MC}+{auxX}+{auxY}')
+        # Modal stuff
+        mCodeRoot.grab_set()
+        mCodeRoot.transient()
+        mCodeRoot.wait_visibility()
+
+        frameMCode = tk.Frame(mCodeRoot)
+        frameMCode.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
+
+        # Set weights so they take the window
+        mCodeRoot.grid_columnconfigure(0, weight=1)
+        frameMCode.grid_columnconfigure(0, weight=1)
+        frameMCode.grid_columnconfigure(1, weight=5)
+        
+        # FIELDS
+       
+        # Label Code
+        labelCode = Label(frameMCode, text="Code")
+        labelCode.grid(row=0, column=0, padx=5, pady=5, sticky='w')
+
+        # Textbox Code
+        textCode = tk.StringVar()
+        textboxCode = Entry(frameMCode, textvariable=textCode)
+        textboxCode.grid(row=0, column=1, padx=5, pady=5, sticky='ew')
+
+        def SaveManualCode():
+            code = textboxCode.get()
+            WriteNewCode(gs._FOLDER_CODES, f"manual_codes.xml", datetime.datetime.now().strftime("%Y.%m.%d %H:%M:%S"), code, "Manual")
+            mCodeRoot.destroy()
+
+        # Save button
+        saveButton = tk.Button(frameMCode, text='Save', command=SaveManualCode)
+        saveButton.grid(row=1, column=1, padx=5, pady=5, sticky='e')
+
+        mCodeRoot.wait_window()
+
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in CreateManualCodeWindow: {e}")
 
 # region Options Win
 
@@ -280,6 +328,8 @@ def HorizontalMenu(i_root):
         
         # File...
         fileMenu = Menu(menubar, tearoff=False) # New Menu
+        fileMenu.add_command(label='Manual code insertion', command=CreateManualCodeWindow)
+        fileMenu.add_separator()
         fileMenu.add_command(label='Options', command=CreateOptionsWindow)
         fileMenu.add_command(label='Check for updates...', command=lambda: CheckForUpdates(True))
         fileMenu.add_separator()

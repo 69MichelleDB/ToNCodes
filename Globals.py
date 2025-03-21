@@ -9,6 +9,10 @@ _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
 _WIDTH = 770
 _HEIGHT = 300
 
+# Manual Code window
+_WIDTH_MC = 400
+_HEIGHT_MC = 100
+
 # Options window
 _WIDTH_OPT = 600
 _HEIGHT_OPT = 200

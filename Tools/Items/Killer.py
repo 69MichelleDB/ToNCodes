@@ -26,6 +26,8 @@ def DecodeNote(i_input, nameOnly=False):
             result = '[No note, code prior to alpha-0.5.0]'
         elif i_input == 'RESPAWN':
             result = 'Respawned'
+        elif i_input == 'Manual':
+            result = 'Manual code'
         else:
             dataRaw = i_input.split(', ')
             map = dataRaw[0]

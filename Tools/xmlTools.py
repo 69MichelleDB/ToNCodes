@@ -308,6 +308,31 @@ def CleanControlEntries(i_controlFile, i_logFiles):
 
 # region Populate codes
 
+# Write code in file
+def WriteNewCode(i_codesFolder, i_fileName, i_dateTime, i_logContent, i_note):
+    gs.writingFlag = True                   # Prevents the gui from accessing while the file is open
+    gs.newCodeAdded = True                  # Alerts the gui that there's a new Code
+    
+    currentLogFile = i_codesFolder + os.path.sep + os.path.basename(i_fileName).replace('.txt', '.xml')
+    if not os.path.exists(currentLogFile):
+        root = ET.Element('Root')
+        root.text = '\n'                    # Make sure it creates <Root></Root> instead of <Root />
+        WriteXml(root, currentLogFile)
+
+    root = ReadXml(currentLogFile)
+    tonCode = ET.Element('TON-Code')
+    ET.SubElement(tonCode, 'File').text = i_fileName
+    ET.SubElement(tonCode, 'Date').text = i_dateTime
+    ET.SubElement(tonCode, 'Code').text = i_logContent
+    ET.SubElement(tonCode, 'Note').text = i_note
+    root.append(tonCode)
+
+    # Let's clean the mess and leave it pretty
+    PrettifyXML(root, currentLogFile)
+
+    gs.writingFlag = False
+
+# Processes log file in search of data
 def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
     try:
         cursor = int(i_cursor)
@@ -333,28 +358,7 @@ def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
         print(f'Saving codes to XML...')
         # Extract all data into the XML
         for fileName, dateTime, logContent, note in logEntries:
-
-            gs.writingFlag = True                   # Prevents the gui from accessing while the file is open
-            gs.newCodeAdded = True                  # Alerts the gui that there's a new Code
-            
-            currentLogFile = i_codesFolder + os.path.sep + os.path.basename(fileName).replace('.txt', '.xml')
-            if not os.path.exists(currentLogFile):
-                root = ET.Element('Root')
-                root.text = '\n'                    # Make sure it creates <Root></Root> instead of <Root />
-                WriteXml(root, currentLogFile)
-
-            root = ReadXml(currentLogFile)
-            tonCode = ET.Element('TON-Code')
-            ET.SubElement(tonCode, 'File').text = fileName
-            ET.SubElement(tonCode, 'Date').text = dateTime
-            ET.SubElement(tonCode, 'Code').text = logContent
-            ET.SubElement(tonCode, 'Note').text = note
-            root.append(tonCode)
-        
-            # Let's clean the mess and leave it pretty
-            PrettifyXML(root, currentLogFile)
-
-            gs.writingFlag = False
+            WriteNewCode(i_codesFolder, fileName, dateTime, logContent, note)
 
             # Send the webhook
             if gs.configList['discord-webhook'] is not None:

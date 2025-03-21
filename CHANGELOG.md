@@ -1,5 +1,10 @@
 # Changelog
 
+## [alpha-0.5.5] - 2025.03.21
+
+### New
+- Manual code insertion under `File menu`. [#32](https://github.com/69MichelleDB/ToNCodes/issues/32)
+
 ## [alpha-0.5.4] - 2025.03.20
 
 ### New
