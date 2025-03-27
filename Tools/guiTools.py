@@ -12,6 +12,7 @@ import Globals as gs
 from math import isnan
 from Tools.Items.Killer import DecodeNote
 import datetime
+from WebsocketServer import SendWSMessage
 
 
 # Create a window
@@ -122,6 +123,7 @@ def CreateOptionsWindow():
         frameOptions.grid_rowconfigure(2, weight=1)
         frameOptions.grid_rowconfigure(3, weight=1)
         frameOptions.grid_rowconfigure(4, weight=1)
+        frameOptions.grid_rowconfigure(5, weight=1)
 
         ## FIRST ROW
         
@@ -184,6 +186,17 @@ def CreateOptionsWindow():
         textboxFD.grid(row=3, column=1, padx=5, pady=5, sticky='ew')
 
 
+        # FIFTH ROW
+        # Label
+        labelWS = Label(frameOptions, text="Connect to tontrack.me: ")
+        labelWS.grid(row=4, column=0, padx=5, pady=5, sticky='w')
+
+        #Checkbox
+        cbVarWS = tk.IntVar()
+        cbVarWS.set(gs.configList['tontrack-ws'])
+        cbWS = Checkbutton(frameOptions, text="Restart ToNCodes for changes to take effect", variable=cbVarWS)
+        cbWS.grid(row=4, column=1, padx=5, pady=5, sticky='w')
+
         # Save changes
         def SaveOptions():
             # VRC Path
@@ -210,6 +223,11 @@ def CreateOptionsWindow():
                 if textFileDelayAux != gs.configList['file-delay']:
                     ModifyNode(gs._FILE_CONFIG, 'file-delay', textFileDelayAux)
 
+            # Connect to tontrack.me
+            cbVarAux2 = str(cbVarWS.get())
+            if cbVarAux2 != gs.configList['tontrack-ws']:
+                ModifyNode(gs._FILE_CONFIG, 'tontrack-ws', cbVarAux2)
+
             # Reload config variable
             gs.configList = InitializeConfig(gs._FILE_CONFIG)
             optionsRoot.destroy()
@@ -218,7 +236,7 @@ def CreateOptionsWindow():
 
         # Save button
         saveButton = tk.Button(frameOptions, text='Save', command=SaveOptions)
-        saveButton.grid(row=4, column=2, padx=5, pady=5)
+        saveButton.grid(row=5, column=2, padx=5, pady=5)
 
         optionsRoot.wait_window()
     except Exception as e:
@@ -303,7 +321,8 @@ def DebugWindow():
                                 f"Round Map: {gs.roundMap} \n" +
                                 f"Round Type: {gs.roundType} \n" +
                                 f"Round Killer: {killer} \n" +
-                                f"Round Condition: {gs.roundCondition} \n\n" 
+                                f"Round Condition: {gs.roundCondition} \n" 
+                                f"Websocket server: ws://{gs._WSURL}:{gs._WSPORT} [{"online" if gs.wsFlag == True else "offline"}] \n\n" +
                                 f"Last update: {datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")}"
                                 )
         text.config(state=tk.DISABLED)  # Make the text uneditable
@@ -449,6 +468,14 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
         # Debug window
         if gs.configList['debug-window'] == '1':
             DebugWindow()
+
+        # Handler for when the main window closes
+        def on_closing():
+            print('Closing...')
+            SendWSMessage("ws_disconnect", [])
+            gs.root.destroy()
+
+        gs.root.protocol("WM_DELETE_WINDOW", on_closing)   # Handle what to do during a delete window event for the debug window
 
     except Exception as e:
         print(e)

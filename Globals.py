@@ -1,9 +1,11 @@
 import os.path
 
 # Constants
-_VERSION = 'alpha-0.5.5'
+_VERSION = 'alpha-0.6.0'
 _TITLE = f"ToNCodes {_VERSION} - by MichelleDB"
 _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
+_WSURL = "localhost"
+_WSPORT = 11398
 
 # Main window
 _WIDTH = 770
@@ -15,7 +17,7 @@ _HEIGHT_MC = 100
 
 # Options window
 _WIDTH_OPT = 600
-_HEIGHT_OPT = 200
+_HEIGHT_OPT = 220
 
 # About window
 _WIDTH_ABOUT = 550
@@ -45,6 +47,7 @@ root = None
 debugRoot = None
 titleMessage = ''
 writingFlag = False
+wsFlag = False
 newCodeAdded = True
 forceRefreshCodes = False
 killersList = []

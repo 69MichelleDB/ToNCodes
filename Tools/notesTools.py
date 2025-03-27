@@ -1,5 +1,7 @@
 import Globals as gs
 from Tools.errorHandler import ErrorLogging
+from WebsocketServer import SendWSMessage
+import asyncio
 
 # Check the content of a log and parse all data
 def ParseContent(i_content, i_fileName, i_cursor):
@@ -69,6 +71,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
                 cursor = i_content.find(strMapSet, cursor)
                 if gs.roundNotJoined != -1 and gs.roundNotJoined < cursor:                          # If they didn't join the round, out
                     print("Player didn't join this round, skipping map...")
+                    SendWSMessage("opt_out", [])
                     gs.roundNotJoined = -1
                     cursor = i_content.find('\n', cursor)
                 else: 
@@ -80,6 +83,9 @@ def ParseContent(i_content, i_fileName, i_cursor):
                             newMapAuxSplit = newMapAux.split('%')
                             gs.roundMap = newMapAuxSplit[0]
                             gs.roundType = newMapAuxSplit[1]
+                            SendWSMessage("opt_in", [])
+                            SendWSMessage("round_start", [])
+                            SendWSMessage("round_map", [mapName, mapID, gs.roundType])
                             print(f"New map found: [{gs.roundMap}] round started.")
                         else: 
                             print("User respawned!!!")
@@ -92,6 +98,11 @@ def ParseContent(i_content, i_fileName, i_cursor):
                         newMapAuxSplit = newMapAux.split('%')
                         gs.roundMap = newMapAuxSplit[0]
                         gs.roundType = newMapAuxSplit[1]
+                        mapName = gs.roundMap[:gs.roundMap.find("(")-1]
+                        mapID = gs.roundMap[gs.roundMap.find("(")+1:gs.roundMap.find(")")]
+                        SendWSMessage("opt_in", [])
+                        SendWSMessage("round_start", [])
+                        SendWSMessage("round_map", [mapName, mapID, gs.roundType])
                         print(f"New map found: [{gs.roundMap}] round started.")
                     elif cursor == -1 and cursorRespawn != -1:          # Only respawn
                         print("User respawned!!!")
@@ -110,13 +121,16 @@ def ParseContent(i_content, i_fileName, i_cursor):
                 else: 
                     cursor = i_content.find(strKillerSet, cursor)
                     strKiller = strKillerSet
+
                 if cursor == -1:                        # If no killer's found, out
                     cursor = len(i_content)             # Place the cursor at the end of the file
-                else:                                   # Map found...
+                else:                                   # Killer found...
                     endIndex = i_content.find(" // Round type is ", cursor)
                     newKillerRaw = i_content[cursor + len(strKiller):endIndex]
                     gs.roundKiller = newKillerRaw
                     gs.roundType = i_content[i_content.find(" is ", cursor):i_content.find("\n", endIndex)].replace(" is ", "") # Replace the round type with the killer's
+                    killersAux = gs.roundKiller.split(" ")
+                    SendWSMessage("round_killers", [killersAux[0],killersAux[1],killersAux[2],gs.roundType])
                     print(f"New killer found: [{gs.roundKiller}], round type: {gs.roundType}.")
                     cursor = i_content.find("\n", endIndex)
 # region CONDITION
@@ -134,6 +148,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
                         print("Player died during the round. Restarting variables...")
                         gs.roundCondition = 'LOSE'
                         cursor = cursorDead
+                        SendWSMessage("round_lost", [])
                         ResetRound()
                     elif cursorRespawn<cursorWin and cursorRespawn<cursorDead:
                         print("User respawned!!!")
@@ -148,6 +163,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
                         print("Player died during the round. Restarting variables...")
                         gs.roundCondition = 'LOSE'
                         cursor = cursorDead
+                        SendWSMessage("round_lost", [])
                         ResetRound()
                 elif cursorWin != -1 and cursorDead == -1 and cursorRespawn != -1:          # W R
                     if cursorWin<cursorRespawn:
@@ -162,6 +178,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
                     if cursorDead<cursorRespawn:
                         print("Player died during the round. Restarting variables...")
                         gs.roundCondition = 'LOSE'
+                        SendWSMessage("round_lost", [])
                         cursor = cursorDead
                         ResetRound()
                     else:
@@ -176,6 +193,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
                     print("Player died during the round. Restarting variables...")
                     gs.roundCondition = 'LOSE'
                     cursor = cursorDead
+                    SendWSMessage("round_lost", [])
                     ResetRound()
                 elif cursorWin == -1 and cursorDead == -1 and cursorRespawn != -1:          # R
                     print("User respawned!!!")
@@ -187,6 +205,10 @@ def ParseContent(i_content, i_fileName, i_cursor):
             if gs.roundCondition in ['WIN','RESPAWN']:                          # As far as I know only winning and respawning generate a code
                 print(f'Code condition fulfilled: {gs.roundCondition}, finding new code.')
                 cursor = i_content.find(strCodeStart, cursor)
+                if gs.roundCondition == 'WIN':
+                    SendWSMessage("round_won", [])
+                else:
+                    SendWSMessage("round_lost", [])
                 if cursor == -1:                            # If there's no codes yet, get out
                     cursor = len(i_content)                 # Place the cursor at the end of the file
                 else:

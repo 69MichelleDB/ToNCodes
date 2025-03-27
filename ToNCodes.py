@@ -6,6 +6,7 @@ from Tools.webhookTool import CheckForUpdates
 from CodesHunter2 import CodesHunter2
 import threading
 import Globals as gs
+from WebsocketServer import WSstart
 
 
 '''
@@ -43,9 +44,16 @@ if __name__ == "__main__":
     mainThread.daemon = True
     mainThread.start()
 
+    # Websocket server
+    if gs.configList['tontrack-ws'] == '1':
+        secondThread = threading.Thread(target=WSstart)
+        secondThread.daemon = True
+        secondThread.start()
+
     # GUI setup
     gs.killersList = GetKeyData(gs._FILE_DATAK, gs._FILE_DATA, 'K')
     gs.unboundsDict = GetKeyData(gs._FILE_DATAUK, gs._FILE_DATAU, 'U')
+    
     gs.root = CreateWindow(gs._TITLE + gs.titleMessage, gs._WIDTH, gs._HEIGHT, True)
     auxX,auxY = CalculatePosition(gs._WIDTH, gs._HEIGHT)
     gs.root.geometry(f'{gs._WIDTH}x{gs._HEIGHT}+{auxX}+{auxY}')
