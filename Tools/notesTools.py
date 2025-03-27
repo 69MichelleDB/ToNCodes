@@ -6,11 +6,15 @@ import asyncio
 # Check the content of a log and parse all data
 def ParseContent(i_content, i_fileName, i_cursor):
     try: 
+
+    # 2025.02.27 20:12:33 Debug      -  An achievement was unlocked. (Red & The Beast)
     # 2025.02.27 18:41:01 Debug      -  Not opted in. Not joining this round.
         # 2025.02.16 23:58:03 Log        -  This round is taking place at Inner Tower (24) and the round type is Classic
     # 2025.02.27 18:41:01 Debug      -  opted in
         # 2025.02.16 23:58:13 Log        -  Killers have been set - 120 0 0 // Round type is Classic
-        
+    
+    #2025.02.27 18:47:43 Debug      -  You are the sus
+
         # 2025.02.16 23:59:04 Log        -  You died.
         # 2025.02.16 23:59:05 Log        -  Died in round.
         # 2025.02.17 00:02:32 Log        -  WE WON
@@ -39,6 +43,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
         strKillerSet = "Killers have been set - "
         strKillerSetFog = "Killers have been revealed - "
         strMapSet = "This round is taking place at "
+        srtAchievement = "An achievement was unlocked. "
         strDed = "Died in round."
         strWin = "Lived in round."
         strRespawn = "Respawned? Coward."
@@ -52,16 +57,37 @@ def ParseContent(i_content, i_fileName, i_cursor):
         cursorKillerFog = i_content.find(strKillerSetFog, cursor)
         cursorCode = i_content.find(strCodeStart, cursor)
         cursorNotJoined = i_content.find(strNotJoinedRound, cursor)
+        cursorMISCAchievement = i_content.find(srtAchievement, cursor)
+
+        cursorMISCAchievementChecked = cursorMISCAchievement
         
         # If there's nothing after the cursor, move on
         if cursorRespawn == -1 and cursorWin == -1 and cursorDead == -1 and cursorMap == -1 \
-            and cursorKiller == -1 and cursorKillerFog == -1 and cursorCode == -1 and cursorNotJoined == -1:
+            and cursorKiller == -1 and cursorKillerFog == -1 and cursorCode == -1 and cursorNotJoined == -1 \
+            and cursorMISCAchievement == -1:
             cursor = len(i_content)
 
         # So, there's something, let's read the file
         while cursor < len(i_content):
+
+# region achievement
+
+            # Find all achievements in the document at once, they can happen at any point in the game, so scan the document and
+            # continue the regular flow until the document's been scanned
+            while cursorMISCAchievement != -1 and cursorMISCAchievement >= cursor:
+                endIndex = i_content.find("\n", cursorMISCAchievement)
+                newAchievement = i_content[cursorMISCAchievement + len(srtAchievement):endIndex]
+                newAchievement = newAchievement.replace("(","").replace(")","")
+                print(f"Achievement found: {newAchievement}")
+                SendWSMessage("achievement", [newAchievement])
+
+                cursorMISCAchievementChecked = endIndex
+                cursorMISCAchievement = i_content.find(srtAchievement, cursorMISCAchievementChecked)
+
+
             # The player can respawn at any point, I need to know if the next respawn is before or after the next condition to find
-            cursorRespawn = i_content.find(strRespawn, cursor)            # Rewpawning can happen at any point
+            cursorRespawn = i_content.find(strRespawn, cursor)              # Rewpawning can happen at any point
+
 #region MAP
             if gs.roundMap == '':           # If map wasn't defined, search for it...                   ## FINDING MAP
                 cursorNotJoined = i_content.find(strNotJoinedRound, cursor)         # First check if the player joined the round
@@ -133,12 +159,14 @@ def ParseContent(i_content, i_fileName, i_cursor):
                     SendWSMessage("round_killers", [killersAux[0],killersAux[1],killersAux[2],gs.roundType])
                     print(f"New killer found: [{gs.roundKiller}], round type: {gs.roundType}.")
                     cursor = i_content.find("\n", endIndex)
+            
 # region CONDITION
             elif gs.roundCondition == '':
                 # We need to check what's the closest condition
                 cursorWin = i_content.find(strWin, cursor)
                 cursorDead = i_content.find(strDed, cursor)
                 
+                # Look into the condition 
                 if cursorWin != -1 and cursorDead != -1 and cursorRespawn != -1:            # W D R
                     if cursorWin<cursorDead and cursorWin<cursorRespawn:
                         print("Player won the round.")
@@ -201,7 +229,8 @@ def ParseContent(i_content, i_fileName, i_cursor):
                     cursor = cursorRespawn
                 else:                                                                       # Nothing, leave
                     cursor = len(i_content)
-#region Code
+
+# region Code
             if gs.roundCondition in ['WIN','RESPAWN']:                          # As far as I know only winning and respawning generate a code
                 print(f'Code condition fulfilled: {gs.roundCondition}, finding new code.')
                 cursor = i_content.find(strCodeStart, cursor)

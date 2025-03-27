@@ -3,7 +3,7 @@
 ## [alpha-0.6.0] -
 
 ### New
-- tontrack.me websocket intragration, first pass [#36](https://github.com/69MichelleDB/ToNCodes/issues/36)
+- tontrack.me websocket intragration, first pass [#36](https://github.com/69MichelleDB/ToNCodes/issues/36) [#33](https://github.com/69MichelleDB/ToNCodes/issues/33)
 
 ## [alpha-0.5.5] - 2025.03.21
 

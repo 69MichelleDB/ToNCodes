@@ -33,7 +33,7 @@ WSRecvBind("enemy_enraged", (name, level = 1) => {
 WSRecvBind("is_joy_awake", () => {
 - WSRecvBind("round_lost", () => {
 - WSRecvBind("round_won", () => {
-WSRecvBind("achievement", (name) => {
+- WSRecvBind("achievement", (name) => {
 WSRecvBind("player_afk", () => {
 WSRecvBind("player_died", (username) => {
 WSRecvBind("__behaviour__world_joining", (world_id, instance_id, instance_details = "") => {
