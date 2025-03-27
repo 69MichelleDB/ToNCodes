@@ -47,6 +47,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
         strDed = "Died in round."
         strWin = "Lived in round."
         strRespawn = "Respawned? Coward."
+        strEnemySpawned = "Enemy Spawned!"
 
         # First check if there's anything in the log
         cursorRespawn = i_content.find(strRespawn, cursor)
@@ -158,6 +159,8 @@ def ParseContent(i_content, i_fileName, i_cursor):
                     killersAux = gs.roundKiller.split(" ")
                     SendWSMessage("round_killers", [killersAux[0],killersAux[1],killersAux[2],gs.roundType])
                     print(f"New killer found: [{gs.roundKiller}], round type: {gs.roundType}.")
+                    if i_content.find(strEnemySpawned, cursor) != -1:     # Check for enemy spawned
+                        SendWSMessage("enemy_spawned", [])
                     cursor = i_content.find("\n", endIndex)
             
 # region CONDITION
