@@ -6,7 +6,7 @@ import os.path
 import Globals as gs
 from Tools.webhookTool import SendWebhook
 from Tools.errorHandler import ErrorLogging
-from Tools.notesTools import ParseContent
+from Tools.notesTools2 import ParseContent
 
 
 #region Common XML
@@ -349,7 +349,8 @@ def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
         fileNameAux = os.path.basename(i_logFile)
         with open(i_logFile, 'r') as f:
             print(f'[START] Reading file: {fileNameAux}')
-            cursor, logEntriesAux = ParseContent(f.read(), fileNameAux, cursor)
+            #cursor, logEntriesAux = ParseContent(f.read(), fileNameAux, cursor)
+            cursor, logEntriesAux = ParseContent(f, fileNameAux, cursor)
             if len(logEntriesAux)>0:
                 if logEntriesAux[0][1] not in addedDates:
                     logEntries += logEntriesAux

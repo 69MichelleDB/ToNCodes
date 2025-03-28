@@ -1,5 +1,5 @@
 from Tools.xmlTools import InitializeConfig, ReadCodeFiles, ModifyNode, VerifyConfigFields
-from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles, GetKeyData
+from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles, GetKeyData, RegexCheck
 from Tools.guiTools import CreateWindow, HorizontalMenu, CreateTreeView, CalculatePosition
 from Tools.errorHandler import ErrorLogging
 from Tools.webhookTool import CheckForUpdates
@@ -10,16 +10,19 @@ from WebsocketServer import WSstart
 
 
 '''
+ToN Codes: https://github.com/69MichelleDB/ToNCodes
 Author: MichelleDB - https://michelledb.com/
 I have no direct relation with Terrors of Nowhere outside of being a fan and a Patreon supporter.
 
 Terrors of Nowhere belongs to Beyond https://www.patreon.com/c/beyondVR
+tontrack.me by Cinossu: https://tontrack.me/
 
 Outside dependencies:
 Pyperclip: https://github.com/asweigart/pyperclip
 screeninfo: https://github.com/rr-/screeninfo
 cryptography: https://github.com/pyca/cryptography
 requests: https://github.com/psf/requests
+websockets: https://github.com/python-websockets/websockets
 '''
 
 
@@ -39,16 +42,18 @@ if __name__ == "__main__":
 
     CheckForUpdates()                                               # Check for new updates logic
 
-    # The main program to check for codes and create the XML files
-    mainThread = threading.Thread(target=CodesHunter2)
-    mainThread.daemon = True
-    mainThread.start()
+    RegexCheck()
 
     # Websocket server
     if gs.configList['tontrack-ws'] == '1':
         secondThread = threading.Thread(target=WSstart)
         secondThread.daemon = True
         secondThread.start()
+
+    # The main program to check for codes and create the XML files
+    mainThread = threading.Thread(target=CodesHunter2)
+    mainThread.daemon = True
+    mainThread.start()
 
     # GUI setup
     gs.killersList = GetKeyData(gs._FILE_DATAK, gs._FILE_DATA, 'K')

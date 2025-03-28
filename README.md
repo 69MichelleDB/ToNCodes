@@ -67,13 +67,13 @@ pip install nuitka
 Linux 
 
 ```bash
-python3 -m nuitka --standalone --follow-imports --onefile --enable-plugin=tk-inter ToNCodes.py
+python3 -m nuitka --standalone --follow-imports --onefile --enable-plugin=tk-inter --include-package=websockets ToNCodes.py
 ```
 
 Windows
 
 ```powershell
-python -m nuitka --standalone --follow-imports --onefile --enable-plugin=tk-inter --windows-console-mode=disable ToNCodes.py
+python -m nuitka --standalone --follow-imports --onefile --enable-plugin=tk-inter --include-package=websockets --windows-console-mode=disable ToNCodes.py
 ```
 
 ## Credits
@@ -89,4 +89,4 @@ Thanks MaraRizer and the community for creating and maintaining this neatly orga
 **Shoutout to the Linux VR Adventures community**: If you're on a Linux distro and want to set up your VR hardware, visit https://lvra.gitlab.io.
 
 Outside dependencies:
-[pyperclip](https://github.com/asweigart/pyperclip), [screeninfo](https://github.com/rr-/screeninfo), [cryptography](https://github.com/pyca/cryptography), [requests](https://github.com/psf/requests)
+[pyperclip](https://github.com/asweigart/pyperclip), [screeninfo](https://github.com/rr-/screeninfo), [cryptography](https://github.com/pyca/cryptography), [requests](https://github.com/psf/requests), [websockets](https://github.com/python-websockets/websockets)

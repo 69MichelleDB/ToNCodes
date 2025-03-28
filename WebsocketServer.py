@@ -4,48 +4,6 @@ import json
 import Globals as gs
 from Tools.errorHandler import ErrorLogging
 
-'''
-- WSRecvBind("ws_connect", () => {
-- WSRecvBind("ws_disconnect", () => roundHistorySessionFinish());
-WSRecvBind("pools", (_pools, clean = false) => {
-- WSRecvBind("opt_in", () => {
-- WSRecvBind("opt_out", () => {
-- WSRecvBind("round_start", () => {
-- WSRecvBind("round_map", function(name, id, round) {
-WSRecvBind("round_map_swap", function(id) {
-WSRecvBind("round_custom_post", () => {
-WSRecvBind("round_killers_post", (round, ...killers) => {
-WSRecvBind("round_unknown", (round) => {
-WSRecvBind("round_custom", () => {
-WSRecvBind("round_saboteur", (username) => {
-WSRecvBind("round_possessed", () => {
-WSRecvBind("page_collected", (page_count) => {
-WSRecvBind("item_player", (player, item_id) => {
-- WSRecvBind("round_killers", (killerA, killerB, killerC, round) => {
-WSRecvBind("is_neo_pilot", () => {
-WSRecvBind("is_meatball_man", () => {
-WSRecvBind("is_hungry_home_invader", () => {
-WSRecvBind("is_atrached", () => {
-WSRecvBind("is_glorbo", () => {
-WSRecvBind("is_wild_yet_bloodthirsty_creature", () => {
-WSRecvBind("enemy_spawned", (end_of_round = false) => {
-WSRecvBind("enemy_enraged", (name, level = 1) => {
-WSRecvBind("is_joy_awake", () => {
-- WSRecvBind("round_lost", () => {
-- WSRecvBind("round_won", () => {
-- WSRecvBind("achievement", (name) => {
-WSRecvBind("player_afk", () => {
-WSRecvBind("player_died", (username) => {
-WSRecvBind("__behaviour__world_joining", (world_id, instance_id, instance_details = "") => {
-WSRecvBind("__behaviour__world_joined", () => {
-WSRecvBind("__behaviour__world_left", () => rh_round_finish("skipped"));
-WSRecvBind("__behaviour__player_self", (username, user_id) => {
-WSRecvBind("__behaviour__player_avatar", (avatar) => {
-WSRecvBind("__behaviour__player_join", (username) => {
-WSRecvBind("__behaviour__player_left", (username) => {
-'''
-
-
 # region WS server
 
 connected_clients = set()

@@ -1,11 +1,12 @@
 import os.path
 
 # Constants
-_VERSION = 'alpha-0.6.0'
+_VERSION = 'alpha-0.7.0'
 _TITLE = f"ToNCodes {_VERSION} - by MichelleDB"
 _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
 _WSURL = "localhost"
 _WSPORT = 11398
+_REGEX = "https://app.tontrack.me/regex.json"
 
 # Main window
 _WIDTH = 770
@@ -21,7 +22,7 @@ _HEIGHT_OPT = 220
 
 # About window
 _WIDTH_ABOUT = 550
-_HEIGHT_ABOUT = 225
+_HEIGHT_ABOUT = 265
 
 # Debug window
 _WIDTH_DEBUG = 500
@@ -52,6 +53,7 @@ newCodeAdded = True
 forceRefreshCodes = False
 killersList = []
 unboundsDict = {}
+regexDict = {}
 
 # Round variables
 roundEvent = ''
@@ -59,6 +61,7 @@ roundNotJoined = -1
 roundMap = ''
 roundType = ''
 roundKiller = ''
+roundSpecialKiller = ''
 roundCondition = ''
 
 # TEMP
