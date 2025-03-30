@@ -4,6 +4,7 @@
 
 ### Changes
 - Reworked how logs are read so it's easier to maintain and expand.
+- Added some April fools variants and special round.
 
 ## [alpha-0.6.0]
 

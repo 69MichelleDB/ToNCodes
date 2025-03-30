@@ -57,6 +57,7 @@ if __name__ == "__main__":
 
     # GUI setup
     gs.killersList = GetKeyData(gs._FILE_DATAK, gs._FILE_DATA, 'K')
+    gs.killersListSilly = GetKeyData(gs._FILE_DATAKSILLY, gs._FILE_DATASILLY, 'K')
     gs.unboundsDict = GetKeyData(gs._FILE_DATAUK, gs._FILE_DATAU, 'U')
     
     gs.root = CreateWindow(gs._TITLE + gs.titleMessage, gs._WIDTH, gs._HEIGHT, True)

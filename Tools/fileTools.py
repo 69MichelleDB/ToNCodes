@@ -190,6 +190,7 @@ def RegexCheck():
             gs.regexDict["TONCODE"]=re.compile(r"^\[START\](.*)\[END\]$")   # Custom regexes
             #gs.regexDict["TONPLAYERNAME"]=re.compile(r"^User Authenticated: (\S+)\s\((usr_[a-z0-9\-]+)\)$")    # I noticed a log that had a code after a OnPlayerLeft <player>, keep in case this needs revisitng
             gs.regexDict["TONWINTER"]=re.compile(r"^winter!$")
+            gs.regexDict["TONWAPRIL"]=re.compile(r"^silly!$")
             print("Regex loaded")
         else:
             print(f"Failed to retrieve regex data. Status code: {response.status_code}")

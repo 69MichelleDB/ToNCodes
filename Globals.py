@@ -39,6 +39,8 @@ _FILE_CONFIG = 'config.xml'
 _FILE_CONTROL = 'control.xml'
 _FILE_DATA = os.path.join('Tools','Items','data')
 _FILE_DATAK = os.path.join('Tools','Items','datak')
+_FILE_DATASILLY = os.path.join('Tools','Items','data_silly')
+_FILE_DATAKSILLY = os.path.join('Tools','Items','datak_silly')
 _FILE_DATAU = os.path.join('Tools','Items','datau')
 _FILE_DATAUK = os.path.join('Tools','Items','datauk')
 
@@ -52,6 +54,8 @@ wsFlag = False
 newCodeAdded = True
 forceRefreshCodes = False
 killersList = []
+killersListSilly = []
+killersListCurrent = []
 unboundsDict = {}
 regexDict = {}
 

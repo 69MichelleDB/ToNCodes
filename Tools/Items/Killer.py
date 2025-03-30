@@ -38,15 +38,22 @@ def DecodeNote(i_input, nameOnly=False):
 
             killersRaw = dataRaw[2].split(' ')
             eventR = dataRaw[3] if len(dataRaw)>3 else ''
+
+            match eventR:
+                case '':
+                    gs.killersListCurrent = gs.killersList
+                case 'AprilFools':
+                    gs.killersListCurrent = gs.killersListSilly
+
             if round.lower() in ['midnight','bloodbath','double trouble','ex','unbound']:    # These rounds have multiple killers
                 count = 0
                 for killer in killersRaw:
                     match round.lower():
                         case 'midnight':
                             if count == 2:
-                                matched = [i for i in gs.killersList if i.type==roundAux and i.id==int(killer)]         # Check for variants
+                                matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]         # Check for variants
                                 if len(matched) == 0:
-                                    matched = [i for i in gs.killersList if i.type==roundAux and i.id==int(killer)]     # Check for the alternate
+                                    matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]     # Check for the alternate
                         case 'unbound':
                             if count == 0:
                                 matched = [Killer('unbound', killer, gs.unboundsDict[killer], f'{int(killer)+1}. {gs.unboundsDict[killer]}')]
@@ -55,13 +62,13 @@ def DecodeNote(i_input, nameOnly=False):
 
                     # Regular terrors
                     if len(matched) == 0:
-                        matched = [i for i in gs.killersList if i.type=='terrors' and i.id==int(killer)]
+                        matched = [i for i in gs.killersListCurrent if i.type=='terrors' and i.id==int(killer)]
                     killers.append(matched[0].name)
                     if round.lower() == 'double trouble' and count == 2:        # In case of double trouble, one of the killers is there twice
                         killers = DoubleTrouble(killers)
                     count += 1
                     matched = []
-            elif round.lower() in ['mystic moon','blood moon','twilight','solstice','cold night','run']:        # Special rounds
+            elif round.lower() in ['mystic moon','blood moon','twilight','solstice','cold night','run', 'gigabytes']:        # Special rounds
                 match round.lower():
                     case 'mystic moon':
                         killers.append('Psychosis')
@@ -75,9 +82,11 @@ def DecodeNote(i_input, nameOnly=False):
                         killers.append('Rift Monsters')
                     case 'run':
                         killers.append('Meatball Man')
+                    case 'gigabytes':
+                        killers.append('GIGABYTES')
             else:                                                                                          # Single killer rounds
                 killer = killersRaw[0]
-                matched = [i for i in gs.killersList if i.type==roundAux and i.id==int(killer)]            # Check for variants
+                matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]            # Check for variants
 
                 if eventR!='' and len(matched)>0:                                                                                  # Special event replacements
                     match eventR:
@@ -85,7 +94,7 @@ def DecodeNote(i_input, nameOnly=False):
                             matched[0].name = 'Neo Pilot' if matched[0].value=='fusion_pilot' else matched[0].name
 
                 if len(matched) == 0:                                                                           # Regular terrors
-                    matched = [i for i in gs.killersList if i.type=='terrors' and i.id==int(killer)]
+                    matched = [i for i in gs.killersListCurrent if i.type=='terrors' and i.id==int(killer)]
                 killers.append(matched[0].name)
                 matched = []
 

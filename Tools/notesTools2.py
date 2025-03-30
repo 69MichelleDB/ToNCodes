@@ -40,6 +40,8 @@ def ParseContent(i_content, i_fileName, i_cursor):
                     match key:                                      # Process depending on what we got
                         case "TONWINTER":                           
                             gs.roundEvent = "Winterfest"
+                        case "TONWAPRIL":                           
+                            gs.roundEvent = "AprilFools"
                         case "TONCODE":                             # Process the code
                             print("Code found!")
                             if gs.roundCondition != '':
@@ -62,17 +64,21 @@ def ParseContent(i_content, i_fileName, i_cursor):
                         case "round_killers":
                             gs.roundKiller = f"{args[0]} {args[1]} {args[2]}"
                             gs.roundType = args[3]
+                        case "is_gigabyte":
+                            gs.roundType = 'Gigabytes'
                         case "round_won":
                             gs.roundCondition = 'WIN'
                         case "round_lost":
                             gs.roundCondition = 'LOSE'
                             ResetRound()
-                    # Special rounds
-                    if key in ["is_meatball_man","is_hungry_home_invader", \
-                        "is_wild_yet_bloodthirsty_creature","is_glorbo","is_neo_pilot"]:
-                        gs.roundSpecialKiller = key
+                    # # Special rounds
+                    # if key in ["is_meatball_man","is_hungry_home_invader", \
+                    #     "is_wild_yet_bloodthirsty_creature","is_glorbo","is_atrached", \
+                    #     "is_neo_pilot", \
+                    #     "is_foxy","is_gigabyte"]:
+                    #     gs.roundSpecialKiller = key
                         
-                    if key not in ['TONEVENT','TONCODE']:
+                    if key not in ['TONWINTER','TONWAPRIL','TONCODE']:
                         SendWSMessage(key, args)
                     break
             
