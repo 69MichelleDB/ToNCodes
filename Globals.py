@@ -1,12 +1,12 @@
 import os.path
 
 # Constants
-_VERSION = 'alpha-0.7.0'
+_VERSION = 'alpha-0.7.1'
 _TITLE = f"ToNCodes {_VERSION} - by MichelleDB"
 _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
 _WSURL = "localhost"
 _WSPORT = 11398
-_REGEX = "https://app.tontrack.me/regex.json"
+_RX = "https://app.tontrack.me/regex.json"
 
 # Main window
 _WIDTH = 770

@@ -1,16 +1,17 @@
 # Changelog
 
-## [alpha-0.7.0]
+## [alpha-0.7.1]
 
 ### Changes
 - Reworked how logs are read so it's easier to maintain and expand.
-- Added some April fools variants and special round.
+- The rework allowed for full tontrack.me support, thanks a ton Cinossu for the help.
+- Added some April fools variants and the special round.
 
 ## [alpha-0.6.0]
 
 ### New
 - tontrack.me websocket intragration, first pass [#36](https://github.com/69MichelleDB/ToNCodes/issues/36) [#33](https://github.com/69MichelleDB/ToNCodes/issues/33)
-- Added websockets to About window.
+- Added websockets library to About window.
 
 ## [alpha-0.5.5] - 2025.03.21
 

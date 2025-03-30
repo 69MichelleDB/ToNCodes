@@ -9,8 +9,10 @@ def ParseContent(i_content, i_fileName, i_cursor):
     try: 
         # Variables
         logHeaderStr = "-  "                    # This is to remove VRC's date and meta
-        logHeaderDebugStr = " Debug"            # This is to obtain VRC's date
-        codesArray = []                         # This is for the code
+        logHeaderDebugStr = " Debug"            # This is to obtain VRC's date for the code
+        codesArray = []                         # This is to store codes
+
+        # Read line by line
 
         i_content.seek(i_cursor)    # Move the cursor to the last read position
         while True:
@@ -72,6 +74,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
                             gs.roundCondition = 'LOSE'
                             ResetRound()
                     # # Special rounds
+                    # I'll review these as I encounter them in game to see how I'll handle them for the notes, probably unify gigabyte and neo pilot
                     # if key in ["is_meatball_man","is_hungry_home_invader", \
                     #     "is_wild_yet_bloodthirsty_creature","is_glorbo","is_atrached", \
                     #     "is_neo_pilot", \

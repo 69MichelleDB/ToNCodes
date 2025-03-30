@@ -182,11 +182,11 @@ def GetKeyData(i_key, i_data, i_type):
 
 def RegexCheck():
     try:
-        response = requests.get(gs._REGEX)
+        response = requests.get(gs._RX)
         if response.status_code == 200:
             gs.regexDict = response.json()
             for key, pattern in gs.regexDict.items():       
-                gs.regexDict[key] = re.compile(pattern)     # Convert to a compiled regex pattern
+                gs.regexDict[key] = re.compile(pattern)                     # Convert to a compiled regex pattern
             gs.regexDict["TONCODE"]=re.compile(r"^\[START\](.*)\[END\]$")   # Custom regexes
             #gs.regexDict["TONPLAYERNAME"]=re.compile(r"^User Authenticated: (\S+)\s\((usr_[a-z0-9\-]+)\)$")    # I noticed a log that had a code after a OnPlayerLeft <player>, keep in case this needs revisitng
             gs.regexDict["TONWINTER"]=re.compile(r"^winter!$")

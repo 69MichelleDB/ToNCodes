@@ -18,15 +18,23 @@ This tool is currently in alpha stages and in development, so expect instability
 
 ## Notes
 
-> `To run` double click `ToNCode.bin` (or `ToNCode.exe` if on Windows).
+> `To run` double click `ToNCodes.bin` (or `ToNCodes.exe` if on Windows).
 >
 > `Double click` to copy a code.
 > 
 > `Delete key` to delete a code.
 >
-> `To update` I'd recommend making a backup of the app's folder, just in case you may need to rollback. Then just unzip the new version, extract the contents inside your app's folder and replace the files.
+> `To update ToNCodes` Unzip the new version and extract the contents inside your app's folder and replace the files. I'd recommend making a backup of the app's folder, just in case you may need to rollback.
+>
+> If there's a new update ToNCodes will inform you of the new update once and you'll have a reminder on the title bar, this can be disable in the "File > Options" menu.
 >
 > `To enable the DEBUG`, in the config.xml file, change the debug-window node value from 0 to 1.
+>
+> `Manual code insertion`, under "File > Manual code insertion" you can manually add code if needed.
+> 
+> `tontrack.me`, you can connect to their Live Tracker by pressing the "Live Tracker" button on the website. Make sure the "File > Options > Connect to tontrack.me" check is enabled (you'll need to restart ToNCodes for the change to take effect if it was disabled).
+> 
+> `Discord webhook`, you can [create a webhook](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks) and add the url to "File > Options > Discord webhook" and any new codes will be send to the Discord channel that webhook was created in.
 
 This current version was made under `Python 3.13.02`. If you want to run it, [you can download the latest standalone release](https://github.com/69MichelleDB/ToNCodes/releases/latest) or if you have Python installed, you can clone the project and run `ToNCodes.py`.
 
