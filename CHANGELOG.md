@@ -1,6 +1,12 @@
 # Changelog
 
-## [alpha-0.7.1]
+# [alpha-0.7.2]
+
+**Fixes**
+- 8 pages now show up correctly.
+
+## [alpha-0.7.1] - 2025.03.30
+
 
 ### Changes
 - Reworked how logs are read so it's easier to maintain and expand.
@@ -10,7 +16,7 @@
 ## [alpha-0.6.0]
 
 ### New
-- tontrack.me websocket intragration, first pass [#36](https://github.com/69MichelleDB/ToNCodes/issues/36) [#33](https://github.com/69MichelleDB/ToNCodes/issues/33)
+- tontrack.me websocket integration, first pass [#36](https://github.com/69MichelleDB/ToNCodes/issues/36) [#33](https://github.com/69MichelleDB/ToNCodes/issues/33)
 - Added websockets library to About window.
 
 ## [alpha-0.5.5] - 2025.03.21

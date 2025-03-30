@@ -80,6 +80,11 @@ def ParseContent(i_content, i_fileName, i_cursor):
                     #     "is_neo_pilot", \
                     #     "is_foxy","is_gigabyte"]:
                     #     gs.roundSpecialKiller = key
+
+                    # Fix name of the round for the Decoder later
+                    match gs.roundType:
+                        case '8 Pages':
+                            gs.roundType = '8pages'
                         
                     if key not in ['TONWINTER','TONWAPRIL','TONCODE']:
                         SendWSMessage(key, args)

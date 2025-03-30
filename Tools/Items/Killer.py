@@ -68,7 +68,7 @@ def DecodeNote(i_input, nameOnly=False):
                         killers = DoubleTrouble(killers)
                     count += 1
                     matched = []
-            elif round.lower() in ['mystic moon','blood moon','twilight','solstice','cold night','run', 'gigabytes']:        # Special rounds
+            elif round.lower() in ['mystic moon','blood moon','twilight','solstice','cold night','run', 'gigabytes', '8pages']:        # Special rounds
                 match round.lower():
                     case 'mystic moon':
                         killers.append('Psychosis')
@@ -84,6 +84,10 @@ def DecodeNote(i_input, nameOnly=False):
                         killers.append('Meatball Man')
                     case 'gigabytes':
                         killers.append('GIGABYTES')
+                    case '8pages':
+                        killer = killersRaw[0]
+                        matched = [i for i in gs.killersListCurrent if i.type==round and i.id==int(killer)]
+                        killers.append(matched[0].name)
             else:                                                                                          # Single killer rounds
                 killer = killersRaw[0]
                 matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]            # Check for variants
