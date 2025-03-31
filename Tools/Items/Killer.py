@@ -1,5 +1,6 @@
 import Globals as gs
 from Tools.errorHandler import ErrorLogging
+import re
 
 class Killer:
 
@@ -15,6 +16,8 @@ def DecodeNote(i_input, nameOnly=False):
         result = ''
         eventR = ''
         map = ''
+        mapRegex = re.compile(r"(^.+?) \((\d+)\)$")
+        mapMatched = []
         round = ''
         roundAux = ''
         killers = []
@@ -31,6 +34,7 @@ def DecodeNote(i_input, nameOnly=False):
         else:
             dataRaw = i_input.split(', ')
             map = dataRaw[0]
+            mapMatched = mapRegex.search(map).groups()
             round = dataRaw[1]
             
             if round in ['Alternate', 'Fog (Alternate)', 'Ghost (Alternate)','Midnight']:
@@ -68,7 +72,7 @@ def DecodeNote(i_input, nameOnly=False):
                         killers = DoubleTrouble(killers)
                     count += 1
                     matched = []
-            elif round.lower() in ['mystic moon','blood moon','twilight','solstice','cold night','run', 'gigabytes', '8pages']:        # Special rounds
+            elif round.lower() in ['mystic moon','blood moon','twilight','solstice','cold night','run', 'special', '8pages']:        # Special rounds
                 match round.lower():
                     case 'mystic moon':
                         killers.append('Psychosis')
@@ -82,7 +86,7 @@ def DecodeNote(i_input, nameOnly=False):
                         killers.append('Rift Monsters')
                     case 'run':
                         killers.append('Meatball Man')
-                    case 'gigabytes':
+                    case 'special':
                         killers.append('GIGABYTES')
                     case '8pages':
                         killer = killersRaw[0]
@@ -106,7 +110,7 @@ def DecodeNote(i_input, nameOnly=False):
                 killerStr += killerName + ', '
             killerStr = killerStr[:len(killerStr)-2]            # Remove the last separator from the killers string
             if not nameOnly:
-                result = f'Won: {map}; {round}; {killerStr}'
+                result = f'{round} in {mapMatched[0]}: {killerStr}'
                 print(f'Note reviewed: {result}')
             else:
                 result = killerStr

@@ -67,7 +67,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
                             gs.roundKiller = f"{args[0]} {args[1]} {args[2]}"
                             gs.roundType = args[3]
                         case "is_gigabyte":
-                            gs.roundType = 'Gigabytes'
+                            gs.roundType = 'Special'
                         case "round_won":
                             gs.roundCondition = 'WIN'
                         case "round_lost":

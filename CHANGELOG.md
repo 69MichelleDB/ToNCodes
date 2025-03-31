@@ -2,6 +2,11 @@
 
 # [alpha-0.7.2]
 
+**Changes**
+- Changed how Notes are shown in the UI: "Round" in "Map": "Terrors"
+- Removed the Map ID in the UI.
+- GIGABYTES round now labeled as Special instead of Gigabytes.
+
 **Fixes**
 - 8 pages now show up correctly.
 

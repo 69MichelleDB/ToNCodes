@@ -26,11 +26,11 @@ This tool is currently in alpha stages and in development, so expect instability
 >
 > `To update ToNCodes` Unzip the new version and extract the contents inside your app's folder and replace the files. I'd recommend making a backup of the app's folder, just in case you may need to rollback.
 >
-> If there's a new update ToNCodes will inform you of the new update once and you'll have a reminder on the title bar, this can be disable in the "File > Options" menu.
+> If there's a new update ToNCodes will inform you of the new update once and you'll have a reminder on the title bar, this can be disabled in the "File > Options" menu.
 >
 > `To enable the DEBUG`, in the config.xml file, change the debug-window node value from 0 to 1.
 >
-> `Manual code insertion`, under "File > Manual code insertion" you can manually add code if needed.
+> `Manual code insertion`, under "File > Manual code insertion" you can manually add a code if needed.
 > 
 > `tontrack.me`, you can connect to their Live Tracker by pressing the "Live Tracker" button on the website. Make sure the "File > Options > Connect to tontrack.me" check is enabled (you'll need to restart ToNCodes for the change to take effect if it was disabled).
 > 
