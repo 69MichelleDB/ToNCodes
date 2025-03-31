@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox, Menu, Label, filedialog, Checkbutton
-from tkinter.ttk import Treeview, Scrollbar, Label, Entry
+from tkinter.ttk import Treeview, Scrollbar, Label, Entry, Combobox
 import os.path
 import pyperclip
 from Tools.xmlTools import ModifyNode, InitializeConfig, ModifyCode, WriteNewCode
@@ -370,22 +370,58 @@ def HorizontalMenu(i_root):
         print(e)
         ErrorLogging(f"Error in HorizontalMenu: {e}")
 
+# This is the Combobox underneath the Menu with the name of the log to filter
+def HorizontalFileBox(i_root):
+    try:
+        dateBoxFrame = tk.Frame(i_root, relief=tk.RAISED, borderwidth=1)        # Gonna put in a frame
+        dateBoxFrame.pack(side=tk.TOP, fill=tk.X)
+
+        gs.fileBoxSelected = tk.StringVar()
+        combobox = Combobox(dateBoxFrame, values=[], state='readonly', textvariable=gs.fileBoxSelected)
+        combobox.pack(pady=5, padx=5, fill=tk.X, expand=True)
+
+        filesOnly = []
+
+        # Feed the Log files names to the combobox
+        def RefreshFileBox():
+            sortedCodesData = sorted(gs.codesData, key=lambda x: x[1], reverse=True)    # Sort
+            for file in sortedCodesData:
+                if file[0] not in filesOnly:                                            # I need the unique names without repeating
+                    filesOnly.append(file[0])
+            if len(filesOnly)!=len(combobox['values']):                                      # If there's new files, update the combobox
+                filesOnlySorted = sorted(filesOnly, key=lambda x: x, reverse=True)
+                combobox['values'] = filesOnlySorted
+                if len(filesOnlySorted)>0:                 # If no value was selected, choose the oldest
+                    combobox.set(filesOnlySorted[0])
+                    gs.fileBoxChanged = True
+            i_root.after(int(gs.configList['ui-delay']), RefreshFileBox)
+
+        RefreshFileBox()
+
+        # If the selected value changes, we inform the tree that it needs a refresh
+        def on_value_change(event):
+            gs.fileBoxChanged = True
+
+        combobox.bind('<<ComboboxSelected>>', on_value_change)        
+
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in HorizontalComboBox: {e}")
 
 # This will allow us to display the XMLs data
-def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
+def CreateTreeView(i_root, i_RefreshInterval, i_RefreshCallback):
     try:
         tree = Treeview(i_root, columns=('File', 'Date', 'Code', 'Notes'), show='headings')
-        tree.heading('File', text='File')
+        tree.column('File', width=0, stretch=tk.NO)                 # File column will now be hidden
         tree.heading('Date', text='Date')
         tree.column('Code', width=0, stretch=tk.NO)                 # I'm going to keep Code hidden and add a new colum Notes
         tree.heading('Notes', text='Notes')
 
-        tree.column('File', width=240)
-        tree.column('Date', width=140)
-        #tree.column('Notes', width=490)
-        tree.column('Notes', width=390)
+        #tree.column('File', width=240)
+        tree.column('Date', width=150)
+        tree.column('Notes', width=450)
         
-        tree.columnconfigure(0, weight=3)
+        #tree.columnconfigure(0, weight=3)
         tree.columnconfigure(1, weight=3)
         tree.columnconfigure(3, weight=1)
 
@@ -398,24 +434,25 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
         # I need the window to refresh from time to time in case there's new data
         def FillTree():
             gs.newCodeAdded = False
-            existingItems = {tree.item(item, 'values') for item in tree.get_children()}     # Get all the items in the tree in a tuple, only the values
-            sortedData = sorted(i_CodesData, key=lambda x: x[1], reverse=True)              # Sort by Date
-            if len(existingItems) == 0:                                                     # If there's no data in the table, just insert as is
-                for fileData in sortedData:
-                    noteDecoded = DecodeNote(fileData[3])                                   # Review what the code is to show something user readable
+            gs.fileBoxChanged = False
+            # existingItems = {tree.item(item, 'values') for item in tree.get_children()}     # Get all the items in the tree in a tuple, only the values
+            sortedData = sorted(gs.codesData, key=lambda x: x[1], reverse=True)             # Sort by Date
+            if gs.fileBoxSelected.get() != '':                                              # Only from the selected file
+                
+                newDataList = []                                                            # Get selected data only
+                for data in sortedData:
+                    if data[0] == gs.fileBoxSelected.get():
+                        newDataList.append(data)
+                
+                for item in tree.get_children():                # Empty the tree
+                    tree.delete(item)
+                for fileData in newDataList:
+                    noteDecoded = DecodeNote(fileData[3])       # Review what the code is to show something user readable
                     row = list(fileData)
                     row[3] = noteDecoded
                     rowTuple = tuple(row)
-                    if rowTuple not in existingItems and fileData[2]!='':                   # Only insert new values, avoid blank codes (this is for the future)
+                    if fileData[2]!='':                         # Avoid blank codes (this is for deleted codes)
                         tree.insert('', tk.END, values=rowTuple)
-            else:                                       # If there's data, I need to read from the bottom of sortedData, insert at the top of the tree
-                for fileData in reversed(sortedData):
-                    noteDecoded = DecodeNote(fileData[3])                                   # Review what the code is to show something user readable
-                    row = list(fileData)
-                    row[3] = noteDecoded
-                    rowTuple = tuple(row)
-                    if rowTuple not in existingItems and fileData[2]!='':                   # Only insert new values, avoid blank codes (this is for the future)
-                        tree.insert('', 0, values=rowTuple)
 
         # Event handler for double click, copies the code to the clipboard (I needed xclip on pop!_os for it to work, on windows there's no need in theory)
         def on_row_click(event):
@@ -433,16 +470,17 @@ def CreateTreeView(i_root, i_CodesData, i_RefreshInterval, i_RefreshCallback):
         # This will handle the data refresh once the mainloop engages
         def refreshTree():
             if not gs.writingFlag:
-                nonlocal i_CodesData
-                i_CodesData = i_RefreshCallback()
-                if gs.newCodeAdded:
+                #nonlocal gs.codesData
+                gs.codesData = i_RefreshCallback()
+                if gs.newCodeAdded or gs.fileBoxChanged:
                     FillTree()
-                i_root.after(i_RefreshInterval, refreshTree)
 
             if gs.configList['firstBoot']==True:        # Open the config window to get the path if this is the first boot
                 gs.configList['firstBoot'] = False
                 gs.auxPathFirstBoot = GetPossibleVRCPath()
                 CreateOptionsWindow()
+
+            i_root.after(i_RefreshInterval, refreshTree)
 
         # Event to handle the deletion of a specific code
         def on_row_del(event):

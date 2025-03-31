@@ -9,7 +9,7 @@ _WSPORT = 11398
 _RX = "https://app.tontrack.me/regex.json"
 
 # Main window
-_WIDTH = 770
+_WIDTH = 600
 _HEIGHT = 300
 
 # Manual Code window
@@ -17,7 +17,7 @@ _WIDTH_MC = 400
 _HEIGHT_MC = 100
 
 # Options window
-_WIDTH_OPT = 600
+_WIDTH_OPT = 610
 _HEIGHT_OPT = 220
 
 # About window
@@ -58,6 +58,9 @@ killersListSilly = []
 killersListCurrent = []
 unboundsDict = {}
 regexDict = {}
+codesData = []
+fileBoxSelected = ''
+fileBoxChanged = False
 
 # Round variables
 roundEvent = ''
@@ -65,7 +68,6 @@ roundNotJoined = -1
 roundMap = ''
 roundType = ''
 roundKiller = ''
-roundSpecialKiller = ''
 roundCondition = ''
 
 # TEMP
