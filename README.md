@@ -5,7 +5,7 @@
 Terrors of Nowhere by Beyond is a VRChat horror world where you and other players try to survive different monsters for a period of time. Your progress gets stored as codes that you can copy and paste whenever you want to restore your session. ToNCodes automates the process of storing those codes as they generate within VRChat's logs.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/06b95ab6-057c-4a5f-a935-ab86b3389f6e" />
+  <img src="https://github.com/user-attachments/assets/9f856c11-bebd-461a-a68a-c9f0818c743c" />
 </p>
 
 This started as a personal application to store all Terrors of Nowhere codes generated while playing, since current available solutions don't work on Linux. I'm not working on it with the intention to replace any existing solutions made for the public, it's mostly an excuse for me to mess with Python and because I believe having multiple choices is always good. You are welcome to use it if you please.
@@ -35,8 +35,16 @@ This tool is currently in alpha stages and in development, so expect instability
 > `tontrack.me`, you can connect to their Live Tracker by pressing the "Live Tracker" button on the website. Make sure the "File > Options > Connect to tontrack.me" check is enabled (you'll need to restart ToNCodes for the change to take effect if it was disabled).
 > 
 > `Discord webhook`, you can [create a webhook](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks) and add the url to "File > Options > Discord webhook" and any new codes will be send to the Discord channel that webhook was created in.
+> 
+> `Change language` in File > Options > Language, a restart of ToNCodes is needed for the changes to take effect.
 
 This current version was made under `Python 3.13.02`. If you want to run it, [you can download the latest standalone release](https://github.com/69MichelleDB/ToNCodes/releases/latest) or if you have Python installed, you can clone the project and run `ToNCodes.py`.
+
+
+## Translations
+
+ToNCodes as of today 2025.04.01 supports multi-language, I'll update this section this week hopefully with instructions of how you can collaborate to help translate.
+
 
 **This next section is only if you want to run the Python code instead of the binary.**
 
