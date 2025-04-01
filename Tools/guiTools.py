@@ -4,7 +4,7 @@ from tkinter.ttk import Treeview, Scrollbar, Label, Entry, Combobox
 import os.path
 import pyperclip
 from Tools.xmlTools import ModifyNode, InitializeConfig, ModifyCode, WriteNewCode
-from Tools.fileTools import GetPossibleVRCPath
+from Tools.fileTools import GetPossibleVRCPath, LoadLocale
 from Tools.errorHandler import ErrorLogging
 from Tools.webhookTool import CheckForUpdates
 from screeninfo import get_monitors
@@ -53,7 +53,7 @@ def CalculatePosition(i_width, i_height):
 def CreateManualCodeWindow():
     try:
         # Window creation
-        mCodeRoot = CreateWindow('Manual code...', gs._WIDTH_MC, gs._HEIGHT_MC, False, True)
+        mCodeRoot = CreateWindow(gs.localeDict['Manual-Code-Title'], gs._WIDTH_MC, gs._HEIGHT_MC, False, True)
         auxX,auxY = CalculatePosition(gs._WIDTH_MC, gs._HEIGHT_MC)
         mCodeRoot.geometry(f'{gs._WIDTH_MC}x{gs._HEIGHT_MC}+{auxX}+{auxY}')
         # Modal stuff
@@ -72,7 +72,7 @@ def CreateManualCodeWindow():
         # FIELDS
        
         # Label Code
-        labelCode = Label(frameMCode, text="Code")
+        labelCode = Label(frameMCode, text=gs.localeDict['Manual-Code-Label'])
         labelCode.grid(row=0, column=0, padx=5, pady=5, sticky='w')
 
         # Textbox Code
@@ -86,7 +86,7 @@ def CreateManualCodeWindow():
             mCodeRoot.destroy()
 
         # Save button
-        saveButton = tk.Button(frameMCode, text='Save', command=SaveManualCode)
+        saveButton = tk.Button(frameMCode, text=gs.localeDict['Manual-Code-Save-Button'], command=SaveManualCode)
         saveButton.grid(row=1, column=1, padx=5, pady=5, sticky='e')
 
         mCodeRoot.wait_window()
@@ -101,7 +101,7 @@ def CreateManualCodeWindow():
 def CreateOptionsWindow():
     try:
         # Window creation
-        optionsRoot = CreateWindow('Options', gs._WIDTH_OPT, gs._HEIGHT_OPT, False, True)
+        optionsRoot = CreateWindow(gs.localeDict['Options-Title'], gs._WIDTH_OPT, gs._HEIGHT_OPT, False, True)
         auxX,auxY = CalculatePosition(gs._WIDTH_OPT, gs._HEIGHT_OPT)
         optionsRoot.geometry(f'{gs._WIDTH_OPT}x{gs._HEIGHT_OPT}+{auxX}+{auxY}')
         # Modal stuff
@@ -125,10 +125,17 @@ def CreateOptionsWindow():
         frameOptions.grid_rowconfigure(4, weight=1)
         frameOptions.grid_rowconfigure(5, weight=1)
 
+        restartNeeded = False
+        # Some options may need a restart to take effect, this enables a warning
+        def NeedRestart(event=None):
+            nonlocal restartNeeded
+            restartNeeded = True
+
+
         ## FIRST ROW
         
         # Label
-        labelPath = Label(frameOptions, text="VRC log Path")
+        labelPath = Label(frameOptions, text=gs.localeDict['Options-VRCPath-Label'])
         labelPath.grid(row=0, column=0, padx=5, pady=5, sticky='w')
 
         # Textbox/Entry Path
@@ -144,39 +151,39 @@ def CreateOptionsWindow():
             if folder_selected:
                 textPath.set(folder_selected)
         # File browser button
-        browseButton = tk.Button(frameOptions, text="Browse", command=BrowseVRCFolder)
+        browseButton = tk.Button(frameOptions, text=gs.localeDict['Options-VRCPath-Browse'], command=BrowseVRCFolder)
         browseButton.grid(row=0, column=2, padx=5, pady=5)
 
 
         ## SECOND ROW
 
         # Label webhook
-        labelWH = Label(frameOptions, text="Discord webhook")
+        labelWH = Label(frameOptions, text=gs.localeDict['Options-Webhook-Label'])
         labelWH.grid(row=1, column=0, padx=5, pady=5, sticky='w')
 
         # Textbox Webhook
         textWebhook = tk.StringVar()
         textWebhook.set( gs.configList['discord-webhook'] if gs.configList['discord-webhook'] is not None else '' )
         textboxWH = Entry(frameOptions, textvariable=textWebhook)
-        textboxWH.grid(row=1, column=1, columnspan=2, padx=5, pady=5, sticky='ew')
+        textboxWH.grid(row=1, column=1, padx=5, pady=5, sticky='ew')
 
 
         # THIRD ROW
         # Label
-        labelUpdate = Label(frameOptions, text="When ToNCodes starts:")
+        labelUpdate = Label(frameOptions, text=gs.localeDict['Options-Update-Label'])
         labelUpdate.grid(row=2, column=0, padx=5, pady=5, sticky='w')
 
         #Checkbox
         cbVar = tk.IntVar()
         cbVar.set(gs.configList['check-updates'])
-        cbUpdates = Checkbutton(frameOptions, text="Check for updates ", variable=cbVar)
+        cbUpdates = Checkbutton(frameOptions, text=gs.localeDict['Options-Update-Check'], variable=cbVar, command=NeedRestart)
         cbUpdates.grid(row=2, column=1, padx=5, pady=5, sticky='w')
 
 
         # FOURTH ROW
 
         # Label check delay
-        labelFD = Label(frameOptions, text="VRC log frequency (seconds)")
+        labelFD = Label(frameOptions, text=gs.localeDict['Options-Delay-Label'])
         labelFD.grid(row=3, column=0, padx=5, pady=5, sticky='w')
 
         # Textbox check delay
@@ -188,14 +195,48 @@ def CreateOptionsWindow():
 
         # FIFTH ROW
         # Label
-        labelWS = Label(frameOptions, text="Connect to tontrack.me: ")
+        labelWS = Label(frameOptions, text=gs.localeDict['Options-Websocket-Label'])
         labelWS.grid(row=4, column=0, padx=5, pady=5, sticky='w')
 
         #Checkbox
         cbVarWS = tk.IntVar()
         cbVarWS.set(gs.configList['tontrack-ws'])
-        cbWS = Checkbutton(frameOptions, text="Restart ToNCodes for changes to take effect", variable=cbVarWS)
+        cbWS = Checkbutton(frameOptions, text=gs.localeDict['Options-Websocket-Check'], variable=cbVarWS)
         cbWS.grid(row=4, column=1, padx=5, pady=5, sticky='w')
+
+
+        # SIXTH ROW
+
+        # These are to convert the ID of the language to the name and the other way arround
+        def Lang2ID(_lang):
+            result = ''
+            match _lang:
+                case 'en':
+                    result = 'English'
+                case 'es':
+                    result = 'Español'
+            return result
+
+        def ID2Lang(_lang):
+            result = ''
+            match _lang:
+                case 'English':
+                    result = 'en'
+                case 'Español':
+                    result = 'es'
+            return result
+
+        # Label
+        labelcomboLocale = Label(frameOptions, text=gs.localeDict['Options-Locale-Combo'])
+        labelcomboLocale.grid(row=5, column=0, padx=5, pady=5, sticky='w')
+
+        #Combo box
+        comboVarLocale = tk.StringVar()
+        comboLocale = Combobox(frameOptions, values=['English','Español'], state='readonly', textvariable=comboVarLocale)
+        comboLocale.grid(row=5, column=1, padx=5, pady=5, sticky='w')
+        auxLocale = Lang2ID(gs.configList['locale'])
+        comboLocale.set(auxLocale)
+        comboLocale.bind('<<ComboboxSelected>>', NeedRestart)
 
         # Save changes
         def SaveOptions():
@@ -228,14 +269,22 @@ def CreateOptionsWindow():
             if cbVarAux2 != gs.configList['tontrack-ws']:
                 ModifyNode(gs._FILE_CONFIG, 'tontrack-ws', cbVarAux2)
 
+            # Language
+            comboVarLocaleAux = ID2Lang(comboVarLocale.get())
+            if comboVarLocaleAux != gs.configList['locale']:
+                ModifyNode(gs._FILE_CONFIG, 'locale', comboVarLocaleAux)
+
             # Reload config variable
             gs.configList = InitializeConfig(gs._FILE_CONFIG)
             optionsRoot.destroy()
+            nonlocal restartNeeded
+            if restartNeeded:
+                messagebox.showinfo(gs.localeDict['Options-Need-Restart-Head'],gs.localeDict['Options-Need-Restart-Body'])
 
         # LAST ROW
 
         # Save button
-        saveButton = tk.Button(frameOptions, text='Save', command=SaveOptions)
+        saveButton = tk.Button(frameOptions, text=gs.localeDict['Options-Save-Button'], command=SaveOptions)
         saveButton.grid(row=5, column=2, padx=5, pady=5)
 
         optionsRoot.wait_window()
@@ -249,7 +298,7 @@ def CreateOptionsWindow():
 def CreateAboutWindow():
     try:
         # Window creation
-        aboutRoot = CreateWindow('About...', gs._WIDTH_ABOUT, gs._HEIGHT_ABOUT, False, True)
+        aboutRoot = CreateWindow(gs.localeDict['About-Title'], gs._WIDTH_ABOUT, gs._HEIGHT_ABOUT, False, True)
         auxX,auxY = CalculatePosition(gs._WIDTH_ABOUT, gs._HEIGHT_ABOUT)
         aboutRoot.geometry(f'{gs._WIDTH_ABOUT}x{gs._HEIGHT_ABOUT}+{auxX}+{auxY}')
         # Modal stuff
@@ -295,7 +344,7 @@ def DebugWindow():
     # Window creation
     debugRoot = CreateWindow('DEBUG', gs._WIDTH_DEBUG, gs._HEIGHT_DEBUG, True, True)
     auxX,auxY = CalculatePosition(gs._WIDTH_DEBUG, gs._HEIGHT_DEBUG)
-    debugRoot.geometry(f'{gs._WIDTH_DEBUG}x{gs._HEIGHT_DEBUG}+{auxX+int(gs._WIDTH/1.2)}+{auxY}')
+    debugRoot.geometry(f'{gs._WIDTH_DEBUG}x{gs._HEIGHT_DEBUG}+{auxX+int(gs._WIDTH/1.1)}+{auxY}')
 
     gs.debugRoot = debugRoot
 
@@ -319,20 +368,20 @@ def DebugWindow():
 
         text.config(state=tk.NORMAL)    # Allow edits
         text.delete("1.0", tk.END)
-        text.insert(tk.END,     f"Round Event: {gs.roundEvent} \n" +
-                                f"Round Map: {gs.roundMap} \n" +
-                                f"Round Type: {gs.roundType} \n" +
-                                f"Round Killer: {killer} \n" +
-                                f"Round Condition: {gs.roundCondition} \n" 
-                                f"Websocket server: ws://{gs._WSURL}:{gs._WSPORT} [{"online" if gs.wsFlag == True else "offline"}] \n\n" +
-                                f"Last update: {datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")}"
+        text.insert(tk.END,     gs.localeDict['Debug-Event'].format(roundEvent=gs.roundEvent) +
+                                gs.localeDict['Debug-Map'].format(roundMap=gs.roundMap) +
+                                gs.localeDict['Debug-Type'].format(roundType=gs.roundType) +
+                                gs.localeDict['Debug-Killers'].format(killer=killer) +
+                                gs.localeDict['Debug-Condition'].format(roundCondition=gs.roundCondition) +
+                                gs.localeDict['Debug-Websocket'].format(_WSURL=gs._WSURL,_WSPORT=gs._WSPORT,WSStatus="online" if gs.wsFlag == True else "offline") +
+                                gs.localeDict['Debug-Date'].format(date=datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S"))
                                 )
         text.config(state=tk.DISABLED)  # Make the text uneditable
         gs.debugRoot.after(int(gs.configList['file-delay'])*1000, DebugWindowRefresh)
 
     # If the debug window closes, close the main window and with it everything else
     def on_closing():
-        if messagebox.askokcancel("Exit", "Would you like to close ToNCodes?", parent=gs.debugRoot):
+        if messagebox.askokcancel(gs.localeDict['Message-Debug-Head'], gs.localeDict['Message-Debug-Body'], parent=gs.debugRoot):
             gs.root.destroy()
 
     DebugWindowRefresh()
@@ -349,23 +398,23 @@ def HorizontalMenu(i_root):
         
         # File...
         fileMenu = Menu(menubar, tearoff=False) # New Menu
-        fileMenu.add_command(label='Manual code insertion', command=CreateManualCodeWindow)
+        fileMenu.add_command(label=gs.localeDict['Horizontal-Menu-Manual-Code'], command=CreateManualCodeWindow)
         fileMenu.add_separator()
-        fileMenu.add_command(label='Options', command=CreateOptionsWindow)
-        fileMenu.add_command(label='Check for updates...', command=lambda: CheckForUpdates(True))
+        fileMenu.add_command(label=gs.localeDict['Horizontal-Menu-Options'], command=CreateOptionsWindow)
+        fileMenu.add_command(label=gs.localeDict['Horizontal-Menu-Updates'], command=lambda: CheckForUpdates(True))
         fileMenu.add_separator()
         fileMenu.add_command(
-            label='Exit',
+            label=gs.localeDict['Horizontal-Menu-Exit'],
             command=i_root.destroy
         )
         menubar.add_cascade(
-            label='File',
+            label=gs.localeDict['Horizontal-Menu-File'],
             menu=fileMenu,
             underline=0
         )
 
         # About...
-        menubar.add_command(label='About',  command=CreateAboutWindow)
+        menubar.add_command(label=gs.localeDict['Horizontal-Menu-About'],  command=CreateAboutWindow)
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in HorizontalMenu: {e}")
@@ -413,13 +462,13 @@ def CreateTreeView(i_root, i_RefreshInterval, i_RefreshCallback):
     try:
         tree = Treeview(i_root, columns=('File', 'Date', 'Code', 'Notes'), show='headings')
         tree.column('File', width=0, stretch=tk.NO)                 # File column will now be hidden
-        tree.heading('Date', text='Date')
+        tree.heading('Date', text=gs.localeDict['Tree-Dates'])
         tree.column('Code', width=0, stretch=tk.NO)                 # I'm going to keep Code hidden and add a new colum Notes
-        tree.heading('Notes', text='Notes')
+        tree.heading('Notes', text=gs.localeDict['Tree-Notes'])
 
         #tree.column('File', width=240)
         tree.column('Date', width=150)
-        tree.column('Notes', width=450)
+        tree.column('Notes', width=500)
         
         #tree.columnconfigure(0, weight=3)
         tree.columnconfigure(1, weight=3)
@@ -462,15 +511,14 @@ def CreateTreeView(i_root, i_RefreshInterval, i_RefreshCallback):
                 file, date, code, notes = tree.item(selectedItem, 'values')
                 pyperclip.copy(code)
                 print("Copied!", f"Code '{date}' copied to clipboard")
-                messagebox.showinfo("Copied!", f"Code '{date}' copied to clipboard")
+                messagebox.showinfo(gs.localeDict['Message-Code-Copied-Head'], gs.localeDict['Message-Code-Copied-Body'].format(date=date))
             else:
                 print("Warning", "No item selected")
-                messagebox.showwarning("Warning", "No item selected")
+                messagebox.showwarning(gs.localeDict['Message-Code-Copied-NoItem-Head'], gs.localeDict['Message-Code-Copied-NoItem-Body'])
 
         # This will handle the data refresh once the mainloop engages
         def refreshTree():
             if not gs.writingFlag:
-                #nonlocal gs.codesData
                 gs.codesData = i_RefreshCallback()
                 if gs.newCodeAdded or gs.fileBoxChanged:
                     FillTree()
@@ -488,15 +536,15 @@ def CreateTreeView(i_root, i_RefreshInterval, i_RefreshCallback):
             if selectedItems:
                 selectedItem = selectedItems[0]
                 file, date, code, notes = tree.item(selectedItem, 'values')
-                answer = messagebox.askquestion("Confirmation", f"Do you want to delete the code {date}?")          # MsgBox to confirm
+                answer = messagebox.askquestion(gs.localeDict['Message-Code-Delete-Head'], gs.localeDict['Message-Code-Delete-Body'].format(date=date)) # MsgBox to confirm
                 if answer == "yes":
                     ModifyCode(os.path.join(gs._FOLDER_CODES,file.replace('.txt','.xml')),date,'')     # Remove from the XML
                     print(f'Deleting code {date}')
-                    messagebox.showinfo("Deleted!", f'Deleting code {date}')
-                    tree.delete(selectedItem)                                                                       # Remove from the TreeView
+                    tree.delete(selectedItem)                                                          # Remove from the TreeView
+                    messagebox.showinfo(gs.localeDict['Message-Code-Deleted-Head'], gs.localeDict['Message-Code-Deleted-Body'].format(date=date))
             else:
                 print("Warning", "Select a code you want to delete")
-                messagebox.showwarning("Warning", "Select a code you want to delete")
+                messagebox.showwarning(gs.localeDict['Message-Code-Delete-NoSelection-Head'], gs.localeDict['Message-Code-Delete-NoSelection-Body'])
 
 
 

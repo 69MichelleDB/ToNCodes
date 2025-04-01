@@ -16,7 +16,7 @@ def DecodeNote(i_input, nameOnly=False):
         result = ''
         eventR = ''
         map = ''
-        mapRegex = re.compile(r"(^.+?) \((\d+)\)$")
+        mapRegex = re.compile(r"(^.+?) \((\d+)\)$")     # This is for the map and id
         mapMatched = []
         round = ''
         roundAux = ''
@@ -26,11 +26,11 @@ def DecodeNote(i_input, nameOnly=False):
 
         if i_input == 'No notes':
             print('This is a code from a version without Note integration (< 0.5.0)')
-            result = '[No note, code prior to alpha-0.5.0]'
+            result = gs.localeDict['Notes-Old-Code']
         elif i_input == 'RESPAWN':
-            result = 'Respawned'
+            result = gs.localeDict['Notes-Respawn']
         elif i_input == 'Manual':
-            result = 'Manual code'
+            result = gs.localeDict['Notes-Manual']
         else:
             dataRaw = i_input.split(', ')
             map = dataRaw[0]
@@ -110,7 +110,7 @@ def DecodeNote(i_input, nameOnly=False):
                 killerStr += killerName + ', '
             killerStr = killerStr[:len(killerStr)-2]            # Remove the last separator from the killers string
             if not nameOnly:
-                result = f'{round} in {mapMatched[0]}: {killerStr}'
+                result = gs.localeDict['Notes-Structure'].format(round=round, mapMatched=mapMatched[0], killerStr=killerStr)
                 print(f'Note reviewed: {result}')
             else:
                 result = killerStr

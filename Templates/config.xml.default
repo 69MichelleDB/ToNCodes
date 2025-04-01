@@ -9,4 +9,5 @@
     <check-updates-warned>0</check-updates-warned>
     <debug-window>0</debug-window>
     <tontrack-ws>1</tontrack-ws>
+    <locale>en</locale>
 </config>

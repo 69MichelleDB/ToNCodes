@@ -1,0 +1,57 @@
+{
+    "Horizontal-Menu-Manual-Code" : "Inserción de código manual",
+    "Horizontal-Menu-Options" : "Opciones",
+    "Horizontal-Menu-Updates" : "Comprobar actualizaciones...",
+    "Horizontal-Menu-Exit" : "Cerrar",
+    "Horizontal-Menu-File" : "Archivo",
+    "Horizontal-Menu-About" : "Acerca de",
+
+    "About-Title" : "Acerca de",
+
+    "Tree-Dates" : "Fechas",
+    "Tree-Notes" : "Anotaciones",
+    "Message-Code-Copied-Head": "¡Copiado!",
+    "Message-Code-Copied-Body" : "Código '{date}' copiado al portapapeles",
+    "Message-Code-Copied-NoItem-Head": "Aviso",
+    "Message-Code-Copied-NoItem-Body" : "No ha seleccionado ningún elemento",
+    "Message-Code-Delete-NoSelection-Head" : "Aviso",
+    "Message-Code-Delete-NoSelection-Body" : "Por favor, seleccione el código que desee borrar",
+    "Message-Code-Delete-Head" : "Confimación",
+    "Message-Code-Delete-Body" : "¿Quieres borrar el código {date}?",
+    "Message-Code-Deleted-Head" : "¡Borrado!",
+    "Message-Code-Deleted-Body" : "Código borrado {date}",
+
+    "Notes-Structure" : "Ronda {round} en {mapMatched}: {killerStr}",
+    "Notes-Old-Code" : "[Sin nota, código anterior a alpha-0.5.0]",
+    "Notes-Respawn" : "Respawneado",
+    "Notes-Manual" : "Código manual",
+   
+    "Debug-Event" : "Evento: {roundEvent} \n",
+    "Debug-Map" : "Mapa: {roundMap} \n",
+    "Debug-Type" : "Tipo de ronda: {roundType} \n",
+    "Debug-Killers" : "Terrores: {killer} \n",
+    "Debug-Condition" : "Condición: {roundCondition} \n",
+    "Debug-Websocket" : "Servidor Websocket: ws://{_WSURL}:{_WSPORT} [{WSStatus}] \n\n",
+    "Debug-Date" : "Última actualización: {date}",
+    "Message-Debug-Head" : "Salir",
+    "Message-Debug-Body" : "¿Quieres cerrar ToNCodes?",
+
+    "Manual-Code-Title" : "Código manual...",
+    "Manual-Code-Label" : "Código",
+    "Manual-Code-Save-Button" : "Grabar",
+
+    "Options-Title" : "Opciones",
+    "Options-VRCPath-Label" : "Ruta log de VRC",
+    "Options-VRCPath-Browse" : "Buscar",
+    "Options-Webhook-Label" : "Discord webhook",
+    "Options-Update-Label" : "Cuando ToNCodes arranca:",
+    "Options-Update-Check" : "Comprobar actualizaciones",
+    "Options-Delay-Label" : "Frecuencia lectura (segundos)",
+    "Options-Websocket-Label" : "tontrack.me Live tracker",
+    "Options-Websocket-Check" : "",
+    "Options-Locale-Combo" : "Idioma",
+    "Options-Save-Button" : "Grabar",
+    "Options-Need-Restart-Head" : "Reiniciar",
+    "Options-Need-Restart-Body" : "Algunos de los cambios efectuados requieren de un reinicio para que entren en vigor"
+
+}

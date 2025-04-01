@@ -1,5 +1,5 @@
 from Tools.xmlTools import InitializeConfig, ReadCodeFiles, ModifyNode, VerifyConfigFields
-from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles, GetKeyData, RegexCheck
+from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles, GetKeyData, RegexCheck, LoadLocale
 from Tools.guiTools import CreateWindow, HorizontalMenu, HorizontalFileBox, CreateTreeView, CalculatePosition
 from Tools.errorHandler import ErrorLogging
 from Tools.webhookTool import CheckForUpdates
@@ -41,8 +41,8 @@ if __name__ == "__main__":
     gs.configList = InitializeConfig(gs._FILE_CONFIG)               # Retrieve all config data
 
     CheckForUpdates()                                               # Check for new updates logic
-
     RegexCheck()
+    LoadLocale()
 
     # Websocket server
     if gs.configList['tontrack-ws'] == '1':

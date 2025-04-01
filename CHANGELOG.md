@@ -1,6 +1,16 @@
 # Changelog
 
-## [alpha-0.7.2]
+## [alpha-0.7.3] - 2025.04.01
+
+**New**
+- Multi-language support for the UI added. Instructions of how you can contribute, soon. [#31](https://github.com/69MichelleDB/ToNCodes/issues/31)
+- English and Spanish added to Options window.
+
+**Changes**
+- Changed how Notes are shown in the UI to "Round" round in "Map": "Terrors"
+- The window grew horizontally a few pixels.
+
+## [alpha-0.7.2] - 2025.03.31
 
 **New**
 - Added a combobox under the horizontal menu where you can filter per VRC log file, reducing the clutter. [#37](https://github.com/69MichelleDB/ToNCodes/issues/37)

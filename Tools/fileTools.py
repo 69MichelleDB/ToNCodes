@@ -197,3 +197,13 @@ def RegexCheck():
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in RegexCheck: {e}")
+
+# Load the selected locale in the global dict
+def LoadLocale():
+    try:
+        print(f"Loading locale {gs.configList['locale']}")
+        with open(os.path.join("Tools","Locale",f"{gs.configList['locale']}.json"), 'r') as file:
+            gs.localeDict = json.loads(file.read())
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in LoadLocale: {e}")

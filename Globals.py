@@ -1,7 +1,7 @@
 import os.path
 
 # Constants
-_VERSION = 'alpha-0.7.2'
+_VERSION = 'alpha-0.7.3'
 _TITLE = f"ToNCodes {_VERSION} - by MichelleDB"
 _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
 _WSURL = "localhost"
@@ -9,7 +9,7 @@ _WSPORT = 11398
 _RX = "https://app.tontrack.me/regex.json"
 
 # Main window
-_WIDTH = 600
+_WIDTH = 650
 _HEIGHT = 300
 
 # Manual Code window
@@ -18,7 +18,7 @@ _HEIGHT_MC = 100
 
 # Options window
 _WIDTH_OPT = 610
-_HEIGHT_OPT = 220
+_HEIGHT_OPT = 235
 
 # About window
 _WIDTH_ABOUT = 550
@@ -46,6 +46,7 @@ _FILE_DATAUK = os.path.join('Tools','Items','datauk')
 
 # Global variables
 configList = {}
+localeDict = {}
 root = None
 debugRoot = None
 titleMessage = ''
