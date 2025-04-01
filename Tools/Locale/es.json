@@ -21,6 +21,12 @@
     "Message-Code-Deleted-Head" : "¡Borrado!",
     "Message-Code-Deleted-Body" : "Código borrado {date}",
 
+    "Update-New-Head" : "Nueva actualización",
+    "Update-New-Body" : "Una nueva versión ha sido liberada [{latestVersion}], ¿quieres visitar GitGub para descargarla y leer las notas del parche?",
+    "Update-NoNew-Head" : "Comprobar actualizaciones",
+    "Update-NoNew-Body" : "Tienes la última versión disponible.",
+    "Update-New-Title" : " - [ ¡Nueva versión disponible! ]",
+
     "Notes-Structure" : "Ronda {round} en {mapMatched}: {killerStr}",
     "Notes-Old-Code" : "[Sin nota, código anterior a alpha-0.5.0]",
     "Notes-Respawn" : "Respawneado",

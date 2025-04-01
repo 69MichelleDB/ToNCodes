@@ -40,9 +40,9 @@ if __name__ == "__main__":
     VerifyConfigFields(gs._FILE_CONFIG)
     gs.configList = InitializeConfig(gs._FILE_CONFIG)               # Retrieve all config data
 
+    LoadLocale()
     CheckForUpdates()                                               # Check for new updates logic
     RegexCheck()
-    LoadLocale()
 
     # Websocket server
     if gs.configList['tontrack-ws'] == '1':

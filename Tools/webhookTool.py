@@ -56,12 +56,12 @@ def CheckForUpdates(i_checkForcedUpdate=False):
             if response.status_code == 200:
                 latestJson = response.json()
                 latestVersion = latestJson['tag_name']
-                latestNotes = latestJson['body']
+                #latestNotes = latestJson['body']
                 print(f"Connected, latest release: {latestVersion}")
                 if latestVersion != gs._VERSION:
                     if gs.configList['check-updates-warned'] == '0' or i_checkForcedUpdate == True:
                         result = 1  #ModifyNode(gs._CONFIG_FILE, 'check-updates-warned', '1')
-                        answer = messagebox.askyesno("New Update", f"A new version was released [{latestVersion}], visit GitHub to download the latest release?\n\n{latestNotes}")
+                        answer = messagebox.askyesno(gs.localeDict['Update-New-Head'], gs.localeDict['Update-New-Body'].format(latestVersion=latestVersion))
                         if answer:
                             print("Opening GitHub link")
                             webbrowser.open(urlLatest)
@@ -73,7 +73,7 @@ def CheckForUpdates(i_checkForcedUpdate=False):
                 else:
                     print("No new update, no need to prompt anything")
                     if i_checkForcedUpdate == True:
-                        messagebox.showinfo("New Update", "You currently have the latest version.")
+                        messagebox.showinfo(gs.localeDict['Update-NoNew-Head'], gs.localeDict['Update-New-Body'])
                     if gs.configList['check-updates-warned'] == '1':
                         print ("Reseting new version warning")
                         result = 2 #ModifyNode(gs._CONFIG_FILE, 'check-updates-warned', '0')
