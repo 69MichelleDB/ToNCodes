@@ -9,7 +9,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
     try: 
         # Variables
         codesArray = []                         # This is to store codes
-        logLineRegex = re.compile(r"(^\d{4}\.\d{2}\.\d{2}\s+\d{2}\:\d{2}\:\d{2})\s+\w+\s+-\s+(.+)") # Regex to extract date and content
+        logLineRegex = re.compile(r"(^\d{4}\.\d{2}\.\d{2}\s+\d{2}\:\d{2}\:\d{2})\s+\w+\s+-\s+(.+$)") # Regex to extract date and content
         lineMatch = []
 
         # Read line by line
