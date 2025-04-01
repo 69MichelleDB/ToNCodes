@@ -45,6 +45,7 @@ This current version was made under `Python 3.13.02`. If you want to run it, [yo
 
 ToNCodes as of today 2025.04.01 supports multi-language, I'll update this section this week hopefully with instructions of how you can collaborate to help translate.
 
+## Advanced
 
 **This next section is only if you want to run the Python code instead of the binary.**
 
