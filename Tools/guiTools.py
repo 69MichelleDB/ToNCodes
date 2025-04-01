@@ -176,7 +176,7 @@ def CreateOptionsWindow():
         #Checkbox
         cbVar = tk.IntVar()
         cbVar.set(gs.configList['check-updates'])
-        cbUpdates = Checkbutton(frameOptions, text=gs.localeDict['Options-Update-Check'], variable=cbVar, command=NeedRestart)
+        cbUpdates = Checkbutton(frameOptions, text=gs.localeDict['Options-Update-Check'], variable=cbVar)
         cbUpdates.grid(row=2, column=1, padx=5, pady=5, sticky='w')
 
 
@@ -201,7 +201,7 @@ def CreateOptionsWindow():
         #Checkbox
         cbVarWS = tk.IntVar()
         cbVarWS.set(gs.configList['tontrack-ws'])
-        cbWS = Checkbutton(frameOptions, text=gs.localeDict['Options-Websocket-Check'], variable=cbVarWS)
+        cbWS = Checkbutton(frameOptions, text=gs.localeDict['Options-Websocket-Check'], variable=cbVarWS, command=NeedRestart)
         cbWS.grid(row=4, column=1, padx=5, pady=5, sticky='w')
 
 
