@@ -5,6 +5,7 @@
 **Fixes**
 - Checking for updates when you were on the latest version, wasn't displaying the correct message.
 - String fixes to ease the translation process at Crowdin.
+- Moved Spanish translation to Crowdin.
 
 ## [alpha-0.7.3] - 2025.04.01
 
