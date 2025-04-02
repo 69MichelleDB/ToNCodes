@@ -22,7 +22,7 @@
     "Message-Code-Deleted-Body" : "Código borrado {date}",
 
     "Update-New-Head" : "Nueva actualización",
-    "Update-New-Body" : "Una nueva versión ha sido liberada [{latestVersion}], ¿quieres visitar GitGub para descargarla y leer las notas del parche?",
+    "Update-New-Body" : "Una nueva versión ha sido liberada {latestVersion}, ¿quieres visitar GitGub para descargarla y leer las notas del parche?",
     "Update-NoNew-Head" : "Comprobar actualizaciones",
     "Update-NoNew-Body" : "Tienes la última versión disponible.",
     "Update-New-Title" : " - [ ¡Nueva versión disponible! ]",
@@ -37,7 +37,7 @@
     "Debug-Type" : "Tipo de ronda: {roundType} \n",
     "Debug-Killers" : "Terrores: {killer} \n",
     "Debug-Condition" : "Condición: {roundCondition} \n",
-    "Debug-Websocket" : "Servidor Websocket: ws://{_WSURL}:{_WSPORT} [{WSStatus}] \n\n",
+    "Debug-Websocket" : "Servidor Websocket: ws://{_WSURL}:{_WSPORT} -> {WSStatus} \n\n",
     "Debug-Date" : "Última actualización: {date}",
     "Message-Debug-Head" : "Salir",
     "Message-Debug-Body" : "¿Quieres cerrar ToNCodes?",
