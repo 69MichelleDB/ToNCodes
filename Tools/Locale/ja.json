@@ -32,7 +32,7 @@
     "Debug-Type": "Round Type: {roundType} \n",
     "Debug-Killers": "Round Terrors: {killer} \n",
     "Debug-Condition": "Round Condition: {roundCondition} \n",
-    "Debug-Websocket": "Websocket server: ws://{_WSURL}:{_WSPORT} -> {WSStatus} \n\n",
+    "Debug-Websocket": "Websocket server: ws://{_WSURL}:{_WSPORT} [{WSStatus}] \n\n",
     "Debug-Date": "Last update: {date}",
     "Message-Debug-Head": "Exit",
     "Message-Debug-Body": "Would you like to close ToNCodes?",
