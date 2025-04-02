@@ -1,5 +1,10 @@
 # Changelog
 
+## [alpha-0.7.4]
+
+**Fixes**
+- Checking for updates when you were on the latest version, wasn't displaying the correct message.
+
 ## [alpha-0.7.3] - 2025.04.01
 
 **New**

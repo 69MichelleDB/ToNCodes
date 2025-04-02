@@ -37,7 +37,7 @@
     "Debug-Type" : "Tipo de ronda: {roundType} \n",
     "Debug-Killers" : "Terrores: {killer} \n",
     "Debug-Condition" : "Condición: {roundCondition} \n",
-    "Debug-Websocket" : "Servidor Websocket: ws://{_WSURL}:{_WSPORT} -> {WSStatus} \n\n",
+    "Debug-Websocket" : "Servidor Websocket: ws://{_WSURL}:{_WSPORT} [{WSStatus}] \n\n",
     "Debug-Date" : "Última actualización: {date}",
     "Message-Debug-Head" : "Salir",
     "Message-Debug-Body" : "¿Quieres cerrar ToNCodes?",
