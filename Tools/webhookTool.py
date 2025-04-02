@@ -73,7 +73,7 @@ def CheckForUpdates(i_checkForcedUpdate=False):
                 else:
                     print("No new update, no need to prompt anything")
                     if i_checkForcedUpdate == True:
-                        messagebox.showinfo(gs.localeDict['Update-NoNew-Head'], gs.localeDict['Update-New-Body'])
+                        messagebox.showinfo(gs.localeDict['Update-NoNew-Head'], gs.localeDict['Update-NoNew-Body'])
                     if gs.configList['check-updates-warned'] == '1':
                         print ("Reseting new version warning")
                         result = 2 #ModifyNode(gs._CONFIG_FILE, 'check-updates-warned', '0')
