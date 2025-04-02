@@ -45,7 +45,7 @@ This current version was made under `Python 3.13.02`. If you want to run it, [yo
 
 ToNCodes as of version `alpha-0.7.3` supports multi-language. After checking around I decided to use the same website VRChat uses for community translations `Crowdin`: https://crowdin.com/project/toncodes 
 
-If you want to collaborate, just head to the link above, sign in, select the language you want to help with, select `en.json` and you'll be presented with a UI with every available text. Here's a link to our wiki with visual guides.
+If you want to collaborate, just head to the link above, sign in, select the language you want to help with, select `en.json` and you'll be presented with a UI with every available text. [Here's a link to our wiki with visual guides](https://github.com/69MichelleDB/ToNCodes/wiki/How-to-help-translate-ToNCodes).
 
 If you want a specific language added to Crowdin, please let me know in [this discussion link](https://github.com/69MichelleDB/ToNCodes/discussions/42).
 
