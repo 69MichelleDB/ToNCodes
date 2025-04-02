@@ -368,12 +368,13 @@ def DebugWindow():
 
         text.config(state=tk.NORMAL)    # Allow edits
         text.delete("1.0", tk.END)
-        text.insert(tk.END,     gs.localeDict['Debug-Event'].format(roundEvent=gs.roundEvent) +
-                                gs.localeDict['Debug-Map'].format(roundMap=gs.roundMap) +
-                                gs.localeDict['Debug-Type'].format(roundType=gs.roundType) +
-                                gs.localeDict['Debug-Killers'].format(killer=killer) +
-                                gs.localeDict['Debug-Condition'].format(roundCondition=gs.roundCondition) +
-                                gs.localeDict['Debug-Websocket'].format(_WSURL=gs._WSURL,_WSPORT=gs._WSPORT,WSStatus="online" if gs.wsFlag == True else "offline") +
+        text.insert(tk.END,     gs.localeDict['Debug-Event'].format(roundEvent=gs.roundEvent) + ' \n' +
+                                gs.localeDict['Debug-Map'].format(roundMap=gs.roundMap) + ' \n' +
+                                gs.localeDict['Debug-Type'].format(roundType=gs.roundType) + ' \n' +
+                                gs.localeDict['Debug-Killers'].format(killer=killer) + ' \n' +
+                                gs.localeDict['Debug-Condition'].format(roundCondition=gs.roundCondition) + ' \n' +
+                                #gs.localeDict['Debug-Websocket'].format(_WSURL=gs._WSURL,_WSPORT=gs._WSPORT,WSStatus="online" if gs.wsFlag == True else "offline") + ' \n\n' +
+                                gs.localeDict['Debug-Websocket'].format(WSStatus="online" if gs.wsFlag == True else "offline") + ' \n\n' +
                                 gs.localeDict['Debug-Date'].format(date=datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S"))
                                 )
         text.config(state=tk.DISABLED)  # Make the text uneditable

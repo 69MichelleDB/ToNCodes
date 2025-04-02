@@ -10,4 +10,4 @@ def WarningHandler(i_result):
             Tools.xmlTools.ModifyNode(gs._FILE_CONFIG, 'check-updates-warned', '0')
         
         if i_result == 1 or i_result == 3:
-            gs.titleMessage = gs.localeDict['Update-New-Title']
+            gs.titleMessage = f" - [ {gs.localeDict['Update-New-Title']} ]"
