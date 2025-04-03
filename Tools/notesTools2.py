@@ -1,7 +1,7 @@
 import Globals as gs
 import re
 from Tools.errorHandler import ErrorLogging
-from WebsocketServer import SendWSMessage
+from Tools.netTools import SendWSMessage
 import asyncio
 
 # Check the content of a log and parse all data

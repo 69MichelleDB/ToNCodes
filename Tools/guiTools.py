@@ -6,13 +6,13 @@ import pyperclip
 from Tools.xmlTools import ModifyNode, InitializeConfig, ModifyCode, WriteNewCode
 from Tools.fileTools import GetPossibleVRCPath, LoadLocale
 from Tools.errorHandler import ErrorLogging
-from Tools.webhookTool import CheckForUpdates
+from Tools.netTools import CheckForUpdates
 from screeninfo import get_monitors
 import Globals as gs
 from math import isnan
 from Tools.Items.Killer import DecodeNote
 import datetime
-from WebsocketServer import SendWSMessage
+from Tools.netTools import SendWSMessage
 
 
 # Create a window

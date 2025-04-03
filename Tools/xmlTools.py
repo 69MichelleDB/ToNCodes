@@ -4,7 +4,7 @@ import xml.dom.minidom as minidom
 import glob
 import os.path
 import Globals as gs
-from Tools.webhookTool import SendWebhook
+from Tools.netTools import SendWebhook
 from Tools.errorHandler import ErrorLogging
 from Tools.notesTools2 import ParseContent
 

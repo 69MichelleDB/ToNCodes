@@ -2,11 +2,10 @@ from Tools.xmlTools import InitializeConfig, ReadCodeFiles, ModifyNode, VerifyCo
 from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles, GetKeyData, RegexCheck, LoadLocale
 from Tools.guiTools import CreateWindow, HorizontalMenu, HorizontalFileBox, CreateTreeView, CalculatePosition
 from Tools.errorHandler import ErrorLogging
-from Tools.webhookTool import CheckForUpdates
+from Tools.netTools import CheckForUpdates, WSstart
 from CodesHunter2 import CodesHunter2
 import threading
 import Globals as gs
-from WebsocketServer import WSstart
 
 
 '''
