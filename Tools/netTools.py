@@ -23,7 +23,7 @@ def SendWebhook(i_date, i_note, i_code):
         fileName = CreateNewTempCodeFile(gs._FOLDER_TEMP, i_date + '_TEMP.txt', i_code)
 
         payload = {
-            "content": f'New code found: {i_date}, Notes: {note}',
+            "content": gs.localeDict['Discord-Webhook-Message'].format(i_date=i_date, note=note),
         }
 
         with open(fileName, "rb") as file:
