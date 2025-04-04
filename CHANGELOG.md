@@ -2,6 +2,9 @@
 
 ## [alpha-0.7.4]
 
+**New**
+- First pass for themes. [#38](https://github.com/69MichelleDB/ToNCodes/issues/38)
+
 **Fixes**
 - Checking for updates when you were on the latest version, wasn't displaying the correct message.
 - String fixes to ease the translation process at Crowdin.

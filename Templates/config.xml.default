@@ -10,4 +10,5 @@
     <debug-window>0</debug-window>
     <tontrack-ws>1</tontrack-ws>
     <locale>en</locale>
+    <theme>Default.json</theme>
 </config>

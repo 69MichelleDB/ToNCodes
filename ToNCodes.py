@@ -1,6 +1,6 @@
 from Tools.xmlTools import InitializeConfig, ReadCodeFiles, ModifyNode, VerifyConfigFields
 from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles, GetKeyData, RegexCheck, LoadLocale
-from Tools.guiTools import CreateWindow, HorizontalMenu, HorizontalFileBox, CreateTreeView, CalculatePosition
+from Tools.guiTools import CreateWindow, HorizontalMenu, HorizontalFileBox, CreateTreeView, CalculatePosition, ApplyStyle
 from Tools.errorHandler import ErrorLogging
 from Tools.netTools import CheckForUpdates, WSstart
 from CodesHunter2 import CodesHunter2
@@ -62,7 +62,9 @@ if __name__ == "__main__":
     gs.root = CreateWindow(gs._TITLE + gs.titleMessage, gs._WIDTH, gs._HEIGHT, True)
     auxX,auxY = CalculatePosition(gs._WIDTH, gs._HEIGHT)
     gs.root.geometry(f'{gs._WIDTH}x{gs._HEIGHT}+{auxX}+{auxY}')
+
     gs.codesData = RefreshCodes()
+
     HorizontalMenu(gs.root)
     HorizontalFileBox(gs.root)
     CreateTreeView(gs.root, int(gs.configList['ui-delay']), RefreshCodes)

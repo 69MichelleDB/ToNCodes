@@ -18,7 +18,7 @@ _HEIGHT_MC = 100
 
 # Options window
 _WIDTH_OPT = 610
-_HEIGHT_OPT = 235
+_HEIGHT_OPT = 275
 
 # About window
 _WIDTH_ABOUT = 550
@@ -33,21 +33,26 @@ _FOLDER_CODES = 'Codes'
 _FOLDER_LOGS = 'Logs'
 _FOLDER_TEMPLATES = 'Templates'
 _FOLDER_TEMP = 'Temp'
+_FOLDER_TOOLS = 'Tools'
+_FOLDER_TOOLS_ITEMS = 'Items'
+_FOLDER_TOOLS_THEMES = 'Themes'
+_FOLDER_TOOLS_THEMES_ASSETS = 'Assets'
 
 # Files
 _FILE_CONFIG = 'config.xml'
 _FILE_CONTROL = 'control.xml'
-_FILE_DATA = os.path.join('Tools','Items','data')
-_FILE_DATAK = os.path.join('Tools','Items','datak')
-_FILE_DATASILLY = os.path.join('Tools','Items','data_silly')
-_FILE_DATAKSILLY = os.path.join('Tools','Items','datak_silly')
-_FILE_DATAU = os.path.join('Tools','Items','datau')
-_FILE_DATAUK = os.path.join('Tools','Items','datauk')
+_FILE_DATA = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'data')
+_FILE_DATAK = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'datak')
+_FILE_DATASILLY = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'data_silly')
+_FILE_DATAKSILLY = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'datak_silly')
+_FILE_DATAU = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'datau')
+_FILE_DATAUK = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'datauk')
 
 # Global variables
 configList = {}
 localeDict = {}
 root = None
+TONStyles = {}
 debugRoot = None
 titleMessage = ''
 writingFlag = False

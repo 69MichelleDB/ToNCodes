@@ -1,10 +1,10 @@
 import tkinter as tk
-from tkinter import messagebox, Menu, Label, filedialog, Checkbutton
+from tkinter import messagebox, Menu, Label, filedialog, Checkbutton, ttk, PhotoImage
 from tkinter.ttk import Treeview, Scrollbar, Label, Entry, Combobox
 import os.path
 import pyperclip
 from Tools.xmlTools import ModifyNode, InitializeConfig, ModifyCode, WriteNewCode
-from Tools.fileTools import GetPossibleVRCPath, LoadLocale
+from Tools.fileTools import GetPossibleVRCPath, LoadLocale, GetAllThemes
 from Tools.errorHandler import ErrorLogging
 from Tools.netTools import CheckForUpdates
 from screeninfo import get_monitors
@@ -13,6 +13,26 @@ from math import isnan
 from Tools.Items.Killer import DecodeNote
 import datetime
 from Tools.netTools import SendWSMessage
+import json
+
+
+# This will apply a common theme to every element
+def ApplyStyle(i_style):
+    path = os.path.join(gs._FOLDER_TOOLS,gs._FOLDER_TOOLS_THEMES,gs.configList['theme'])
+    with open(path) as file:
+        jsonFile = json.loads(file.read())
+
+    maps = {}
+    for widgetStyle in jsonFile:
+        if widgetStyle != 'TON':
+            maps = jsonFile[widgetStyle].pop('map', None)
+            i_style.configure(widgetStyle, **jsonFile[widgetStyle])   # This way we can apply a style to each element, maintain and expand it easily
+            if maps is not None:                                      # This is for styles that have states
+                for attribute, state_value in maps.items():
+                    state, value = state_value
+                    i_style.map(widgetStyle, **{attribute: [(state, value)]})
+        else: 
+            gs.TONStyles = jsonFile[widgetStyle]           # Not everything can be configured with style.configure, they'll need manual fixes
 
 
 # Create a window
@@ -26,6 +46,11 @@ def CreateWindow(i_title, i_width, i_height, i_resizable, i_modal=False):
         root.title(i_title)
         root.geometry(f"{i_width}x{i_height}")
         root.resizable(i_resizable,i_resizable)
+
+        style = ttk.Style()
+        ApplyStyle(style)
+        if gs.configList['theme'] != 'Default.json':
+            root.configure(**gs.TONStyles['window'])
 
         return root
     except Exception as e:
@@ -61,7 +86,7 @@ def CreateManualCodeWindow():
         mCodeRoot.transient()
         mCodeRoot.wait_visibility()
 
-        frameMCode = tk.Frame(mCodeRoot)
+        frameMCode = tk.Frame(mCodeRoot, **gs.TONStyles['frameOptions'])
         frameMCode.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
 
         # Set weights so they take the window
@@ -86,7 +111,7 @@ def CreateManualCodeWindow():
             mCodeRoot.destroy()
 
         # Save button
-        saveButton = tk.Button(frameMCode, text=gs.localeDict['Manual-Code-Save-Button'], command=SaveManualCode)
+        saveButton = tk.Button(frameMCode, text=gs.localeDict['Manual-Code-Save-Button'], command=SaveManualCode, **gs.TONStyles['buttons'])
         saveButton.grid(row=1, column=1, padx=5, pady=5, sticky='e')
 
         mCodeRoot.wait_window()
@@ -109,7 +134,7 @@ def CreateOptionsWindow():
         optionsRoot.transient()
         optionsRoot.wait_visibility()
 
-        frameOptions = tk.Frame(optionsRoot)
+        frameOptions = tk.Frame(optionsRoot, **gs.TONStyles['frameOptions'])
         frameOptions.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
 
         # Set weights so they take the window
@@ -124,6 +149,7 @@ def CreateOptionsWindow():
         frameOptions.grid_rowconfigure(3, weight=1)
         frameOptions.grid_rowconfigure(4, weight=1)
         frameOptions.grid_rowconfigure(5, weight=1)
+        frameOptions.grid_rowconfigure(6, weight=1)
 
         restartNeeded = False
         # Some options may need a restart to take effect, this enables a warning
@@ -151,7 +177,7 @@ def CreateOptionsWindow():
             if folder_selected:
                 textPath.set(folder_selected)
         # File browser button
-        browseButton = tk.Button(frameOptions, text=gs.localeDict['Options-VRCPath-Browse'], command=BrowseVRCFolder)
+        browseButton = tk.Button(frameOptions, text=gs.localeDict['Options-VRCPath-Browse'], command=BrowseVRCFolder, **gs.TONStyles['buttons'])
         browseButton.grid(row=0, column=2, padx=5, pady=5)
 
 
@@ -176,7 +202,7 @@ def CreateOptionsWindow():
         #Checkbox
         cbVar = tk.IntVar()
         cbVar.set(gs.configList['check-updates'])
-        cbUpdates = Checkbutton(frameOptions, text=gs.localeDict['Options-Update-Check'], variable=cbVar)
+        cbUpdates = Checkbutton(frameOptions, text=gs.localeDict['Options-Update-Check'], variable=cbVar, **gs.TONStyles['checkbutton'])
         cbUpdates.grid(row=2, column=1, padx=5, pady=5, sticky='w')
 
 
@@ -201,7 +227,7 @@ def CreateOptionsWindow():
         #Checkbox
         cbVarWS = tk.IntVar()
         cbVarWS.set(gs.configList['tontrack-ws'])
-        cbWS = Checkbutton(frameOptions, text=gs.localeDict['Options-Websocket-Check'], variable=cbVarWS, command=NeedRestart)
+        cbWS = Checkbutton(frameOptions, text=gs.localeDict['Options-Websocket-Check'], variable=cbVarWS, command=NeedRestart, **gs.TONStyles['checkbutton'])
         cbWS.grid(row=4, column=1, padx=5, pady=5, sticky='w')
 
 
@@ -227,7 +253,7 @@ def CreateOptionsWindow():
             return result
 
         # Label
-        labelcomboLocale = Label(frameOptions, text=gs.localeDict['Options-Locale-Combo'])
+        labelcomboLocale = Label(frameOptions, text=gs.localeDict['Options-Locale-Label'])
         labelcomboLocale.grid(row=5, column=0, padx=5, pady=5, sticky='w')
 
         #Combo box
@@ -237,6 +263,20 @@ def CreateOptionsWindow():
         auxLocale = Lang2ID(gs.configList['locale'])
         comboLocale.set(auxLocale)
         comboLocale.bind('<<ComboboxSelected>>', NeedRestart)
+
+    
+        # SEVENTH ROW
+
+        # Label
+        labelTheme = Label(frameOptions, text=gs.localeDict['Options-Theme-Label'])
+        labelTheme.grid(row=6, column=0, padx=5, pady=5, sticky='w')
+
+        #Combo box
+        comboVarTheme = tk.StringVar()
+        comboTheme = Combobox(frameOptions, values=GetAllThemes(), state='readonly', textvariable=comboVarTheme)
+        comboTheme.grid(row=6, column=1, padx=5, pady=5, sticky='w')
+        comboTheme.set(gs.configList['theme'])
+        comboTheme.bind('<<ComboboxSelected>>', NeedRestart)
 
         # Save changes
         def SaveOptions():
@@ -274,6 +314,11 @@ def CreateOptionsWindow():
             if comboVarLocaleAux != gs.configList['locale']:
                 ModifyNode(gs._FILE_CONFIG, 'locale', comboVarLocaleAux)
 
+            # Theme
+            comboVarThemeAux = comboVarTheme.get()
+            if comboVarThemeAux != gs.configList['theme']:
+                ModifyNode(gs._FILE_CONFIG, 'theme', comboVarThemeAux)
+
             # Reload config variable
             gs.configList = InitializeConfig(gs._FILE_CONFIG)
             optionsRoot.destroy()
@@ -284,8 +329,8 @@ def CreateOptionsWindow():
         # LAST ROW
 
         # Save button
-        saveButton = tk.Button(frameOptions, text=gs.localeDict['Options-Save-Button'], command=SaveOptions)
-        saveButton.grid(row=5, column=2, padx=5, pady=5)
+        saveButton = tk.Button(frameOptions, text=gs.localeDict['Options-Save-Button'], command=SaveOptions, **gs.TONStyles['buttons'])
+        saveButton.grid(row=6, column=2, padx=5, pady=5)
 
         optionsRoot.wait_window()
     except Exception as e:
@@ -315,7 +360,7 @@ def CreateAboutWindow():
 
         # Textr
         bgColor = aboutRoot.cget("bg")  # Get the default background color of the window
-        text = tk.Text(aboutRoot, wrap=tk.WORD, bg=bgColor, height=13)
+        text = tk.Text(aboutRoot, wrap=tk.WORD, **gs.TONStyles['about'])
         text.insert(tk.END,     f"ToN Codes: https://github.com/69MichelleDB/ToNCodes\n" +
                                 f"Version: {gs._VERSION}\n" + 
                                 f"By 69MichelleDB: https://michelledb.com\n\n" +
@@ -356,8 +401,8 @@ def DebugWindow():
     frameDebug.grid_columnconfigure(0, weight=1)
 
     # Textr
-    bgColor = debugRoot.cget("bg")  # Get the default background color of the window
-    text = tk.Text(debugRoot, wrap=tk.WORD, bg=bgColor, height=15)
+    #text = tk.Text(debugRoot, wrap=tk.WORD, bg=bgColor, height=15)
+    text = tk.Text(debugRoot, wrap=tk.WORD, **gs.TONStyles['debug'])
 
     text.grid(row=0, column=0, padx=5, pady=5, sticky='ew')
 
@@ -394,11 +439,11 @@ def DebugWindow():
 # H-Menu
 def HorizontalMenu(i_root):
     try:
-        menubar = Menu(i_root)                  # Create and assign to the window
+        menubar = Menu(i_root, **gs.TONStyles['menu']['baseMenu'])                  # Create and assign to the window
         i_root.config(menu=menubar)
         
         # File...
-        fileMenu = Menu(menubar, tearoff=False) # New Menu
+        fileMenu = Menu(menubar, **gs.TONStyles['menu']['file']) # New Menu
         fileMenu.add_command(label=gs.localeDict['Horizontal-Menu-Manual-Code'], command=CreateManualCodeWindow)
         fileMenu.add_separator()
         fileMenu.add_command(label=gs.localeDict['Horizontal-Menu-Options'], command=CreateOptionsWindow)
@@ -423,7 +468,7 @@ def HorizontalMenu(i_root):
 # This is the Combobox underneath the Menu with the name of the log to filter
 def HorizontalFileBox(i_root):
     try:
-        dateBoxFrame = tk.Frame(i_root, relief=tk.RAISED, borderwidth=1)        # Gonna put in a frame
+        dateBoxFrame = tk.Frame(i_root, **gs.TONStyles['frameHorizontalDate'])        # Gonna put in a frame
         dateBoxFrame.pack(side=tk.TOP, fill=tk.X)
 
         gs.fileBoxSelected = tk.StringVar()

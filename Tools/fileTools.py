@@ -207,3 +207,15 @@ def LoadLocale():
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in LoadLocale: {e}")
+
+
+# Obtain all themes
+def GetAllThemes():
+    try:
+        result = []
+        for file in glob.glob(os.path.join(gs._FOLDER_TOOLS,gs._FOLDER_TOOLS_THEMES, '*.json')):
+            result.append(file.replace(str(os.path.join(gs._FOLDER_TOOLS,gs._FOLDER_TOOLS_THEMES)) + os.sep, ''))
+        return result
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in GetAllThemes: {e}")
