@@ -51,6 +51,8 @@
     "Options-Locale-Label": "Language",
     "Options-Theme-Label": "Theme",
     "Options-Save-Button": "Save",
+    "Options-Debug-Label": "Enable debug",
+    "Options-Debug-Check": "",
     "Options-Need-Restart-Head": "Restart",
     "Options-Need-Restart-Body": "Some of the options changed require a restart of ToNCodes for them to take effect",
     "Discors-Webhook-Message": "New code found: {i_date}, Notes: {note}"
