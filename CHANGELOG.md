@@ -14,6 +14,7 @@
 - String fixes to ease the translation process at Crowdin.
 - Moved Spanish translation to Crowdin.
 - Added the message sent by to the Discord webhook when a new code is generated to the locale files. [#40](https://github.com/69MichelleDB/ToNCodes/issues/40)
+- Added fix to prevent reading lines where a killer is set without a round, while a round is already going.
 
 ## [alpha-0.7.3] - 2025.04.01
 

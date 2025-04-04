@@ -59,8 +59,9 @@ def ParseContent(i_content, i_fileName, i_cursor):
                                 gs.roundMap = f"{args[0]} ({args[1]})"
                                 gs.roundType = args[2]
                             case "round_killers":
-                                gs.roundKiller = f"{args[0]} {args[1]} {args[2]}"
-                                gs.roundType = args[3]
+                                if args[3] != '':       # I found a case with an 8 pages where the game returned an empty round with other killers before the round ended
+                                    gs.roundKiller = f"{args[0]} {args[1]} {args[2]}"
+                                    gs.roundType = args[3]
                             case "is_gigabyte":
                                 gs.roundType = 'Special'
                             case "round_won":
