@@ -51,6 +51,8 @@
     "Options-Locale-Label": "Idioma",
     "Options-Theme-Label": "Tema",
     "Options-Save-Button": "Grabar",
+    "Options-Debug-Label": "Enable debug",
+    "Options-Debug-Check": "",
     "Options-Need-Restart-Head": "Reiniciar",
     "Options-Need-Restart-Body": "Algunos de los cambios efectuados requieren de un reinicio para que entren en vigor",
     "Discors-Webhook-Message": "Nuevo código encontrado: {i_date}, Notes: {note}"
