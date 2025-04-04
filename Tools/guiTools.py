@@ -14,6 +14,7 @@ from Tools.Items.Killer import DecodeNote
 import datetime
 from Tools.netTools import SendWSMessage
 import json
+import re
 
 
 # This will apply a common theme to every element
@@ -46,6 +47,7 @@ def CreateWindow(i_title, i_width, i_height, i_resizable, i_modal=False):
         root.title(i_title)
         root.geometry(f"{i_width}x{i_height}")
         root.resizable(i_resizable,i_resizable)
+        root.minsize(i_width, i_height)
 
         style = ttk.Style()
         ApplyStyle(style)
@@ -338,9 +340,10 @@ def CreateOptionsWindow():
             if cbVarAuxDebug != gs.configList['debug-window']:
                 ModifyNode(gs._FILE_CONFIG, 'debug-window', cbVarAuxDebug)
                 if cbVarAuxDebug == '1':
-                    DebugWindow()
+                    DebugBar(gs.root)
                 else:
-                    gs.debugRoot.destroy()
+                    gs.root.after_cancel(gs.debugBarAfterID)
+                    gs.debugBarFrame.destroy()
 
             # Reload config variable
             gs.configList = InitializeConfig(gs._FILE_CONFIG)
@@ -403,59 +406,6 @@ def CreateAboutWindow():
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in CreateAboutWindow: {e}")
-
-
-# region Debug Win
-
-# This window will only show up if the debug-window flag is 1
-def DebugWindow():
-    # Window creation
-    debugRoot = CreateWindow('DEBUG', gs._WIDTH_DEBUG, gs._HEIGHT_DEBUG, True, True)
-    auxX,auxY = CalculatePosition(gs._WIDTH_DEBUG, gs._HEIGHT_DEBUG)
-    debugRoot.geometry(f'{gs._WIDTH_DEBUG}x{gs._HEIGHT_DEBUG}+{auxX+int(gs._WIDTH/1.1)}+{auxY}')
-
-    gs.debugRoot = debugRoot
-
-    frameDebug = tk.Frame(debugRoot)
-    frameDebug.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
-
-    # Set weights so they take the window
-    debugRoot.grid_columnconfigure(0, weight=1)
-    frameDebug.grid_columnconfigure(0, weight=1)
-
-    # Textr
-    #text = tk.Text(debugRoot, wrap=tk.WORD, bg=bgColor, height=15)
-    text = tk.Text(debugRoot, wrap=tk.WORD, **gs.TONStyles['debug'])
-
-    text.grid(row=0, column=0, padx=5, pady=5, sticky='ew')
-
-    def DebugWindowRefresh():
-        killer = ''
-        if gs.roundMap!='' and gs.roundType!='' and gs.roundKiller!='':
-            killer = DecodeNote(f"{gs.roundMap}, {gs.roundType}, {gs.roundKiller}, {gs.roundEvent}", True)
-
-        text.config(state=tk.NORMAL)    # Allow edits
-        text.delete("1.0", tk.END)
-        text.insert(tk.END,     gs.localeDict['Debug-Event'].format(roundEvent=gs.roundEvent) + ' \n' +
-                                gs.localeDict['Debug-Map'].format(roundMap=gs.roundMap) + ' \n' +
-                                gs.localeDict['Debug-Type'].format(roundType=gs.roundType) + ' \n' +
-                                gs.localeDict['Debug-Killers'].format(killer=killer) + ' \n' +
-                                gs.localeDict['Debug-Condition'].format(roundCondition=gs.roundCondition) + ' \n' +
-                                #gs.localeDict['Debug-Websocket'].format(_WSURL=gs._WSURL,_WSPORT=gs._WSPORT,WSStatus="online" if gs.wsFlag == True else "offline") + ' \n\n' +
-                                gs.localeDict['Debug-Websocket'].format(WSStatus="online" if gs.wsFlag == True else "offline") + ' \n\n' +
-                                gs.localeDict['Debug-Date'].format(date=datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S"))
-                                )
-        text.config(state=tk.DISABLED)  # Make the text uneditable
-        gs.debugRoot.after(int(gs.configList['file-delay'])*1000, DebugWindowRefresh)
-
-    # If the debug window closes, close the main window and with it everything else
-    def on_closing():
-        if messagebox.askokcancel(gs.localeDict['Message-Debug-Head'], gs.localeDict['Message-Debug-Body'], parent=gs.debugRoot):
-            gs.root.destroy()
-
-    DebugWindowRefresh()
-    gs.debugRoot.protocol("WM_DELETE_WINDOW", on_closing)   # Handle what to do during a delete window event for the debug window
-
 
 # region Main Win
 
@@ -529,7 +479,10 @@ def HorizontalFileBox(i_root):
 # This will allow us to display the XMLs data
 def CreateTreeView(i_root, i_RefreshInterval, i_RefreshCallback):
     try:
-        tree = Treeview(i_root, columns=('File', 'Date', 'Code', 'Notes'), show='headings')
+        treeFrame = tk.Frame(i_root, **gs.TONStyles['frameTree'])
+        treeFrame.pack(side=tk.TOP, fill="both", expand=True)
+
+        tree = Treeview(treeFrame, columns=('File', 'Date', 'Code', 'Notes'), show='headings')
         tree.column('File', width=0, stretch=tk.NO)                 # File column will now be hidden
         tree.heading('Date', text=gs.localeDict['Tree-Dates'])
         tree.column('Code', width=0, stretch=tk.NO)                 # I'm going to keep Code hidden and add a new colum Notes
@@ -544,9 +497,10 @@ def CreateTreeView(i_root, i_RefreshInterval, i_RefreshCallback):
         tree.columnconfigure(3, weight=1)
 
         # Scrollbar
-        scrollbar = Scrollbar(i_root, orient = 'vertical', command=tree.yview)
+        scrollbar = Scrollbar(treeFrame, orient = 'vertical', command=tree.yview)
         tree.configure(yscrollcommand=scrollbar.set)
         scrollbar.pack(side='right', fill='y')
+
         tree.pack(side='left', fill='both', expand=True)
 
         # I need the window to refresh from time to time in case there's new data
@@ -615,16 +569,10 @@ def CreateTreeView(i_root, i_RefreshInterval, i_RefreshCallback):
                 print("Warning", "Select a code you want to delete")
                 messagebox.showwarning(gs.localeDict['Message-Code-Delete-NoSelection-Head'], gs.localeDict['Message-Code-Delete-NoSelection-Body'])
 
-
-
         tree.bind('<Double-1>', on_row_click)           # Hook the double click event
         tree.bind('<Delete>', on_row_del)               # Hook for deleting rows
         FillTree()                                      # Fill the tree
         i_root.after(i_RefreshInterval, refreshTree)    # Hook the data refresh event
-
-        # Debug window
-        if gs.configList['debug-window'] == '1':
-            DebugWindow()
 
         # Handler for when the main window closes
         def on_closing():
@@ -637,3 +585,30 @@ def CreateTreeView(i_root, i_RefreshInterval, i_RefreshCallback):
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in CreateTreeView: {e}")
+
+
+# This bar at the bottom of the window will display debug info of the round
+def DebugBar(i_root):
+    gs.debugBarFrame = tk.Frame(i_root, **gs.TONStyles['frameDebug'])
+    gs.debugBarFrame.pack(side=tk.BOTTOM, fill=tk.X)
+    text = tk.Text(gs.debugBarFrame, wrap=tk.WORD, **gs.TONStyles['debugText'])
+    text.pack(fill=tk.X, expand=True)
+    
+    def DebugBarRefresh():
+        killer = ''
+        mapRegex = re.compile(r"(^.+?) \((\d+)\)$")
+        if gs.roundMap!='' and gs.roundType!='' and gs.roundKiller!='':
+            killer = DecodeNote(f"{gs.roundMap}, {gs.roundType}, {gs.roundKiller}, {gs.roundEvent}", True)
+
+        text.config(state=tk.NORMAL)    # Allow edits
+        text.delete("1.0", tk.END)
+        currentMap = mapRegex.search(gs.roundMap)
+        if currentMap:
+            currentMap = currentMap.groups()[0]
+        else:
+            currentMap = ''
+        text.insert(tk.END, f"{datetime.datetime.now().strftime("%H:%M:%S")} {gs.roundEvent} {currentMap} {gs.roundType} {killer} {gs.roundCondition}")
+        text.config(state=tk.DISABLED)  # Make the text uneditable
+        gs.debugBarAfterID = gs.root.after(int(gs.configList['file-delay'])*1000, DebugBarRefresh)
+
+    DebugBarRefresh()

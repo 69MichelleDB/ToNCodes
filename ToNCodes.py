@@ -1,6 +1,6 @@
 from Tools.xmlTools import InitializeConfig, ReadCodeFiles, ModifyNode, VerifyConfigFields
 from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles, GetKeyData, RegexCheck, LoadLocale
-from Tools.guiTools import CreateWindow, HorizontalMenu, HorizontalFileBox, CreateTreeView, CalculatePosition, ApplyStyle
+from Tools.guiTools import CreateWindow, HorizontalMenu, HorizontalFileBox, CreateTreeView, CalculatePosition, ApplyStyle, DebugBar
 from Tools.errorHandler import ErrorLogging
 from Tools.netTools import CheckForUpdates, WSstart
 from CodesHunter2 import CodesHunter2
@@ -59,7 +59,7 @@ if __name__ == "__main__":
     gs.killersListSilly = GetKeyData(gs._FILE_DATAKSILLY, gs._FILE_DATASILLY, 'K')
     gs.unboundsDict = GetKeyData(gs._FILE_DATAUK, gs._FILE_DATAU, 'U')
     
-    gs.root = CreateWindow(gs._TITLE + gs.titleMessage, gs._WIDTH, gs._HEIGHT, True)
+    gs.root = CreateWindow(gs._TITLE + gs.titleMessage, gs._WIDTH, gs._HEIGHT+30, True)
     auxX,auxY = CalculatePosition(gs._WIDTH, gs._HEIGHT)
     gs.root.geometry(f'{gs._WIDTH}x{gs._HEIGHT}+{auxX}+{auxY}')
 
@@ -68,5 +68,9 @@ if __name__ == "__main__":
     HorizontalMenu(gs.root)
     HorizontalFileBox(gs.root)
     CreateTreeView(gs.root, int(gs.configList['ui-delay']), RefreshCodes)
+    # Debug bar
+    if gs.configList['debug-window'] == '1':
+        DebugBar(gs.root)
+
 
     gs.root.mainloop()

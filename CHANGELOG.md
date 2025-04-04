@@ -6,6 +6,9 @@
 - First pass for themes. [#38](https://github.com/69MichelleDB/ToNCodes/issues/38)
 - Added option to enable debug in File > Options.
 
+**Changes**
+- Removed Debug window and integrated it to the bottom of the main window reducing clutter. [#47](https://github.com/69MichelleDB/ToNCodes/issues/47)
+
 **Fixes**
 - Checking for updates when you were on the latest version, wasn't displaying the correct message.
 - String fixes to ease the translation process at Crowdin.

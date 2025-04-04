@@ -31,16 +31,6 @@
     "Notes-Old-Code" : "[No note, code prior to alpha-0.5.0]",
     "Notes-Respawn" : "Respawned",
     "Notes-Manual" : "Manual code",
-   
-    "Debug-Event" : "Round Event: {roundEvent}",
-    "Debug-Map" : "Round Map: {roundMap}",
-    "Debug-Type" : "Round Type: {roundType}",
-    "Debug-Killers" : "Round Terrors: {killer}",
-    "Debug-Condition" : "Round Condition: {roundCondition}",
-    "Debug-Websocket" : "Websocket server: {WSStatus}",
-    "Debug-Date" : "Last update: {date}",
-    "Message-Debug-Head" : "Exit",
-    "Message-Debug-Body" : "Would you like to close ToNCodes?",
 
     "Manual-Code-Title" : "Manual code...",
     "Manual-Code-Label" : "Code",
@@ -63,5 +53,5 @@
     "Options-Need-Restart-Head" : "Restart",
     "Options-Need-Restart-Body" : "Some of the options changed require a restart of ToNCodes for them to take effect",
 
-    "Discors-Webhook-Message" : "New code found: {i_date}, Notes: {note}"
+    "Discord-Webhook-Message" : "New code found: {i_date}, Notes: {note}"
 }

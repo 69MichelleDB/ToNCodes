@@ -17,3 +17,4 @@ BuildBin/*
 .compile*
 
 ignore-*
+*-test*
