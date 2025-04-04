@@ -8,7 +8,7 @@ Logs/*
 Temp/*
 !Temp/Hi.txt
 
-config.xml
+config*
 *.old
 *.bak
 

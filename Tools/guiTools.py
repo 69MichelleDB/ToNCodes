@@ -589,37 +589,42 @@ def CreateTreeView(i_root, i_RefreshInterval, i_RefreshCallback):
 
 # This bar at the bottom of the window will display debug info of the round
 def DebugBar(i_root):
-    heightT = 1
-    if 'debug-ws' in gs.configList:
-        if gs.configList['debug-ws']=='1':
-            heightT = 2
-    gs.debugBarFrame = tk.Frame(i_root, **gs.TONStyles['frameDebug'])
-    gs.debugBarFrame.pack(side=tk.BOTTOM, fill=tk.X)
-    text = tk.Text(gs.debugBarFrame, wrap=tk.WORD, height=heightT, **gs.TONStyles['debugText'])
-    text.pack(fill=tk.X, expand=True)
-    
-    def DebugBarRefresh():
-        killer = ''
-        mapRegex = re.compile(r"(^.+?) \((\d+)\)$")
-        if gs.roundMap!='' and gs.roundType!='' and gs.roundKiller!='':
-            killer = DecodeNote(f"{gs.roundMap}, {gs.roundType}, {gs.roundKiller}, {gs.roundEvent}", True)
+    try:
+        gs.debugBarFrame = tk.Frame(i_root, **gs.TONStyles['frameDebug'])
+        gs.debugBarFrame.pack(side=tk.BOTTOM, fill=tk.X)
 
-        text.config(state=tk.NORMAL)    # Allow edits
-        text.delete("1.0", tk.END)
-        currentMap = mapRegex.search(gs.roundMap)
-        if currentMap:
-            currentMap = currentMap.groups()[0]
-        else:
-            currentMap = ''
-
-        auxWS = ''
+        heightT = 1
         if 'debug-ws' in gs.configList:
             if gs.configList['debug-ws']=='1':
-                auxWS = gs.lastWSMessage
-        text.insert(tk.END, f"{datetime.datetime.now().strftime("%H:%M:%S")} {gs.roundEvent} {currentMap} {gs.roundType} {killer} {gs.roundCondition}\n" \
-                            f"{auxWS}")
-        text.config(state=tk.DISABLED)  # Make the text uneditable
-        #gs.debugBarAfterID = gs.root.after(int(gs.configList['file-delay'])*1000, DebugBarRefresh)
-        gs.debugBarAfterID = gs.root.after(200, DebugBarRefresh)
+                heightT = 2
+        text = tk.Text(gs.debugBarFrame, wrap=tk.WORD, height=heightT, **gs.TONStyles['debugText'])
+        text.pack(fill=tk.X, expand=True)
+        
+        # Function to refresh the content of the debug bar
+        def DebugBarRefresh():
+            killer = ''
+            mapRegex = re.compile(r"(^.+?) \((\d+)\)$")
+            if gs.roundMap!='' and gs.roundType!='' and gs.roundKiller!='':
+                killer = DecodeNote(f"{gs.roundMap}, {gs.roundType}, {gs.roundKiller}, {gs.roundEvent}", True)
 
-    DebugBarRefresh()
+            text.config(state=tk.NORMAL)    # Enable edits in the text box
+            text.delete("1.0", tk.END)
+            currentMap = mapRegex.search(gs.roundMap)
+            if currentMap:
+                currentMap = currentMap.groups()[0]
+            else:
+                currentMap = ''
+
+            auxWS = ''
+            if 'debug-ws' in gs.configList:
+                if gs.configList['debug-ws']=='1':
+                    auxWS = gs.lastWSMessage
+            text.insert(tk.END, f"{datetime.datetime.now().strftime("%H:%M:%S")} {gs.roundEvent} {currentMap} {gs.roundType} {killer} {gs.roundCondition}\n" \
+                                f"{auxWS}")
+            text.config(state=tk.DISABLED)  # Disable edits in the text box
+            gs.debugBarAfterID = gs.root.after(gs._DEBUG_REFRESH, DebugBarRefresh)
+
+        DebugBarRefresh()
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in DebugBar: {e}")

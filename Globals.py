@@ -7,6 +7,7 @@ _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
 _WSURL = "localhost"
 _WSPORT = 11398
 _RX = "https://app.tontrack.me/regex.json"
+_DEBUG_REFRESH = 200
 
 # Main window
 _WIDTH = 650
