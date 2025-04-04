@@ -150,6 +150,7 @@ def CreateOptionsWindow():
         frameOptions.grid_rowconfigure(4, weight=1)
         frameOptions.grid_rowconfigure(5, weight=1)
         frameOptions.grid_rowconfigure(6, weight=1)
+        frameOptions.grid_rowconfigure(7, weight=1)
 
         restartNeeded = False
         # Some options may need a restart to take effect, this enables a warning
@@ -278,6 +279,19 @@ def CreateOptionsWindow():
         comboTheme.set(gs.configList['theme'])
         comboTheme.bind('<<ComboboxSelected>>', NeedRestart)
 
+
+        # EIGHTH ROW
+        # Label
+        labelDebug = Label(frameOptions, text=gs.localeDict['Options-Debug-Label'])
+        labelDebug.grid(row=7, column=0, padx=5, pady=5, sticky='w')
+
+        #Checkbox
+        cbVarDebug = tk.IntVar()
+        cbVarDebug.set(gs.configList['debug-window'])
+        cbDebug = Checkbutton(frameOptions, text=gs.localeDict['Options-Debug-Check'], variable=cbVarDebug, **gs.TONStyles['checkbutton'])
+        cbDebug.grid(row=7, column=1, padx=5, pady=5, sticky='w')
+
+
         # Save changes
         def SaveOptions():
             # VRC Path
@@ -319,6 +333,15 @@ def CreateOptionsWindow():
             if comboVarThemeAux != gs.configList['theme']:
                 ModifyNode(gs._FILE_CONFIG, 'theme', comboVarThemeAux)
 
+            # Debug window
+            cbVarAuxDebug = str(cbVarDebug.get())
+            if cbVarAuxDebug != gs.configList['debug-window']:
+                ModifyNode(gs._FILE_CONFIG, 'debug-window', cbVarAuxDebug)
+                if cbVarAuxDebug == '1':
+                    DebugWindow()
+                else:
+                    gs.debugRoot.destroy()
+
             # Reload config variable
             gs.configList = InitializeConfig(gs._FILE_CONFIG)
             optionsRoot.destroy()
@@ -330,7 +353,7 @@ def CreateOptionsWindow():
 
         # Save button
         saveButton = tk.Button(frameOptions, text=gs.localeDict['Options-Save-Button'], command=SaveOptions, **gs.TONStyles['buttons'])
-        saveButton.grid(row=6, column=2, padx=5, pady=5)
+        saveButton.grid(row=7, column=2, padx=5, pady=5)
 
         optionsRoot.wait_window()
     except Exception as e:

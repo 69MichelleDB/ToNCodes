@@ -18,7 +18,7 @@ _HEIGHT_MC = 100
 
 # Options window
 _WIDTH_OPT = 610
-_HEIGHT_OPT = 275
+_HEIGHT_OPT = 305
 
 # About window
 _WIDTH_ABOUT = 550

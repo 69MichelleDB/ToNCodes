@@ -28,15 +28,17 @@ This tool is currently in alpha stages and in development, so expect instability
 >
 > If there's a new update ToNCodes will inform you of the new update once and you'll have a reminder on the title bar, this can be disabled in the "File > Options" menu.
 >
-> `To enable the DEBUG`, in the config.xml file, change the debug-window node value from 0 to 1.
->
 > `Manual code insertion`, under "File > Manual code insertion" you can manually add a code if needed.
 > 
 > `tontrack.me`, you can connect to their Live Tracker by pressing the "Live Tracker" button on the website. Make sure the "File > Options > Connect to tontrack.me" check is enabled (you'll need to restart ToNCodes for the change to take effect if it was disabled).
 > 
 > `Discord webhook`, you can [create a webhook](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks) and add the url to "File > Options > Discord webhook" and any new codes will be send to the Discord channel that webhook was created in.
 > 
-> `Change language` in File > Options > Language, a restart of ToNCodes is needed for the changes to take effect.
+> `Change language` in "File > Options > Language", a restart of ToNCodes is needed for the changes to take effect.
+> 
+> `Change Themes` in "File > Options > Themes", a restart of ToNCodes is needed for the changes to take effect.
+>
+> `To enable the DEBUG`, in "File > Options".
 
 This current version was made under `Python 3.13.02`. If you want to run it, [you can download the latest standalone release](https://github.com/69MichelleDB/ToNCodes/releases/latest) or if you have Python installed, you can clone the project and run `ToNCodes.py`.
 
