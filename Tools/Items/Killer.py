@@ -46,6 +46,8 @@ def DecodeNote(i_input, nameOnly=False):
             match eventR:
                 case '':
                     gs.killersListCurrent = gs.killersList
+                case 'Winterfest':
+                    gs.killersListCurrent = gs.killersList
                 case 'AprilFools':
                     gs.killersListCurrent = gs.killersListSilly
 

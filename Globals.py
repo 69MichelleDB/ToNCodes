@@ -76,6 +76,7 @@ roundMap = ''
 roundType = ''
 roundKiller = ''
 roundCondition = ''
+lastWSMessage = ''
 
 # TEMP
 auxPathFirstBoot = None

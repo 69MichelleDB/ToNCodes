@@ -589,9 +589,13 @@ def CreateTreeView(i_root, i_RefreshInterval, i_RefreshCallback):
 
 # This bar at the bottom of the window will display debug info of the round
 def DebugBar(i_root):
+    heightT = 1
+    if 'debug-ws' in gs.configList:
+        if gs.configList['debug-ws']=='1':
+            heightT = 2
     gs.debugBarFrame = tk.Frame(i_root, **gs.TONStyles['frameDebug'])
     gs.debugBarFrame.pack(side=tk.BOTTOM, fill=tk.X)
-    text = tk.Text(gs.debugBarFrame, wrap=tk.WORD, **gs.TONStyles['debugText'])
+    text = tk.Text(gs.debugBarFrame, wrap=tk.WORD, height=heightT, **gs.TONStyles['debugText'])
     text.pack(fill=tk.X, expand=True)
     
     def DebugBarRefresh():
@@ -607,8 +611,15 @@ def DebugBar(i_root):
             currentMap = currentMap.groups()[0]
         else:
             currentMap = ''
-        text.insert(tk.END, f"{datetime.datetime.now().strftime("%H:%M:%S")} {gs.roundEvent} {currentMap} {gs.roundType} {killer} {gs.roundCondition}")
+
+        auxWS = ''
+        if 'debug-ws' in gs.configList:
+            if gs.configList['debug-ws']=='1':
+                auxWS = gs.lastWSMessage
+        text.insert(tk.END, f"{datetime.datetime.now().strftime("%H:%M:%S")} {gs.roundEvent} {currentMap} {gs.roundType} {killer} {gs.roundCondition}\n" \
+                            f"{auxWS}")
         text.config(state=tk.DISABLED)  # Make the text uneditable
-        gs.debugBarAfterID = gs.root.after(int(gs.configList['file-delay'])*1000, DebugBarRefresh)
+        #gs.debugBarAfterID = gs.root.after(int(gs.configList['file-delay'])*1000, DebugBarRefresh)
+        gs.debugBarAfterID = gs.root.after(200, DebugBarRefresh)
 
     DebugBarRefresh()

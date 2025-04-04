@@ -112,11 +112,11 @@ async def handler(websocket):
                 if data.get("event") == "TONCODES":         # Message from ToNCodes ws client, the args have the message
                     args = data.get("args")
                     print(f"Args received: {args}")
-                    response = json.dumps(args)
-                    await asyncio.gather(*(client.send(response) for client in connected_clients))
+                    gs.lastWSMessage = json.dumps(args)
+                    await asyncio.gather(*(client.send(gs.lastWSMessage) for client in connected_clients))
                 elif data.get("event") == "pools":          # tontrack connected
-                    response = json.dumps({"event": "ws_connect", "args": []})
-                    await asyncio.gather(*(client.send(response) for client in connected_clients))
+                    gs.lastWSMessage = json.dumps({"event": "ws_connect", "args": []})
+                    await asyncio.gather(*(client.send(gs.lastWSMessage) for client in connected_clients))
             except json.JSONDecodeError:
                 await websocket.send("Invalid JSON format")
 
@@ -148,7 +148,7 @@ async def SendMessageAsync(i_event, i_args):
     try:
         async with websockets.connect(f"ws://{gs._WSURL}:{gs._WSPORT}") as websocket:       # Make a connection
             message = {"event": "TONCODES", "args": {"event": i_event, "args": i_args}}     # Build the message
-            print(f"Sending WS message: {message}")
+            #print(f"Sending WS message: {message}")
             await websocket.send(json.dumps(message))                                       # And send it away
     except Exception as e:
         print(e)

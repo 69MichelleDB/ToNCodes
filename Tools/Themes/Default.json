@@ -10,7 +10,7 @@
         "frameOptions" : {  },
         "frameTree" : {  },
         "frameDebug" : { "borderwidth" : 0, "relief" : "flat" },
-        "debugText" : { "borderwidth" : 0, "height" : 1, "relief" : "flat" },
+        "debugText" : { "borderwidth" : 0, "relief" : "flat" },
         "buttons" : {  },
         "checkbutton" : {  }
     }
