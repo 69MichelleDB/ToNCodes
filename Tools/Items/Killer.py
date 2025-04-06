@@ -23,6 +23,7 @@ def DecodeNote(i_input, nameOnly=False):
         killers = []
         matched = []
         killerStr = ''
+        isMonarch = False
 
         if i_input == 'No notes':
             print('This is a code from a version without Note integration (< 0.5.0)')
@@ -57,7 +58,9 @@ def DecodeNote(i_input, nameOnly=False):
                     match round.lower():
                         case 'midnight':
                             if count == 2:
-                                matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]         # Check for variants
+                                matched = [i for i in gs.killersListCurrent if i.type==round.lower() and i.id==int(killer)]         # Check for variants
+                                if matched[0].id == 19:                         # Check for Monarch, rounds with them in, have no other terrors
+                                    isMonarch = True
                                 if len(matched) == 0:
                                     matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]     # Check for the alternate
                         case 'unbound':
@@ -107,10 +110,14 @@ def DecodeNote(i_input, nameOnly=False):
                     matched = [i for i in gs.killersListCurrent if i.type=='terrors' and i.id==int(killer)]
                 killers.append(matched[0].name)
                 matched = []
-
-            for killerName in killers:
-                killerStr += killerName + ', '
-            killerStr = killerStr[:len(killerStr)-2]            # Remove the last separator from the killers string
+            
+            # Name concat
+            if isMonarch:
+                killerStr = killers[2]
+            else: 
+                for killerName in killers:
+                    killerStr += killerName + ', '
+                killerStr = killerStr[:len(killerStr)-2]            # Remove the last separator from the killers string
             if not nameOnly:
                 result = gs.localeDict['Notes-Structure'].format(round=round, mapMatched=mapMatched[0], killerStr=killerStr)
                 print(f'Note reviewed: {result}')
