@@ -5,7 +5,7 @@
 Terrors of Nowhere by Beyond is a VRChat horror world where you and other players try to survive different monsters for a period of time. Your progress gets stored as codes that you can copy and paste whenever you want to restore your session. ToNCodes automates the process of storing those codes as they generate within VRChat's logs.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/9f856c11-bebd-461a-a68a-c9f0818c743c" />
+  <img src="https://github.com/user-attachments/assets/67e28c00-248b-4920-a3f4-717bd81ae8cb" />
 </p>
 
 This started as a personal application to store all Terrors of Nowhere codes generated while playing, since current available solutions don't work on Linux. I'm not working on it with the intention to replace any existing solutions made for the public, it's mostly an excuse for me to mess with Python and because I believe having multiple choices is always good. You are welcome to use it if you please.
@@ -38,7 +38,7 @@ This tool is currently in alpha stages and in development, so expect instability
 > 
 > `Change Themes` in "File > Options > Themes", a restart of ToNCodes is needed for the changes to take effect.
 >
-> `To enable the DEBUG`, in "File > Options".
+> `To enable the DEBUG`, in "File > Options", currently shows information of the on going round.
 
 This current version was made under `Python 3.13.02`. If you want to run it, [you can download the latest standalone release](https://github.com/69MichelleDB/ToNCodes/releases/latest) or if you have Python installed, you can clone the project and run `ToNCodes.py`.
 
@@ -47,9 +47,9 @@ This current version was made under `Python 3.13.02`. If you want to run it, [yo
 
 ToNCodes as of version `alpha-0.7.3` supports multi-language. After checking around I decided to use the same website VRChat uses for community translations `Crowdin`: https://crowdin.com/project/toncodes 
 
-If you want to collaborate, just head to the link above, sign in, select the language you want to help with, select `en.json` and you'll be presented with a UI with every available text. [Here's a link to our wiki with visual guides](https://github.com/69MichelleDB/ToNCodes/wiki/How-to-help-translate-ToNCodes).
+If you want to collaborate with a specific language that's not listed currently, please let me know in [this discussion link](https://github.com/69MichelleDB/ToNCodes/discussions/42) and I will add it.
 
-If you want a specific language added to Crowdin, please let me know in [this discussion link](https://github.com/69MichelleDB/ToNCodes/discussions/42).
+To collaborate, just head to the link above, sign in, select the language you want to help with, select `en.json` and you'll be presented with a UI with every available text. [Here's a link to our wiki with visual guides](https://github.com/69MichelleDB/ToNCodes/wiki/How-to-help-translate-ToNCodes).
 
 If you have any questions, please open a [new discussion thread](https://github.com/69MichelleDB/ToNCodes/discussions).
 
