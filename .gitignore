@@ -9,12 +9,12 @@ Temp/*
 !Temp/Hi.txt
 
 config*
+!Templates/config.xml.default
 *.old
 *.bak
 
 .releases/
 BuildBin/*
-.compile*
 
 ignore-*
 *-test*
