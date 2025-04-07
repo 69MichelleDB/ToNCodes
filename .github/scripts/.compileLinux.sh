@@ -22,7 +22,7 @@ mv ../../${folderCopy} ./
 
 # Go in and compile
 cd ./${folderCopy}
-python3 -m nuitka --standalone --follow-imports --onefile --enable-plugin=tk-inter --include-package=websockets --assume-yes-for-downloads ToNCodes.py
+python3 -m nuitka --standalone --follow-imports --onefile --enable-plugin=tk-inter --include-package=websockets --assume-yes-for-downloads --lto --strip ToNCodes.py
 
 # Create structure and clean up
 mkdir "$finalFolder"
