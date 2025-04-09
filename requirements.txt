@@ -4,3 +4,4 @@ requests
 cryptography
 websockets
 python-osc
+vdf

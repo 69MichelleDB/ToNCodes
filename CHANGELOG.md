@@ -9,11 +9,12 @@
 - Added the ability to create different OSC profiles using 2 available templates, you can change the name of the OSC variable the values get sent to.
 - Added 2 OSC templates:
     - Default.json with ToNCodes OSC variable names.
-    - ToNSM-Standard.json with the standard OSC names created by ToNSaveManager that all assets that use OSC for Terrors of Nowhere currently use.
+    - ToNSM-Standard.json with the standard OSC parameter names created by Kittenji that all assets that use OSC for Terrors of Nowhere currently use.
 - Added reset config option to delete your current configurations. [#51](https://github.com/69MichelleDB/ToNCodes/issues/51)
 
 **Changes**
 - Now ToNCodes will automatically restart itself after changing configurations that require a restart.
+- On a fresh config file, changed how the VRC log folder is searched under Linux, using libraryfolders.vdf, thanks Adi for the suggestion~! [#52](https://github.com/69MichelleDB/ToNCodes/issues/52)
 
 **Fixes**
 - Fixed how modal windows were created, they should behave much better now.

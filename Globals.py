@@ -24,7 +24,7 @@ _HEIGHT_OPT = 415
 
 # About window
 _WIDTH_ABOUT = 550
-_HEIGHT_ABOUT = 280
+_HEIGHT_ABOUT = 340
 
 # Debug window
 _WIDTH_DEBUG = 500

@@ -24,6 +24,7 @@ cryptography: https://github.com/pyca/cryptography
 requests: https://github.com/psf/requests
 websockets: https://github.com/python-websockets/websockets
 python-osc: https://github.com/attwad/python-osc
+vdf: https://github.com/ValvePython/vdf
 '''
 
 

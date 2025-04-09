@@ -120,4 +120,4 @@ Thanks MaraRizer and the community for creating and maintaining this neatly orga
 Current [OSC paramater's standard naming scheme and values](https://github.com/ChrisFeline/ToNSaveManager/blob/main/Docs/OSC/OSC_Parameters.md) for Terrors of Nowhere by Kittenji, https://github.com/ChrisFeline/ToNSaveManager
 
 Outside dependencies:
-[pyperclip](https://github.com/asweigart/pyperclip), [screeninfo](https://github.com/rr-/screeninfo), [cryptography](https://github.com/pyca/cryptography), [requests](https://github.com/psf/requests), [websockets](https://github.com/python-websockets/websockets), [python-osc](https://github.com/attwad/python-osc)
+[pyperclip](https://github.com/asweigart/pyperclip), [screeninfo](https://github.com/rr-/screeninfo), [cryptography](https://github.com/pyca/cryptography), [requests](https://github.com/psf/requests), [websockets](https://github.com/python-websockets/websockets), [python-osc](https://github.com/attwad/python-osc), [vdf](https://github.com/ValvePython/vdf)

@@ -4,7 +4,7 @@ from tkinter.ttk import Treeview, Scrollbar, Label, Entry, Combobox
 import os.path
 import pyperclip
 from Tools.xmlTools import ModifyNode, InitializeConfig, ModifyCode, WriteNewCode
-from Tools.fileTools import GetPossibleVRCPath, LoadLocale, GetAllFiles, ResetConfigFile
+from Tools.fileTools import GetPossibleVRCPath2, LoadLocale, GetAllFiles, ResetConfigFile
 from Tools.errorHandler import ErrorLogging
 from Tools.netTools import CheckForUpdates, GetOSCProfileData, InitializeOSCClient
 from screeninfo import get_monitors
@@ -602,7 +602,8 @@ def CreateAboutWindow():
                                 f"cryptography: https://github.com/pyca/cryptography\n" + 
                                 f"requests: https://github.com/psf/requests\n" + 
                                 f"websockets: https://github.com/python-websockets/websockets\n" + 
-                                f"python-osc: https://github.com/attwad/python-osc"
+                                f"python-osc: https://github.com/attwad/python-osc\n" + 
+                                f"vdf: https://github.com/ValvePython/vdf"
                                 )
 
         text.config(state=tk.DISABLED)  # Make the text uneditable
@@ -753,7 +754,7 @@ def CreateTreeView(i_root, i_RefreshInterval, i_RefreshCallback):
 
             if gs.configList['firstBoot']==True:        # Open the config window to get the path if this is the first boot
                 gs.configList['firstBoot'] = False
-                gs.auxPathFirstBoot = GetPossibleVRCPath()
+                gs.auxPathFirstBoot = GetPossibleVRCPath2()
                 CreateOptionsWindow()
 
             i_root.after(i_RefreshInterval, refreshTree)

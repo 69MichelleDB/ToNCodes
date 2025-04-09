@@ -9,6 +9,7 @@ from tkinter import messagebox
 from Tools.errorHandler import ErrorLogging
 from cryptography.fernet import Fernet
 import json
+import vdf
 import Tools.Items.Killer as agent
 import requests
 
@@ -87,35 +88,74 @@ def GetModifiedFiles(i_currentDates, i_previousDates):
 
 
 # On first boot, lets try to give a possible valid path for where VRC logs might be
-def GetPossibleVRCPath():
+# def GetPossibleVRCPath():
+#     try:
+#         result = ''
+
+#         print(f'Platform: {platform.system()}')
+#         userName = getpass.getuser()
+#         print(f'User name: {userName}')
+        
+#         if platform.system() == "Windows":
+#             result = f'c:\\users\\{userName}\\AppData\\LocalLow\\VRChat\\VRChat\\'
+#         elif platform.system() == "Linux":
+
+#             possiblePaths = (
+#                             f'/home/{userName}/.steam/debian-installation/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/',
+#                             f'/home/{userName}/.local/share/Steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/',
+#                             f'/home/{userName}/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/'
+#                             )
+#             for path in possiblePaths:
+#                 if os.path.exists(path):
+#                     print(f'Valid path {path}')
+#                     result = path
+#                     break
+#         else:
+#             print('Might be a Mac or something else')
+
+#         return result
+#     except Exception as e:
+#         print(e)
+#         ErrorLogging(f"Error in GetPossibleVRCPath: {e}")
+
+
+# On first boot, lets try to give a possible valid path for where VRC logs might be
+def GetPossibleVRCPath2():
     try:
         result = ''
+        vrchatID = '438100'
 
         print(f'Platform: {platform.system()}')
         userName = getpass.getuser()
         print(f'User name: {userName}')
-        
+      
         if platform.system() == "Windows":
             result = f'c:\\users\\{userName}\\AppData\\LocalLow\\VRChat\\VRChat\\'
         elif platform.system() == "Linux":
-
-            possiblePaths = (
-                            f'/home/{userName}/.steam/debian-installation/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/',
-                            f'/home/{userName}/.local/share/Steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/',
-                            f'/home/{userName}/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/'
-                            )
-            for path in possiblePaths:
-                if os.path.exists(path):
-                    print(f'Valid path {path}')
-                    result = path
-                    break
+            possiblePaths = [
+                            f'/home/{userName}/.steam/debian-installation/steamapps/libraryfolders.vdf',
+                            f'/home/{userName}/.local/share/Steam/steamapps/libraryfolders.vdf',
+                            f'/home/{userName}/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/libraryfolders.vdf'
+                            ]
+            for libraryfoldersFile in possiblePaths:
+                if os.path.exists(libraryfoldersFile):
+                    print(f'Found steam path: {libraryfoldersFile}')
+                    vdfFile = {}
+                    with open(libraryfoldersFile, 'r') as file:         # This vdf file has the path to all games, we can pinpoint where vrc logs might be
+                        vdfFile = vdf.loads(file.read())
+                    for key in vdfFile['libraryfolders']:
+                        if vrchatID in vdfFile['libraryfolders'][key]['apps']:
+                            checkThisPath = os.path.join(vdfFile['libraryfolders'][key]['path'], f"steamapps/compatdata/{vrchatID}/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/")
+                            if os.path.exists(checkThisPath):
+                                result = checkThisPath
+                                break
         else:
-            print('Might be a Mac or something else')
+            print('Might be something else')
 
         return result
     except Exception as e:
         print(e)
-        ErrorLogging(f"Error in GetPossibleVRCPath: {e}")
+        ErrorLogging(f"Error in GetPossibleVRCPath2: {e}")
 
 
 # File to be send to discord through the webhook
