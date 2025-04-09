@@ -7,7 +7,7 @@ from Tools.errorHandler import ErrorLogging
 
 
 # The main loop that will connect to VRCs logs and check for codes
-def CodesHunter2():
+def CodesHunter():
     try:
         # Variables
         logFiles = []

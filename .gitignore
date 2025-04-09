@@ -8,6 +8,9 @@ Logs/*
 Temp/*
 !Temp/Hi.txt
 
+Tools/OSC/*
+!Tools/OSC/Hi.txt
+
 config*
 !Templates/config.xml.default
 *.old

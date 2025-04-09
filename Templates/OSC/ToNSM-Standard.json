@@ -1,0 +1,211 @@
+{
+    "opt_in": {
+      "variable": "/avatar/parameters/ToN_OptedIn",
+      "values": true
+    },
+    "opt_out": {
+      "variable": "/avatar/parameters/ToN_OptedIn",
+      "values": false
+    },
+    "round_start": {
+      "variable": "/avatar/parameters/ToN_IsStarted",
+      "values": true
+    },
+    "round_map": {
+      "variable": "/avatar/parameters/ToN_Map",
+      "values": ""
+    },
+    "round_type": {
+      "variable": "/avatar/parameters/ToN_RoundType",
+      "values": {
+        "Unknown" : 0,
+        "Classic" : 1,
+        "Fog" : 2,
+        "Punished" : 3,
+        "Sabotage" : 4,
+        "Among Us" : 4,
+        "Cracked" : 5,
+        "Bloodbath" : 6,
+        "Double_Trouble" : 7,
+        "EX" : 8,
+        "Ghost" : 9,
+        "Unbound" : 10,
+        "Midnight" : 50,
+        "Alternate" : 51,
+        "Fog (Alternate)" : 52,
+        "Ghost (Alternate)" : 53,
+        "Mystic Moon" : 100,
+        "Blood Moon" : 101,
+        "Twilight" : 102,
+        "Solstice" : 103,
+        "Run" : 104,
+        "8 Pages" : 105,
+        "Cold Night" : 107
+      }
+    },
+    "item_pickup": {
+      "variable": "/avatar/parameters/ToN_Item",
+      "values": {
+        "Radar 2" : 1,
+        "Medkit" : 2,
+        "RedMedkit" : 3,
+        "HaveBrew" : 4,
+        "Slots" : 5,
+        "SpeedCoil_Glow" : 6,
+        "PsychoCoil" : 7,
+        "Teleporter" : 8,
+        "Suitcase" : 9,
+        "BloodyTeleporter" : 10,
+        "SolTele" : 11,
+        "SoulVisitor" : 12,
+        "SpeedCoil_1" : 13,
+        "BloodyCoil" : 14,
+        "RegenCoil" : 15,
+        "paleRegen" : 16,
+        "LifeCoil" : 17,
+        "MetalBat" : 18,
+        "BloodyBat" : 19,
+        "Jusitita" : 20,
+        "Pretty_Bat" : 21,
+        "Metal Pipe" : 22,
+        "GhostBat" : 23,
+        "KatCharm" : 24,
+        "BloodKatCharm" : 25,
+        "LunaCharm" : 26,
+        "CrazyCoil" : 27,
+        "TwilightCoil" : 28,
+        "Glass Coil" : 29,
+        "CorkScrew" : 30,
+        "Destroyer Coil" : 31,
+        "RustyPistol" : 32,
+        "BloodPistol" : 33,
+        "PalePistol" : 34,
+        "Burger" : 35,
+        "HauntedBurger" : 36,
+        "BeyondPlush" : 37,
+        "NoraPlush" : 38,
+        "MagicConchShell" : 39,
+        "RadarCoil" : 40,
+        "RubberHammer (Bat)" : 41,
+        "Banana" : 42,
+        "TBH" : 43,
+        "Taser" : 44,
+        "DarkgreyPlush" : 45,
+        "DarkgreyPlush2" : 46,
+        "Glass Coil X" : 47,
+        "Emerald Coil" : 48,
+        "PotOfGreed" : 49,
+        "Brick" : 50,
+        "Luxury Coil" : 51,
+        "Blue Medkit" : 52,
+        "SealedSword" : 53,
+        "Faust" : 54,
+        "Avenger" : 55,
+        "maxwell" : 56,
+        "Rock" : 57,
+        "Illumina" : 58,
+        "Redbull" : 59,
+        "OmoriPlush" : 60,
+        "ParadiseLost" : 61,
+        "GuidancePlush" : 62,
+        "ObservationPlush (1)" : 63,
+        "JOY" : 64,
+        "Jailbird" : 65,
+        "Glognut" : 66,
+        "SilverCoil" : 67,
+        "DevPhone" : 80,
+        "FuwattiPlush" : 81,
+        "SeerPen" : 82,
+        "tamo" : 83,
+        "IJED" : 84,
+        "ItemChest" : 85,
+        "King's Kit" : 87,
+        "SnowyCoil" : 68,
+        "TorchOfObsession" : 69,
+        "Dropkick" : 70,
+        "SMG" : 86,
+        "WaveCoil" : 71,
+        "FirstShape" : 72,
+        "seerplush" : 73,
+        "Darkheart (1)" : 74,
+        "Knife" : 75,
+        "CarrotCoil" : 76,
+        "WispyPlush" : 77,
+        "NicomalSpear" : 79,
+        "Broken Teleporter" : 80,
+        "girlfriend" : 81
+      }
+    },
+    "item_drop": {
+      "variable": "/avatar/parameters/ToN_Item",
+      "values": 255
+    },
+    "round_map_swap": {
+      "variable": "/avatar/parameters/ToN_Map",
+      "values": ""
+    },
+    "round_killer1": {
+      "variable": "/avatar/parameters/ToN_Terror1",
+      "values": ""
+    },
+    "round_killer2": {
+      "variable": "/avatar/parameters/ToN_Terror2",
+      "values": ""
+    },
+    "round_killer3": {
+      "variable": "/avatar/parameters/ToN_Terror3",
+      "values": ""
+    },
+    "round_lost": {
+      "variable": "/avatar/parameters/ToN_IsAlive",
+      "values": false
+    },
+    "round_won": {
+      "variable": "/avatar/parameters/ToN_IsAlive",
+      "values": true
+    },
+    "round_possessed": {
+      "variable": "/avatar/parameters/ToN_Saboteur",
+      "values": true
+    },
+    "page_collected": {
+      "variable": "/avatar/parameters/ToN_Pages",
+      "values": ""
+    },
+    "is_joy_asleep": {
+      "variable": "/avatar/parameters/ToN_EncounterIJA",
+      "values": true
+    },
+    "is_joy_awake": {
+      "variable": "/avatar/parameters/ToN_EncounterIJW",
+      "values": true
+    },
+    "is_glorbo": {
+      "variable": "/avatar/parameters/ToN_EncounterGLO",
+      "values": true
+    },
+    "is_wild_yet_bloodthirsty_creature": {
+      "variable": "/avatar/parameters/ToN_EncounterWYB",
+      "values": true
+    },
+    "is_atrached": {
+      "variable": "/avatar/parameters/ToN_EncounterATR",
+      "values": true
+    },
+    "is_hungry_home_invader": {
+      "variable": "/avatar/parameters/ToN_EncounterHHI",
+      "values": true
+    },
+    "is_meatball_man": {
+      "variable": "/avatar/parameters/ToN_EncounterRUN",
+      "values": true
+    },
+    "is_foxy": {
+      "variable": "/avatar/parameters/ToN_EncounterFOX",
+      "values": true
+    },
+    "is_gigabyte": {
+      "variable": "/avatar/parameters/ToN_EncounterGBS",
+      "values": true
+    }
+}

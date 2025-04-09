@@ -2,8 +2,8 @@ from Tools.xmlTools import InitializeConfig, ReadCodeFiles, ModifyNode, VerifyCo
 from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles, GetKeyData, RegexCheck, LoadLocale
 from Tools.guiTools import CreateWindow, HorizontalMenu, HorizontalFileBox, CreateTreeView, CalculatePosition, ApplyStyle, DebugBar
 from Tools.errorHandler import ErrorLogging
-from Tools.netTools import CheckForUpdates, WSstart
-from CodesHunter2 import CodesHunter2
+from Tools.netTools import CheckForUpdates, WSstart, InitializeOSCClient
+from CodesHunter import CodesHunter
 import threading
 import Globals as gs
 
@@ -22,6 +22,7 @@ screeninfo: https://github.com/rr-/screeninfo
 cryptography: https://github.com/pyca/cryptography
 requests: https://github.com/psf/requests
 websockets: https://github.com/python-websockets/websockets
+python-osc: https://github.com/attwad/python-osc
 '''
 
 
@@ -49,8 +50,11 @@ if __name__ == "__main__":
         secondThread.daemon = True
         secondThread.start()
 
+    # OSC Client
+    InitializeOSCClient(gs.configList['osc-in-port'], gs.configList['osc-profile'])
+
     # The main program to check for codes and create the XML files
-    mainThread = threading.Thread(target=CodesHunter2)
+    mainThread = threading.Thread(target=CodesHunter)
     mainThread.daemon = True
     mainThread.start()
 

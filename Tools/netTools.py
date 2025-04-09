@@ -6,10 +6,11 @@ import asyncio
 import websockets
 import json
 from tkinter import messagebox
-from Tools.fileTools import CreateNewTempCodeFile
+from Tools.fileTools import CreateNewTempCodeFile, GetAllFiles
 from Tools.errorHandler import ErrorLogging
 from Tools.updateHandler import WarningHandler
 from Tools.Items.Killer import DecodeNote
+from pythonosc import udp_client
 
 
 # region Discord
@@ -148,7 +149,6 @@ async def SendMessageAsync(i_event, i_args):
     try:
         async with websockets.connect(f"ws://{gs._WSURL}:{gs._WSPORT}") as websocket:       # Make a connection
             message = {"event": "TONCODES", "args": {"event": i_event, "args": i_args}}     # Build the message
-            #print(f"Sending WS message: {message}")
             await websocket.send(json.dumps(message))                                       # And send it away
     except Exception as e:
         print(e)
@@ -158,3 +158,85 @@ async def SendMessageAsync(i_event, i_args):
 def SendWSMessage(i_event, i_args):
     if gs.wsFlag:                                                                           # Only send messages if the WS server is on
         asyncio.run(SendMessageAsync(i_event, i_args))
+
+
+# region OSC Client
+
+# Small class with a few key attributes to process all OSC calls
+class OSCOrder:
+    def __init__ (self, i_key, i_attribute, i_values, i_extra=''): 
+        self.key = i_key                    # The key the regex was in
+        self.attribute = i_attribute        # The name the of the OSC attribute
+        self.values = i_values              # The values to send
+        self.extraOrders = i_extra          # If there needs something else to be done...
+
+# We are going to make a queue of OSC calls and process them individually
+def ExecuteOSCList(i_orderList):
+    for order in i_orderList:
+        SendOSCMessage(order.attribute, order.values)
+
+        match order.extraOrders:            # Some orders may require extra actions like restarting some OSC variables
+            case 'resetRound':
+                ResetRoundOSC()
+            case 'newRound':
+                NewRound()
+    return []
+
+# Initialize the OSC client
+def InitializeOSCClient(i_port, i_file):
+    try:
+        if gs.configList['osc-enabled'] == '1':                                         # Only if OSC is enabled
+            gs.oscClient = udp_client.SimpleUDPClient(gs._OSCURL, int(i_port))          # Connect client
+
+            # Handle different situations for the profile
+            if i_file is None or not os.path.exists(i_file):                            # If the profile is not defined or the file doesn't exist, default
+                gs.configList['osc-profile'] = gs._FILE_FALLBACKOSCPROFILE
+                gs.oscJsonProfile = GetOSCProfileData(gs.configList['osc-profile'])
+            else:
+                gs.oscJsonProfile = GetOSCProfileData(i_file)
+        else:
+            gs.oscClient = None
+            gs.oscJsonProfile = None
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in InitializeClient: {e}")
+
+# Read a given profile json file and return all the data in a dictionary
+def GetOSCProfileData(i_file):
+    with open(i_file) as file:
+        return json.load(file)
+
+# Simple function to send OSC messages
+def SendOSCMessage(i_variable, i_value):
+    try:
+        if gs.configList['osc-enabled'] == '1':             # Only send messages if OSC is enabled
+            print(f"OSC: {i_variable}={i_value}")
+            gs.lastOSCMessage = f"{i_variable}={i_value}"
+            gs.oscClient.send_message(i_variable, i_value)
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in SendOSCMessage: {e}")
+
+
+def ResetRoundOSC():
+    SendOSCMessage(gs.oscJsonProfile['round_start']['variable'], False)
+    SendOSCMessage(gs.oscJsonProfile['round_won']['variable'], True)
+
+def NewRound():
+    SendOSCMessage(gs.oscJsonProfile['round_map']['variable'], 255)
+    SendOSCMessage(gs.oscJsonProfile['round_type']['variable'], 255)
+    SendOSCMessage(gs.oscJsonProfile['round_killer1']['variable'], 255)
+    SendOSCMessage(gs.oscJsonProfile['round_killer2']['variable'], 255)
+    SendOSCMessage(gs.oscJsonProfile['round_killer3']['variable'], 255)
+
+    SendOSCMessage(gs.oscJsonProfile['round_possessed']['variable'], False)
+    SendOSCMessage(gs.oscJsonProfile['page_collected']['variable'], 255)
+    SendOSCMessage(gs.oscJsonProfile['is_joy_asleep']['variable'], False)
+    SendOSCMessage(gs.oscJsonProfile['is_joy_awake']['variable'], False)
+    SendOSCMessage(gs.oscJsonProfile['is_glorbo']['variable'], False)
+    SendOSCMessage(gs.oscJsonProfile['is_wild_yet_bloodthirsty_creature']['variable'], False)
+    SendOSCMessage(gs.oscJsonProfile['is_atrached']['variable'], False)
+    SendOSCMessage(gs.oscJsonProfile['is_hungry_home_invader']['variable'], False)
+    SendOSCMessage(gs.oscJsonProfile['is_meatball_man']['variable'], False)
+    SendOSCMessage(gs.oscJsonProfile['is_foxy']['variable'], False)
+    SendOSCMessage(gs.oscJsonProfile['is_gigabyte']['variable'], False)

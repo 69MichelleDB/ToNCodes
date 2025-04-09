@@ -8,7 +8,7 @@ Terrors of Nowhere by Beyond is a VRChat horror world where you and other player
   <img src="https://github.com/user-attachments/assets/67e28c00-248b-4920-a3f4-717bd81ae8cb" />
 </p>
 
-This started as a personal application to store all Terrors of Nowhere codes generated while playing, since current available solutions don't work on Linux. I'm not working on it with the intention to replace any existing solutions made for the public, it's mostly an excuse for me to mess with Python and because I believe having multiple choices is always good. You are welcome to use it if you please.
+Since there was no available solutions for Linux, this started as a personal application to store all Terrors of Nowhere codes generated while playing. I'm not working on it with the intention to replace any existing solutions made for the public, it's mostly an excuse for me to mess with Python and because I believe having multiple choices is always good. You are welcome to use it if you please.
 
 If you find any bugs or want to make suggestions, please open a new issue or let me know on [Discord](https://discord.com/channels/983240485529337856/1340340722011734169).
 
@@ -39,6 +39,8 @@ This tool is currently in alpha stages and in development, so expect instability
 > `Change Themes` in "File > Options > Themes", a restart of ToNCodes is needed for the changes to take effect.
 >
 > `To enable the DEBUG`, in "File > Options", currently shows information of the on going round.
+> 
+> `OSC`, you can enable or disable OSC communication, change the port number and edit the name to which each attribute gets the information sent to in "File > Options"
 
 This current version was made under `Python 3.13.02`. If you want to run it, [you can download the latest standalone release](https://github.com/69MichelleDB/ToNCodes/releases/latest) or if you have Python installed, you can clone the project and run `ToNCodes.py`.
 
@@ -115,5 +117,7 @@ Thanks MaraRizer and the community for creating and maintaining this neatly orga
 
 **Shoutout to the Linux VR Adventures community**: If you're on a Linux distro and want to set up your VR hardware, visit https://lvra.gitlab.io.
 
+Current [OSC paramater's standard naming scheme and values](https://github.com/ChrisFeline/ToNSaveManager/blob/main/Docs/OSC/OSC_Parameters.md) for Terrors of Nowhere by Kittenji, https://github.com/ChrisFeline/ToNSaveManager
+
 Outside dependencies:
-[pyperclip](https://github.com/asweigart/pyperclip), [screeninfo](https://github.com/rr-/screeninfo), [cryptography](https://github.com/pyca/cryptography), [requests](https://github.com/psf/requests), [websockets](https://github.com/python-websockets/websockets)
+[pyperclip](https://github.com/asweigart/pyperclip), [screeninfo](https://github.com/rr-/screeninfo), [cryptography](https://github.com/pyca/cryptography), [requests](https://github.com/psf/requests), [websockets](https://github.com/python-websockets/websockets), [python-osc](https://github.com/attwad/python-osc)

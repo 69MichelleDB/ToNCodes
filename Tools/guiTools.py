@@ -1,12 +1,12 @@
 import tkinter as tk
-from tkinter import messagebox, Menu, Label, filedialog, Checkbutton, ttk, PhotoImage
+from tkinter import messagebox, Menu, Label, filedialog, Checkbutton, ttk, PhotoImage, Canvas, Frame
 from tkinter.ttk import Treeview, Scrollbar, Label, Entry, Combobox
 import os.path
 import pyperclip
 from Tools.xmlTools import ModifyNode, InitializeConfig, ModifyCode, WriteNewCode
-from Tools.fileTools import GetPossibleVRCPath, LoadLocale, GetAllThemes
+from Tools.fileTools import GetPossibleVRCPath, LoadLocale, GetAllFiles
 from Tools.errorHandler import ErrorLogging
-from Tools.netTools import CheckForUpdates
+from Tools.netTools import CheckForUpdates, GetOSCProfileData, InitializeOSCClient
 from screeninfo import get_monitors
 import Globals as gs
 from math import isnan
@@ -153,6 +153,8 @@ def CreateOptionsWindow():
         frameOptions.grid_rowconfigure(5, weight=1)
         frameOptions.grid_rowconfigure(6, weight=1)
         frameOptions.grid_rowconfigure(7, weight=1)
+        frameOptions.grid_rowconfigure(8, weight=1)
+        frameOptions.grid_rowconfigure(9, weight=1)
 
         restartNeeded = False
         # Some options may need a restart to take effect, this enables a warning
@@ -276,22 +278,47 @@ def CreateOptionsWindow():
 
         #Combo box
         comboVarTheme = tk.StringVar()
-        comboTheme = Combobox(frameOptions, values=GetAllThemes(), state='readonly', textvariable=comboVarTheme)
+        comboTheme = Combobox(frameOptions, values=GetAllFiles([gs._FOLDER_TOOLS,gs._FOLDER_TOOLS_THEMES], '*.json'), state='readonly', textvariable=comboVarTheme)
         comboTheme.grid(row=6, column=1, padx=5, pady=5, sticky='w')
         comboTheme.set(gs.configList['theme'])
         comboTheme.bind('<<ComboboxSelected>>', NeedRestart)
 
-
         # EIGHTH ROW
-        # Label
-        labelDebug = Label(frameOptions, text=gs.localeDict['Options-Debug-Label'])
-        labelDebug.grid(row=7, column=0, padx=5, pady=5, sticky='w')
+
+        # # Label
+        # labelDebug = Label(frameOptions, text=gs.localeDict['Options-Debug-Label'])
+        # labelDebug.grid(row=7, column=0, padx=5, pady=5, sticky='w')
 
         #Checkbox
         cbVarDebug = tk.IntVar()
         cbVarDebug.set(gs.configList['debug-window'])
         cbDebug = Checkbutton(frameOptions, text=gs.localeDict['Options-Debug-Check'], variable=cbVarDebug, **gs.TONStyles['checkbutton'])
         cbDebug.grid(row=7, column=1, padx=5, pady=5, sticky='w')
+
+
+        # NINTH ROW
+
+        #Checkbox
+        cbVarOSC = tk.IntVar()
+        cbVarOSC.set(gs.configList['osc-enabled'])
+        cbOSC = Checkbutton(frameOptions, text=gs.localeDict['Options-osc-Check'], variable=cbVarOSC, **gs.TONStyles['checkbutton'])
+        cbOSC.grid(row=8, column=1, padx=5, pady=5, sticky='w')
+        
+        # Button
+        EditOSCButton = tk.Button(frameOptions, text=gs.localeDict['Options-oscEdit-Button'], command=CreateOSCParamWindow, **gs.TONStyles['buttons'])
+        EditOSCButton.grid(row=8, column=2, padx=5, pady=5, sticky='e')
+
+        # TENTH ROW
+        
+        # Label
+        labelOSCPort = Label(frameOptions, text=gs.localeDict['Options-oscPort-Label'])
+        labelOSCPort.grid(row=9, column=0, padx=5, pady=5, sticky='w')
+
+        # Textbox
+        textOSCPortVar = tk.StringVar()
+        textOSCPortVar.set( gs.configList['osc-in-port'] if gs.configList['osc-in-port'] is not None else '' )
+        textOSCPort = Entry(frameOptions, textvariable=textOSCPortVar)
+        textOSCPort.grid(row=9, column=1, padx=5, pady=5, sticky='ew')
 
 
         # Save changes
@@ -335,7 +362,7 @@ def CreateOptionsWindow():
             if comboVarThemeAux != gs.configList['theme']:
                 ModifyNode(gs._FILE_CONFIG, 'theme', comboVarThemeAux)
 
-            # Debug window
+            # Debug bar
             cbVarAuxDebug = str(cbVarDebug.get())
             if cbVarAuxDebug != gs.configList['debug-window']:
                 ModifyNode(gs._FILE_CONFIG, 'debug-window', cbVarAuxDebug)
@@ -344,6 +371,19 @@ def CreateOptionsWindow():
                 else:
                     gs.root.after_cancel(gs.debugBarAfterID)
                     gs.debugBarFrame.destroy()
+
+            # OSC Port in
+            textOSCPortAux = textOSCPortVar.get()
+            if not isnan(float(textFileDelayAux)):                 # Make sure it's a number
+                if textOSCPortAux != gs.configList['osc-in-port']:
+                    ModifyNode(gs._FILE_CONFIG, 'osc-in-port', textOSCPortAux)
+
+
+            # Enable OSC
+            cbVarOSCAux = str(cbVarOSC.get())
+            if cbVarOSCAux != gs.configList['osc-enabled']:
+                ModifyNode(gs._FILE_CONFIG, 'osc-enabled', cbVarOSCAux)
+                InitializeOSCClient(gs.configList['osc-in-port'], gs.configList['osc-profile'])
 
             # Reload config variable
             gs.configList = InitializeConfig(gs._FILE_CONFIG)
@@ -356,13 +396,154 @@ def CreateOptionsWindow():
 
         # Save button
         saveButton = tk.Button(frameOptions, text=gs.localeDict['Options-Save-Button'], command=SaveOptions, **gs.TONStyles['buttons'])
-        saveButton.grid(row=7, column=2, padx=5, pady=5)
+        saveButton.grid(row=9, column=2, padx=5, pady=5, sticky='e')
 
         optionsRoot.wait_window()
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in CreateOptionsWindow: {e}")
 
+
+# region OSC Parameters
+def CreateOSCParamWindow():
+    try:
+        # Window creation
+        OSCParamRoot = CreateWindow(gs.localeDict['OSCParam-Title'], gs._WIDTH_OSCPARAM, gs._HEIGHT_OSCPARAM, False, True)
+        auxX,auxY = CalculatePosition(gs._WIDTH_OSCPARAM, gs._HEIGHT_OSCPARAM)
+        OSCParamRoot.geometry(f'{gs._WIDTH_OSCPARAM}x{gs._HEIGHT_OSCPARAM}+{auxX}+{auxY}')
+        # Modal stuff
+        OSCParamRoot.grab_set()
+        OSCParamRoot.transient()
+        OSCParamRoot.wait_visibility()
+
+        frameOSCWindow = Frame(OSCParamRoot, **gs.TONStyles['frameParam'])
+        frameOSCWindow.pack(pady=5, padx=5, fill='both', expand=True)
+
+        # Set weights so they take the window
+        frameOSCWindow.rowconfigure(0, weight=0)
+        frameOSCWindow.rowconfigure(1, weight=1)
+        frameOSCWindow.rowconfigure(2, weight=0)
+        frameOSCWindow.columnconfigure(0, weight=1)
+
+        # Row 1 combobox
+        oscParamProfileVar = tk.StringVar()
+        oscParamCombo = Combobox(frameOSCWindow, values=[], state='normal', textvariable=oscParamProfileVar)
+        oscParamCombo.grid(row=0, padx=10, pady=10, sticky='ew')
+
+        # Frame for the Scroll and Canvas
+        frameOSCcanvasScroll = Frame(frameOSCWindow, **gs.TONStyles['frameParam'])
+        frameOSCcanvasScroll.grid(row=1, column=0, sticky="nsew")
+        
+        frameOSCcanvasScroll.rowconfigure(0, weight=1)
+        frameOSCcanvasScroll.columnconfigure(0, weight=1)
+
+        # Scrollbar
+        scrollbar = tk.Scrollbar(frameOSCcanvasScroll, orient="vertical")
+        scrollbar.grid(row=0, column=1, sticky="ns")
+
+        # Canvas
+        canvas = Canvas(frameOSCcanvasScroll, yscrollcommand=scrollbar.set)
+        canvas.grid(row=0, column=0, sticky="nsew")
+
+        scrollbar.config(command=canvas.yview)
+
+        # Frame for the OSC Params
+        frameOSCParamsContainer = Frame(canvas, **gs.TONStyles['frameParam'])
+        canvas.create_window((0, 0), window=frameOSCParamsContainer, anchor="nw")
+
+        frameOSCParamsContainer.columnconfigure(0, weight=1)
+        frameOSCParamsContainer.columnconfigure(1, weight=1)
+
+        # Update the scrollable region in the canvas
+        def configure_scrollregion(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        frameOSCParamsContainer.bind("<Configure>", configure_scrollregion)
+
+        currentJsonValues = {}
+        entryList = {}
+        labelList = {}
+
+        # Refreses the combobox with all available profiles
+        def UpdateCombobox(i_choice=""):
+            filesTemplates = GetAllFiles([gs._FOLDER_TEMPLATES, gs._FOLDER_OSC], '*.json', True)
+            filesUser = GetAllFiles([gs._FOLDER_TOOLS, gs._FOLDER_OSC], '*.json', True)
+
+            files = filesTemplates + filesUser      # Mix both locations
+            oscParamCombo['values'] = files         # And add them to the combobox
+
+            if i_choice!="":
+                oscParamCombo.set(i_choice)
+
+        def on_select_combo(event):                 # Whenever a new profile is selected, load all data into variable and refresh UI
+            nonlocal currentJsonValues
+            currentJsonValues = GetOSCProfileData(oscParamProfileVar.get())
+            GenerateEntries()
+
+        def GenerateEntries():                      # Dynamically generate all Labels and Entries
+            for i, (key, value) in enumerate(currentJsonValues.items()):
+                label = Label(frameOSCParamsContainer, text=key)
+                label.grid(row=i+1, column=0, padx=5, pady=5, sticky='w')
+                labelList[key] = label
+
+                entry = Entry(frameOSCParamsContainer)
+                entry.grid(row=i+1, column=1, padx=5, pady=5, sticky='ew')
+                entry.insert(0, value['variable'].replace('/avatar/parameters/',''))    # I don't want the user to mess with the OSC Path, I re-add it later
+                entryList[key] = entry
+
+        def SaveAll():
+
+            def SavingProcess(i_destiny):           # Save all the json changes
+                for i, (key, value) in enumerate(currentJsonValues.items()):            # First iterate and update the variable with the data
+                    currentJsonValues[key]['variable'] = '/avatar/parameters/' + str(entryList[key].get())
+
+                path = os.path.dirname(i_destiny)                                       # Make sure the chosen path exists
+                if not os.path.exists(path):
+                    os.makedirs(path)
+                    
+                with open(i_destiny, 'w') as file:                                      # And write the data
+                    json.dump(currentJsonValues, file, indent=4)
+
+            
+            print(f'Processing {oscParamProfileVar.get()}')
+            name = ''
+            error = False
+            if os.path.join(gs._FOLDER_TEMPLATES,gs._FOLDER_OSC) in oscParamProfileVar.get():
+                print('This is a template, a new file will be created')
+                #name = os.path.basename(str(oscParamProfileVar.get()))     # I read in stack that this might give problems on windows, test later
+                name = str(oscParamProfileVar.get()).replace(os.path.join(gs._FOLDER_TEMPLATES,gs._FOLDER_OSC) + os.sep,'')
+                name = os.path.join(gs._FOLDER_TOOLS,gs._FOLDER_OSC, name)
+                SavingProcess(name)      # Since it's a template, we save it in the tools folder
+            elif os.path.join(gs._FOLDER_TOOLS,gs._FOLDER_OSC) in oscParamProfileVar.get():
+                name = str(oscParamProfileVar.get())
+                SavingProcess(name)
+            else:                       # Don't allow profiles to be created outside Tools/OSC, for my own sanity
+                error = True
+                messagebox.showerror(gs.localeDict['OSCParam-Save-ErrorFolder-Head'], gs.localeDict['OSCParam-Save-ErrorFolder-Body'].format(path=os.path.join(gs._FOLDER_TOOLS,gs._FOLDER_OSC)))
+            
+            if not error:               # Only update things if the saving process worked
+                UpdateCombobox(name)
+                varAux = str(oscParamProfileVar.get())
+                if varAux != gs.configList['osc-profile']:
+                    ModifyNode(gs._FILE_CONFIG, 'osc-profile', varAux)
+
+        # Bottom button
+        saveButton = tk.Button(frameOSCWindow, text=gs.localeDict['OSCParam-Save-Button'], command=SaveAll, **gs.TONStyles['buttons'])
+        saveButton.grid(row=2, column=0, padx=5, pady=5, sticky='e')
+
+        # On opening the OSC Param windows...
+        UpdateCombobox()
+        oscParamCombo.set(gs.configList['osc-profile'])
+        on_select_combo(None)
+
+        oscParamCombo.bind('<<ComboboxSelected>>', on_select_combo)
+
+        OSCParamRoot.wait_window()
+
+
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in CreateOSCParamWindow: {e}")
 
 # region About win 
 
@@ -397,7 +578,8 @@ def CreateAboutWindow():
                                 f"screeninfo: https://github.com/rr-/screeninfo\n"+
                                 f"cryptography: https://github.com/pyca/cryptography\n" + 
                                 f"requests: https://github.com/psf/requests\n" + 
-                                f"websockets: https://github.com/python-websockets/websockets"
+                                f"websockets: https://github.com/python-websockets/websockets\n" + 
+                                f"python-osc: https://github.com/attwad/python-osc"
                                 )
 
         text.config(state=tk.DISABLED)  # Make the text uneditable
@@ -593,10 +775,10 @@ def DebugBar(i_root):
         gs.debugBarFrame = tk.Frame(i_root, **gs.TONStyles['frameDebug'])
         gs.debugBarFrame.pack(side=tk.BOTTOM, fill=tk.X)
 
-        heightT = 1
+        heightT = 2
         if 'debug-ws' in gs.configList:
             if gs.configList['debug-ws']=='1':
-                heightT = 2
+                heightT = 3
         text = tk.Text(gs.debugBarFrame, wrap=tk.WORD, height=heightT, **gs.TONStyles['debugText'])
         text.pack(fill=tk.X, expand=True)
         
@@ -618,8 +800,9 @@ def DebugBar(i_root):
             auxWS = ''
             if 'debug-ws' in gs.configList:
                 if gs.configList['debug-ws']=='1':
-                    auxWS = gs.lastWSMessage
+                    auxWS = "\n" + gs.lastWSMessage
             text.insert(tk.END, f"{datetime.datetime.now().strftime("%H:%M:%S")} {gs.roundEvent} {currentMap} {gs.roundType} {killer} {gs.roundCondition}\n" \
+                                f"{gs.lastOSCMessage}" \
                                 f"{auxWS}")
             text.config(state=tk.DISABLED)  # Disable edits in the text box
             gs.debugBarAfterID = gs.root.after(gs._DEBUG_REFRESH, DebugBarRefresh)

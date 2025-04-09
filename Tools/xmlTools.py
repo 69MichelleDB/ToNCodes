@@ -6,7 +6,7 @@ import os.path
 import Globals as gs
 from Tools.netTools import SendWebhook
 from Tools.errorHandler import ErrorLogging
-from Tools.notesTools2 import ParseContent
+from Tools.notesTools import ParseContent
 
 
 #region Common XML

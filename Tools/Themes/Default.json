@@ -1,13 +1,14 @@
 {
     "TON" : {
         "debug" : {"bg" : "lightgrey", "height" : 15, "borderwidth" : 0, "highlightthickness" : 0 },
-        "about" : {"bg" : "lightgrey", "height" : 13, "borderwidth" : 0, "highlightthickness" : 0 },
+        "about" : {"bg" : "lightgrey", "height" : 14, "borderwidth" : 0, "highlightthickness" : 0 },
         "menu": {
             "baseMenu" : {},
             "file": {"tearoff" : 0}
         },
         "frameHorizontalDate" : {  },
         "frameOptions" : {  },
+        "frameParam" : {  },
         "frameTree" : {  },
         "frameDebug" : { "borderwidth" : 0, "relief" : "flat" },
         "debugText" : { "borderwidth" : 0, "relief" : "flat" },

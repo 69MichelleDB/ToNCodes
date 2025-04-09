@@ -8,7 +8,10 @@
     <check-updates>1</check-updates>
     <check-updates-warned>0</check-updates-warned>
     <debug-window>0</debug-window>
-    <tontrack-ws>1</tontrack-ws>
+    <tontrack-ws>0</tontrack-ws>
     <locale>en</locale>
     <theme>Default.json</theme>
+    <osc-enabled>0</osc-enabled>
+    <osc-in-port>9000</osc-in-port>
+    <osc-profile></osc-profile>
 </config>

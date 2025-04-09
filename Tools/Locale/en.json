@@ -48,10 +48,18 @@
     "Options-Locale-Label" : "Language",
     "Options-Theme-Label" : "Theme",
     "Options-Save-Button" : "Save",
-    "Options-Debug-Label" : "Enable debug",
-    "Options-Debug-Check" : "",
+    "Options-Debug-Label" : "",
+    "Options-Debug-Check" : "Enable debug",
+    "Options-oscPort-Label" : "OSC in Port",
+    "Options-osc-Check" : "Enable OSC",
+    "Options-oscEdit-Button" : "OSC Parameters",
     "Options-Need-Restart-Head" : "Restart",
     "Options-Need-Restart-Body" : "Some of the options changed require a restart of ToNCodes for them to take effect",
 
-    "Discord-Webhook-Message" : "New code found: {i_date}, Notes: {note}"
+    "Discord-Webhook-Message" : "New code found: {i_date}, Notes: {note}",
+
+    "OSCParam-Title" : "OSC Parameters",
+    "OSCParam-Save-Button" : "Save",
+    "OSCParam-Save-ErrorFolder-Head" : "Wrong path",
+    "OSCParam-Save-ErrorFolder-Body" : "Please keep the json file inside {path}."
 }

@@ -3,3 +3,4 @@ screeninfo
 requests
 cryptography
 websockets
+python-osc
