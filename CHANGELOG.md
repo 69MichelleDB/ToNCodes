@@ -1,5 +1,10 @@
 # Changelog
 
+## [alpha-0.7.6]
+
+**Fixes**
+- Fixed bug where when opening the browser for the VRC path, it doesn't start with the input path.
+
 ## [alpha-0.7.5] - 2025.04.09
 
 **New**

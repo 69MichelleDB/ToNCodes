@@ -186,7 +186,7 @@ def CreateOptionsWindow():
         # File browser
         def BrowseVRCFolder():
             folder_selected = filedialog.askdirectory(parent=gs.optionsRoot,                   # parent prevents it defaulting to root
-                                            initialdir=gs.configList['vrchat-log-path'])    
+                                            initialdir=textPath.get())    
             if folder_selected:
                 textPath.set(folder_selected)
         # File browser button
