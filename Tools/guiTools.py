@@ -4,7 +4,7 @@ from tkinter.ttk import Treeview, Scrollbar, Label, Entry, Combobox
 import os.path
 import pyperclip
 from Tools.xmlTools import ModifyNode, InitializeConfig, ModifyCode, WriteNewCode
-from Tools.fileTools import GetPossibleVRCPath, LoadLocale, GetAllFiles
+from Tools.fileTools import GetPossibleVRCPath, LoadLocale, GetAllFiles, ResetConfigFile
 from Tools.errorHandler import ErrorLogging
 from Tools.netTools import CheckForUpdates, GetOSCProfileData, InitializeOSCClient
 from screeninfo import get_monitors
@@ -15,6 +15,7 @@ import datetime
 from Tools.netTools import SendWSMessage
 import json
 import re
+import sys
 
 
 # This will apply a common theme to every element
@@ -37,12 +38,12 @@ def ApplyStyle(i_style):
 
 
 # Create a window
-def CreateWindow(i_title, i_width, i_height, i_resizable, i_modal=False):
+def CreateWindow(i_title, i_width, i_height, i_resizable, i_modal=False, i_root=None):
     try:
         if i_modal==False:
             root = tk.Tk()
         else:
-            root = tk.Toplevel()
+            root = tk.Toplevel(i_root)
 
         root.title(i_title)
         root.geometry(f"{i_width}x{i_height}")
@@ -73,6 +74,12 @@ def CalculatePosition(i_width, i_height):
         print(e)
         ErrorLogging(f"Error in CalculatePosition: {e}")
 
+# This will retart ToNCodes
+def ToNCRestart():
+    messagebox.showinfo(gs.localeDict['Options-Need-Restart-Head'],gs.localeDict['Options-Need-Restart-Body'])
+    executable = sys.executable
+    os.execl(executable, executable, *sys.argv)
+
 
 # region Manual Code Win
 
@@ -80,7 +87,7 @@ def CalculatePosition(i_width, i_height):
 def CreateManualCodeWindow():
     try:
         # Window creation
-        mCodeRoot = CreateWindow(gs.localeDict['Manual-Code-Title'], gs._WIDTH_MC, gs._HEIGHT_MC, False, True)
+        mCodeRoot = CreateWindow(gs.localeDict['Manual-Code-Title'], gs._WIDTH_MC, gs._HEIGHT_MC, False, True, gs.root)
         auxX,auxY = CalculatePosition(gs._WIDTH_MC, gs._HEIGHT_MC)
         mCodeRoot.geometry(f'{gs._WIDTH_MC}x{gs._HEIGHT_MC}+{auxX}+{auxY}')
         # Modal stuff
@@ -128,23 +135,23 @@ def CreateManualCodeWindow():
 def CreateOptionsWindow():
     try:
         # Window creation
-        optionsRoot = CreateWindow(gs.localeDict['Options-Title'], gs._WIDTH_OPT, gs._HEIGHT_OPT, False, True)
+        gs.optionsRoot = CreateWindow(gs.localeDict['Options-Title'], gs._WIDTH_OPT, gs._HEIGHT_OPT, False, True, gs.root)
         auxX,auxY = CalculatePosition(gs._WIDTH_OPT, gs._HEIGHT_OPT)
-        optionsRoot.geometry(f'{gs._WIDTH_OPT}x{gs._HEIGHT_OPT}+{auxX}+{auxY}')
+        gs.optionsRoot.geometry(f'{gs._WIDTH_OPT}x{gs._HEIGHT_OPT}+{auxX}+{auxY}')
         # Modal stuff
-        optionsRoot.grab_set()
-        optionsRoot.transient()
-        optionsRoot.wait_visibility()
+        gs.optionsRoot.transient(gs.root)
+        gs.optionsRoot.grab_set()
+        #gs.optionsRoot.wait_visibility()
 
-        frameOptions = tk.Frame(optionsRoot, **gs.TONStyles['frameOptions'])
+        frameOptions = tk.Frame(gs.optionsRoot, **gs.TONStyles['frameOptions'])
         frameOptions.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
 
         # Set weights so they take the window
-        optionsRoot.grid_columnconfigure(0, weight=1)
-        frameOptions.grid_columnconfigure(0, weight=1)
+        gs.optionsRoot.grid_columnconfigure(0, weight=1)
+        frameOptions.grid_columnconfigure(0, weight=0)
         frameOptions.grid_columnconfigure(1, weight=1)
-        frameOptions.grid_columnconfigure(2, weight=1)
-        optionsRoot.grid_rowconfigure(0, weight=1)
+        frameOptions.grid_columnconfigure(2, weight=0)
+        gs.optionsRoot.grid_rowconfigure(0, weight=1)
         frameOptions.grid_rowconfigure(0, weight=1)
         frameOptions.grid_rowconfigure(1, weight=1)
         frameOptions.grid_rowconfigure(2, weight=1)
@@ -155,6 +162,7 @@ def CreateOptionsWindow():
         frameOptions.grid_rowconfigure(7, weight=1)
         frameOptions.grid_rowconfigure(8, weight=1)
         frameOptions.grid_rowconfigure(9, weight=1)
+        frameOptions.grid_rowconfigure(10, weight=1)
 
         restartNeeded = False
         # Some options may need a restart to take effect, this enables a warning
@@ -177,13 +185,13 @@ def CreateOptionsWindow():
 
         # File browser
         def BrowseVRCFolder():
-            folder_selected = filedialog.askdirectory(parent=optionsRoot,                   # parent prevents it defaulting to root
+            folder_selected = filedialog.askdirectory(parent=gs.optionsRoot,                   # parent prevents it defaulting to root
                                             initialdir=gs.configList['vrchat-log-path'])    
             if folder_selected:
                 textPath.set(folder_selected)
         # File browser button
         browseButton = tk.Button(frameOptions, text=gs.localeDict['Options-VRCPath-Browse'], command=BrowseVRCFolder, **gs.TONStyles['buttons'])
-        browseButton.grid(row=0, column=2, padx=5, pady=5)
+        browseButton.grid(row=0, column=2, padx=5, pady=5, sticky='ew')
 
 
         ## SECOND ROW
@@ -387,18 +395,30 @@ def CreateOptionsWindow():
 
             # Reload config variable
             gs.configList = InitializeConfig(gs._FILE_CONFIG)
-            optionsRoot.destroy()
+            gs.optionsRoot.destroy()
             nonlocal restartNeeded
             if restartNeeded:
-                messagebox.showinfo(gs.localeDict['Options-Need-Restart-Head'],gs.localeDict['Options-Need-Restart-Body'])
+                ToNCRestart()
+
+        def ResetOptions():
+            gs.optionsRoot.withdraw()       # Hide the window
+            if messagebox.askyesno(gs.localeDict['Options-ResetOptions-Head'],gs.localeDict['Options-ResetOptions-Body']):
+                ResetConfigFile()
+                ToNCRestart()
+            else:
+                gs.optionsRoot.deiconify()      # Show the window
 
         # LAST ROW
 
         # Save button
         saveButton = tk.Button(frameOptions, text=gs.localeDict['Options-Save-Button'], command=SaveOptions, **gs.TONStyles['buttons'])
-        saveButton.grid(row=9, column=2, padx=5, pady=5, sticky='e')
+        saveButton.grid(row=10, column=2, padx=5, pady=5, sticky='ew')
 
-        optionsRoot.wait_window()
+        # Reset settings button
+        saveButton = tk.Button(frameOptions, text=gs.localeDict['Options-Reset-Button'], command=ResetOptions, **gs.TONStyles['buttons'])
+        saveButton.grid(row=10, column=0, padx=5, pady=5, sticky='w')
+
+        gs.optionsRoot.wait_window()
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in CreateOptionsWindow: {e}")
@@ -408,12 +428,12 @@ def CreateOptionsWindow():
 def CreateOSCParamWindow():
     try:
         # Window creation
-        OSCParamRoot = CreateWindow(gs.localeDict['OSCParam-Title'], gs._WIDTH_OSCPARAM, gs._HEIGHT_OSCPARAM, False, True)
+        OSCParamRoot = CreateWindow(gs.localeDict['OSCParam-Title'], gs._WIDTH_OSCPARAM, gs._HEIGHT_OSCPARAM, False, True, gs.optionsRoot)
         auxX,auxY = CalculatePosition(gs._WIDTH_OSCPARAM, gs._HEIGHT_OSCPARAM)
         OSCParamRoot.geometry(f'{gs._WIDTH_OSCPARAM}x{gs._HEIGHT_OSCPARAM}+{auxX}+{auxY}')
         # Modal stuff
         OSCParamRoot.grab_set()
-        OSCParamRoot.transient()
+        OSCParamRoot.transient(gs.optionsRoot)
         OSCParamRoot.wait_visibility()
 
         frameOSCWindow = Frame(OSCParamRoot, **gs.TONStyles['frameParam'])
@@ -519,7 +539,9 @@ def CreateOSCParamWindow():
                 SavingProcess(name)
             else:                       # Don't allow profiles to be created outside Tools/OSC, for my own sanity
                 error = True
+                OSCParamRoot.withdraw()
                 messagebox.showerror(gs.localeDict['OSCParam-Save-ErrorFolder-Head'], gs.localeDict['OSCParam-Save-ErrorFolder-Body'].format(path=os.path.join(gs._FOLDER_TOOLS,gs._FOLDER_OSC)))
+                OSCParamRoot.deiconify()
             
             if not error:               # Only update things if the saving process worked
                 UpdateCombobox(name)
@@ -550,7 +572,7 @@ def CreateOSCParamWindow():
 def CreateAboutWindow():
     try:
         # Window creation
-        aboutRoot = CreateWindow(gs.localeDict['About-Title'], gs._WIDTH_ABOUT, gs._HEIGHT_ABOUT, False, True)
+        aboutRoot = CreateWindow(gs.localeDict['About-Title'], gs._WIDTH_ABOUT, gs._HEIGHT_ABOUT, False, True, gs.root)
         auxX,auxY = CalculatePosition(gs._WIDTH_ABOUT, gs._HEIGHT_ABOUT)
         aboutRoot.geometry(f'{gs._WIDTH_ABOUT}x{gs._HEIGHT_ABOUT}+{auxX}+{auxY}')
         # Modal stuff
@@ -572,7 +594,8 @@ def CreateAboutWindow():
                                 f"Version: {gs._VERSION}\n" + 
                                 f"By 69MichelleDB: https://michelledb.com\n\n" +
                                 f"Terrors of Nowhere by Beyond: https://www.patreon.com/c/beyondVR\n" + 
-                                f"tontrack.me by Cinossu: https://tontrack.me/\n\n" + 
+                                f"tontrack.me by Cinossu: https://tontrack.me/\n" + 
+                                f"OSC standard naming scheme by Kittenji: https://github.com/ChrisFeline/ToNSaveManager\n\n" + 
                                 f"Dependencies:\n" + 
                                 f"pyperclip: https://github.com/asweigart/pyperclip\n" + 
                                 f"screeninfo: https://github.com/rr-/screeninfo\n"+

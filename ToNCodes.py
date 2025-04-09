@@ -15,6 +15,7 @@ I have no direct relation with Terrors of Nowhere outside of being a fan and a P
 
 Terrors of Nowhere belongs to Beyond https://www.patreon.com/c/beyondVR
 tontrack.me by Cinossu: https://tontrack.me/
+OSC standard naming by Kittenji: https://github.com/ChrisFeline/ToNSaveManager
 
 Outside dependencies:
 Pyperclip: https://github.com/asweigart/pyperclip

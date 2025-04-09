@@ -10,6 +10,13 @@
 - Added 2 OSC templates:
     - Default.json with ToNCodes OSC variable names.
     - ToNSM-Standard.json with the standard OSC names created by ToNSaveManager that all assets that use OSC for Terrors of Nowhere currently use.
+- Added reset config option to delete your current configurations. [#51](https://github.com/69MichelleDB/ToNCodes/issues/51)
+
+**Changes**
+- Now ToNCodes will automatically restart itself after changing configurations that require a restart.
+
+**Fixes**
+- Fixed how modal windows were created, they should behave much better now.
 
 ## [alpha-0.7.4] - 2025.04.06
 

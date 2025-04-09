@@ -49,6 +49,14 @@ def VerifyConfigExists(i_file):
         print(e)
         ErrorLogging(f"Error in CreateFromDefault: {e}")
 
+# Reset config file
+def ResetConfigFile():
+    try:
+        os.remove(gs._FILE_CONFIG)
+        VerifyConfigExists(gs._FILE_CONFIG)
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in ResetConfigFile: {e}")
 
 # Pass it a list of files and obtain a dictionary with the file name and the date modified
 def GetDateModified(i_files):

@@ -19,8 +19,8 @@ _WIDTH_MC = 400
 _HEIGHT_MC = 100
 
 # Options window
-_WIDTH_OPT = 610
-_HEIGHT_OPT = 395
+_WIDTH_OPT = 640
+_HEIGHT_OPT = 415
 
 # About window
 _WIDTH_ABOUT = 550
@@ -60,6 +60,7 @@ _FILE_FALLBACKOSCPROFILE = os.path.join(_FOLDER_TEMPLATES,_FOLDER_OSC,'Default.j
 configList = {}
 localeDict = {}
 root = None
+optionsRoot = None
 TONStyles = {}
 debugBarFrame = None
 debugBarAfterID = None

@@ -187,15 +187,15 @@ def InitializeOSCClient(i_port, i_file):
     try:
         if gs.configList['osc-enabled'] == '1':                                         # Only if OSC is enabled
             gs.oscClient = udp_client.SimpleUDPClient(gs._OSCURL, int(i_port))          # Connect client
-
-            # Handle different situations for the profile
-            if i_file is None or not os.path.exists(i_file):                            # If the profile is not defined or the file doesn't exist, default
-                gs.configList['osc-profile'] = gs._FILE_FALLBACKOSCPROFILE
-                gs.oscJsonProfile = GetOSCProfileData(gs.configList['osc-profile'])
-            else:
-                gs.oscJsonProfile = GetOSCProfileData(i_file)
         else:
             gs.oscClient = None
+
+        # Handle different situations for the profile
+        if i_file is None or not os.path.exists(i_file):                            # If the profile is not defined or the file doesn't exist, default
+            gs.configList['osc-profile'] = gs._FILE_FALLBACKOSCPROFILE
+            gs.oscJsonProfile = GetOSCProfileData(gs.configList['osc-profile'])
+        else:
+            gs.oscJsonProfile = GetOSCProfileData(i_file)
             gs.oscJsonProfile = None
     except Exception as e:
         print(e)
