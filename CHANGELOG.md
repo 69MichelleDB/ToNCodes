@@ -1,15 +1,15 @@
 # Changelog
 
-## [alpha-0.7.5] - 
+## [alpha-0.7.5] - 2025.04.09
 
 **New**
 - First pass for OSC integration. [#34](https://github.com/69MichelleDB/ToNCodes/issues/34)
-- Added OSC Port option.
-- Added OSC enabled checkbox.
-- Added the ability to create different OSC profiles using 2 available templates, you can change the name of the OSC variable the values get sent to.
-- Added 2 OSC templates:
-    - Default.json with ToNCodes OSC variable names.
-    - ToNSM-Standard.json with the standard OSC parameter names created by Kittenji that all assets that use OSC for Terrors of Nowhere currently use.
+    - Added OSC Port option.
+    - Added OSC enabled checkbox.
+    - Added the ability to create different OSC profiles using 2 available templates, you can change the name of the OSC variable the values get sent to.
+    - Added 2 OSC templates:
+        - Default.json with ToNCodes OSC variable names.
+        - ToNSM-Standard.json with the standard OSC parameter names created by Kittenji that all assets that use OSC for Terrors of Nowhere currently use.
 - Added reset config option to delete your current configurations. [#51](https://github.com/69MichelleDB/ToNCodes/issues/51)
 
 **Changes**
