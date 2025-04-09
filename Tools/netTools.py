@@ -196,7 +196,6 @@ def InitializeOSCClient(i_port, i_file):
             gs.oscJsonProfile = GetOSCProfileData(gs.configList['osc-profile'])
         else:
             gs.oscJsonProfile = GetOSCProfileData(i_file)
-            gs.oscJsonProfile = None
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in InitializeClient: {e}")

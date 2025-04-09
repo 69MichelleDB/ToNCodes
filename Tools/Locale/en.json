@@ -64,5 +64,12 @@
     "OSCParam-Title" : "OSC Parameters",
     "OSCParam-Save-Button" : "Save",
     "OSCParam-Save-ErrorFolder-Head" : "Wrong path",
-    "OSCParam-Save-ErrorFolder-Body" : "Please keep the json file inside {path}."
+    "OSCParam-Save-ErrorFolder-Body" : "Please keep the json file inside {path}",
+    "OSCParam-Delete-Button" : "Delete profile",
+    "OSCParam-DeleteTemplate-Head" : "Template error",
+    "OSCParam-DeleteTemplate-Body" : "Templates can't be deleted, only files in {path}",
+    "OSCParam-ConfirmDelete-Head" : "Confirm",
+    "OSCParam-ConfirmDelete-Body" : "Do you want to delete the profile {path}?",
+    "OSCParam-Deleted-Head" : "Profile deleted",
+    "OSCParam-Deleted-Body" : "The profile {path} was deleted"
 }

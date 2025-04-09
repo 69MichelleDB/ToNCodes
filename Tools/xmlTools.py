@@ -161,6 +161,8 @@ def InitializeConfig(i_configFile):
             for key, value in node.items(): 
                 if key == 'vrchat-log-path':
                     result['firstBoot'] = True if value == 'noinit' else False
+                if key == 'osc-profile' and value==None:
+                    value = gs._FILE_FALLBACKOSCPROFILE
 
                 result[key] = value                             # Store the rest of the config data
 

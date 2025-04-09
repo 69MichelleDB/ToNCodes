@@ -386,7 +386,6 @@ def CreateOptionsWindow():
                 if textOSCPortAux != gs.configList['osc-in-port']:
                     ModifyNode(gs._FILE_CONFIG, 'osc-in-port', textOSCPortAux)
 
-
             # Enable OSC
             cbVarOSCAux = str(cbVarOSC.get())
             if cbVarOSCAux != gs.configList['osc-enabled']:
@@ -549,9 +548,29 @@ def CreateOSCParamWindow():
                 if varAux != gs.configList['osc-profile']:
                     ModifyNode(gs._FILE_CONFIG, 'osc-profile', varAux)
 
+        def DeleteProfile():
+            if os.path.join(gs._FOLDER_TEMPLATES,gs._FOLDER_OSC) in oscParamProfileVar.get():
+                OSCParamRoot.withdraw()
+                messagebox.showwarning(gs.localeDict['OSCParam-DeleteTemplate-Head'], gs.localeDict['OSCParam-DeleteTemplate-Body'].format(path=os.path.join(gs._FOLDER_TOOLS,gs._FOLDER_OSC)))
+                OSCParamRoot.deiconify()
+            else:
+                if messagebox.askyesno(gs.localeDict['OSCParam-ConfirmDelete-Head'],gs.localeDict['OSCParam-ConfirmDelete-Body'].format(path=oscParamProfileVar.get())):
+                    try:
+                        os.remove(oscParamProfileVar.get())
+                        messagebox.showinfo(gs.localeDict['OSCParam-Deleted-Head'], gs.localeDict['OSCParam-Deleted-Head'].format(path=oscParamProfileVar.get()))
+                        UpdateCombobox(gs._FILE_FALLBACKOSCPROFILE)
+                        on_select_combo(None)
+                    except Exception as e:
+                        print(e)
+                        ErrorLogging(f"Error in DeleteProfile: {e}")
+                    
+
         # Bottom button
         saveButton = tk.Button(frameOSCWindow, text=gs.localeDict['OSCParam-Save-Button'], command=SaveAll, **gs.TONStyles['buttons'])
         saveButton.grid(row=2, column=0, padx=5, pady=5, sticky='e')
+
+        deleteButton = tk.Button(frameOSCWindow, text=gs.localeDict['OSCParam-Delete-Button'], command=DeleteProfile, **gs.TONStyles['buttons'])
+        deleteButton.grid(row=2, column=0, padx=5, pady=5, sticky='w')
 
         # On opening the OSC Param windows...
         UpdateCombobox()
