@@ -557,7 +557,7 @@ def CreateOSCParamWindow():
                 if messagebox.askyesno(gs.localeDict['OSCParam-ConfirmDelete-Head'],gs.localeDict['OSCParam-ConfirmDelete-Body'].format(path=oscParamProfileVar.get())):
                     try:
                         os.remove(oscParamProfileVar.get())
-                        messagebox.showinfo(gs.localeDict['OSCParam-Deleted-Head'], gs.localeDict['OSCParam-Deleted-Head'].format(path=oscParamProfileVar.get()))
+                        messagebox.showinfo(gs.localeDict['OSCParam-Deleted-Head'], gs.localeDict['OSCParam-Deleted-Body'].format(path=oscParamProfileVar.get()))
                         UpdateCombobox(gs._FILE_FALLBACKOSCPROFILE)
                         on_select_combo(None)
                     except Exception as e:
