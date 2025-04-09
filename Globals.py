@@ -8,7 +8,7 @@ _WSURL = "localhost"
 _WSPORT = 11398
 _RX = "https://app.tontrack.me/regex.json"
 _DEBUG_REFRESH = 200
-_OSCURL = "localhost"
+_OSCURL = "127.0.0.1"
 
 # Main window
 _WIDTH = 650
