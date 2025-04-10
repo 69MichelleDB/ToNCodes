@@ -4,11 +4,12 @@ import re
 
 class Killer:
 
-    def __init__ (self, i_type, i_id, i_value, i_name):
+    def __init__ (self, i_type, i_id, i_value, i_name, variant_type=None):
         self.type = i_type
         self.id = i_id
         self.value = i_value
         self.name = i_name
+        self.variant_type = variant_type
 
 # Function to translate the raw note data, to something the user can understand
 def DecodeNote(i_input, nameOnly=False):
@@ -57,13 +58,17 @@ def DecodeNote(i_input, nameOnly=False):
                 for killer in killersRaw:
                     match round.lower():
                         case 'midnight':
-                            if count == 2:
-                                matched = [i for i in gs.killersListCurrent if i.type==round.lower() and i.id==int(killer)]         # Check for variants
+                            # Check for terror variants in midnight
+                            if count < 2:
+                                matched = [i for i in gs.killersListCurrent if i.type==round.lower() and i.variant_type=='terror' and i.id==int(killer)]
+                            else:
+                                # Check for alternate variants in midnight
+                                matched = [i for i in gs.killersListCurrent if i.type==round.lower() and i.variant_type=='alternate' and i.id==int(killer)]
                                 if len(matched)>0:                                  # We need to check for monarch if a variant was found
                                     if matched[0].id == 19:                         # Check for Monarch, rounds with them in, have no other terrors
                                         isMonarch = True
-                                elif len(matched) == 0:
-                                    matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]     # Check for the alternate
+                                else:       # If no variant was found, find the alternate
+                                    matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]
                         case 'unbound':
                             if count == 0:
                                 matched = [Killer('unbound', killer, gs.unboundsDict[killer], f'{int(killer)+1}. {gs.unboundsDict[killer]}')]
@@ -98,16 +103,24 @@ def DecodeNote(i_input, nameOnly=False):
                         killer = killersRaw[0]
                         matched = [i for i in gs.killersListCurrent if i.type==round and i.id==int(killer)]
                         killers.append(matched[0].name)
-            else:                                                                                          # Single killer rounds
+            else:                                                                                           # Single killer rounds
                 killer = killersRaw[0]
-                matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]            # Check for variants
 
-                if eventR!='' and len(matched)>0:                                                                                  # Special event replacements
+                # Check for terror variants in cracked
+                if round.lower() == 'cracked':
+                    matched = [i for i in gs.killersListCurrent if i.type==round.lower() and i.variant_type=='terror' and i.id==int(killer)]
+                
+                # Special event replacements
+                if eventR!='' and len(matched)>0:
                     match eventR:
                         case 'Winterfest':
                             matched[0].name = 'Neo Pilot' if matched[0].value=='fusion_pilot' else matched[0].name
+                
+                # Check for Alternates
+                matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]      
 
-                if len(matched) == 0:                                                                           # Regular terrors
+                # And finally check for regular terrors
+                if len(matched) == 0:                                                                           
                     matched = [i for i in gs.killersListCurrent if i.type=='terrors' and i.id==int(killer)]
                 killers.append(matched[0].name)
                 matched = []

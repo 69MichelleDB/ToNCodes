@@ -218,10 +218,8 @@ def GetKeyData(i_key, i_data, i_type):
             killerList = json.loads(cipher.decrypt(data).decode('utf-8'))
 
             for typeList in killerList:
-                #print(typeList)
                 for killers in killerList[typeList]:
-                    #print(f'{killers['id']},{killers['value']},{killers['name']}')
-                    result.append( agent.Killer(typeList, killers['id'], killers['value'], killers['name']) )
+                    result.append( agent.Killer(typeList, killers['id'], killers['value'], killers['name'], killers['variant_type'] if 'variant_type' in killers else None) )
         case 'U':
             result = {}
             result = json.loads(cipher.decrypt(data).decode('utf-8'))

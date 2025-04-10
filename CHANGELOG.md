@@ -1,6 +1,9 @@
 # Changelog
 
-## [alpha-0.7.7] - 
+## [alpha-0.7.7] - 2025.04.10
+
+**Fixes**
+- Reworked how Midnight and Cracked variants are processed, they should display correctly now.
 
 **Changes**
 - Updated about window.
