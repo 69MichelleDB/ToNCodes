@@ -1,9 +1,10 @@
 # Changelog
 
-## [alpha-0.7.6]
+## [alpha-0.7.6] - 2025.04.10
 
 **Fixes**
 - Fixed bug where when opening the browser for the VRC path, it doesn't start with the input path.
+- Fixed crash when Midnight round happens and it's not Monarch.
 
 ## [alpha-0.7.5] - 2025.04.09
 

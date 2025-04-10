@@ -59,9 +59,10 @@ def DecodeNote(i_input, nameOnly=False):
                         case 'midnight':
                             if count == 2:
                                 matched = [i for i in gs.killersListCurrent if i.type==round.lower() and i.id==int(killer)]         # Check for variants
-                                if matched[0].id == 19:                         # Check for Monarch, rounds with them in, have no other terrors
-                                    isMonarch = True
-                                if len(matched) == 0:
+                                if len(matched)>0:                                  # We need to check for monarch if a variant was found
+                                    if matched[0].id == 19:                         # Check for Monarch, rounds with them in, have no other terrors
+                                        isMonarch = True
+                                elif len(matched) == 0:
                                     matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]     # Check for the alternate
                         case 'unbound':
                             if count == 0:
