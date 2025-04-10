@@ -1,7 +1,7 @@
 import os.path
 
 # Constants
-_VERSION = 'alpha-0.7.6'
+_VERSION = 'alpha-0.7.7'
 _TITLE = f"ToNCodes {_VERSION} - by MichelleDB"
 _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
 _WSURL = "localhost"
@@ -24,7 +24,7 @@ _HEIGHT_OPT = 415
 
 # About window
 _WIDTH_ABOUT = 550
-_HEIGHT_ABOUT = 340
+_HEIGHT_ABOUT = 360
 
 # Debug window
 _WIDTH_DEBUG = 500

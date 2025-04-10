@@ -1,5 +1,10 @@
 # Changelog
 
+## [alpha-0.7.7] - 
+
+**Changes**
+- Updated about window.
+
 ## [alpha-0.7.6] - 2025.04.10
 
 **Fixes**

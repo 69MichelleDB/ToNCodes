@@ -614,7 +614,8 @@ def CreateAboutWindow():
                                 f"By 69MichelleDB: https://michelledb.com\n\n" +
                                 f"Terrors of Nowhere by Beyond: https://www.patreon.com/c/beyondVR\n" + 
                                 f"tontrack.me by Cinossu: https://tontrack.me/\n" + 
-                                f"OSC standard naming scheme by Kittenji: https://github.com/ChrisFeline/ToNSaveManager\n\n" + 
+                                f"OSC standard naming scheme by Kittenji: https://github.com/ChrisFeline/ToNSaveManager\n" +
+                                f"ToN Wiki by MaraRizer, https://terror.moe\n\n" + 
                                 f"Dependencies:\n" + 
                                 f"pyperclip: https://github.com/asweigart/pyperclip\n" + 
                                 f"screeninfo: https://github.com/rr-/screeninfo\n"+
