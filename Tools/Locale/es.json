@@ -7,7 +7,7 @@
     "Horizontal-Menu-About": "Acerca de",
     "About-Title": "Acerca de",
     "Error-Pools-Head": "Error",
-    "Error-Pools-Body": "There was an error obtaining the latest data, if the error persists, please open an issue on GitHub {url}",
+    "Error-Pools-Body": "Hubo un error al obtener los datos más recientes, si el error persiste, por favor pon un mensaje en \"issues\" en GitHub {url}",
     "Tree-Dates": "Fechas",
     "Tree-Notes": "Anotaciones",
     "Message-Code-Copied-Head": "¡Copiado!",
