@@ -9,7 +9,7 @@
     "About-Title" : "About",
     
     "Error-Pools-Head" : "Error",
-    "Error-Pools-Body" : "There was an error obtaining the latest data, if the error persists, please open an issue on github {url}",
+    "Error-Pools-Body" : "There was an error obtaining the latest data, if the error persists, please open an issue on GitHub {url}",
 
     "Tree-Dates" : "Dates",
     "Tree-Notes" : "Notes",
