@@ -1,6 +1,6 @@
 # Changelog
 
-## [alpha-0.7.8]
+## [alpha-0.7.8] - 2025.04.11
 
 **New**
 - Added option to disable April Fool names.
@@ -9,7 +9,7 @@
 - Optimized code and cleaned clutter.
 - Reduced file size and reworked update mechanism for terrors.
 - Renamed some internal concepts.
-- tontrack.me's label in Options is now a hyperlink for ease of access.
+- tontrack.me's label in Options is now a hyperlink for ease of access. [#57](https://github.com/69MichelleDB/ToNCodes/issues/57)
 
 ## [alpha-0.7.7] - 2025.04.10
 
