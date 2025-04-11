@@ -14,4 +14,7 @@
     <osc-enabled>0</osc-enabled>
     <osc-in-port>9000</osc-in-port>
     <osc-profile></osc-profile>
+    <pool-ver>0</pool-ver>
+    <pool-key></pool-key>
+    <silly-enabled>1</silly-enabled>
 </config>

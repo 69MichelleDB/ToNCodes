@@ -1,14 +1,16 @@
 import os.path
 
 # Constants
-_VERSION = 'alpha-0.7.7'
+_VERSION = 'alpha-0.7.8'
 _TITLE = f"ToNCodes {_VERSION} - by MichelleDB"
 _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
 _WSURL = "localhost"
 _WSPORT = 11398
-_RX = "https://app.tontrack.me/regex.json"
+_URL = "app.tontrack.me"
 _DEBUG_REFRESH = 200
 _OSCURL = "127.0.0.1"
+_PLS = 'pools.json'
+_RX = 'regex.json'
 
 # Main window
 _WIDTH = 650
@@ -48,13 +50,9 @@ _FOLDER_OSC= 'OSC'
 # Files
 _FILE_CONFIG = 'config.xml'
 _FILE_CONTROL = 'control.xml'
-_FILE_DATA = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'data')
-_FILE_DATAK = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'datak')
-_FILE_DATASILLY = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'data_silly')
-_FILE_DATAKSILLY = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'datak_silly')
-_FILE_DATAU = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'datau')
-_FILE_DATAUK = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'datauk')
 _FILE_FALLBACKOSCPROFILE = os.path.join(_FOLDER_TEMPLATES,_FOLDER_OSC,'Default.json')
+_FILE_POOLS = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'pools.dat')
+_FILE_SILLYNAMES = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'silly.json')
 
 # Global variables
 configList = {}
@@ -69,10 +67,8 @@ writingFlag = False
 wsFlag = False
 newCodeAdded = True
 forceRefreshCodes = False
-killersList = []
-killersListSilly = []
-killersListCurrent = []
-unboundsDict = {}
+pools = []
+sillyNames = {}
 regexDict = {}
 codesData = []
 fileBoxSelected = ''

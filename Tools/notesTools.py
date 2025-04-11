@@ -109,18 +109,13 @@ def ParseContent(i_content, i_fileName, i_cursor):
                                 if args[0] in gs.oscJsonProfile[key]['values']:     # First check if the item exists, that list is not refined yet and new items may enter
                                     OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], gs.oscJsonProfile[key]['values'][args[0]]))
                                 else:
-                                    print(f'OSC Alert: item [{rgs[0]}] is not in the json file')
+                                    print(f'OSC Alert: item [{args[0]}] is not in the json file')
                             case "item_drop":
                                 OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], gs.oscJsonProfile[key]['values']))
 
                         
                         OSCorderList = ExecuteOSCList(OSCorderList)         # Process all the OSC calls
 
-                        # Fix name of the round for the Decoder later
-                        match gs.roundType:
-                            case '8 Pages':
-                                gs.roundType = '8pages'
-                            
                         if key not in ['TONWINTER','TONWAPRIL','TONCODE']:  # Process all Websocket calls
                             SendWSMessage(key, args)
 

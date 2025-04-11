@@ -7,6 +7,9 @@
     "Horizontal-Menu-About" : "About",
 
     "About-Title" : "About",
+    
+    "Error-Pools-Head" : "Error",
+    "Error-Pools-Body" : "There was an error obtaining the latest data, if the error persists, please open an issue on github {url}",
 
     "Tree-Dates" : "Dates",
     "Tree-Notes" : "Notes",
@@ -54,6 +57,7 @@
     "Options-oscPort-Label" : "OSC in Port",
     "Options-osc-Check" : "Enable OSC",
     "Options-oscEdit-Button" : "OSC Parameters",
+    "Options-silly-Check" : "Enable April Fool names",
     "Options-Need-Restart-Head" : "Restart needed",
     "Options-Need-Restart-Body" : "Some of the options changed require a restart of ToNCodes for them to take effect.",
     "Options-ResetOptions-Head" : "Are you sure?",

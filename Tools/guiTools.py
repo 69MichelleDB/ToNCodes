@@ -10,7 +10,7 @@ from Tools.netTools import CheckForUpdates, GetOSCProfileData, InitializeOSCClie
 from screeninfo import get_monitors
 import Globals as gs
 from math import isnan
-from Tools.Items.Killer import DecodeNote
+from Tools.Items.Encounters import DecodeNote
 import datetime
 from Tools.netTools import SendWSMessage
 import json
@@ -163,6 +163,7 @@ def CreateOptionsWindow():
         frameOptions.grid_rowconfigure(8, weight=1)
         frameOptions.grid_rowconfigure(9, weight=1)
         frameOptions.grid_rowconfigure(10, weight=1)
+        frameOptions.grid_rowconfigure(11, weight=1)
 
         restartNeeded = False
         # Some options may need a restart to take effect, this enables a warning
@@ -328,6 +329,14 @@ def CreateOptionsWindow():
         textOSCPort = Entry(frameOptions, textvariable=textOSCPortVar)
         textOSCPort.grid(row=9, column=1, padx=5, pady=5, sticky='ew')
 
+        # ELEVENTH ROW
+
+        #Checkbox
+        cbVarSilly = tk.IntVar()
+        cbVarSilly.set(gs.configList['silly-enabled'])
+        cbSilly = Checkbutton(frameOptions, text=gs.localeDict['Options-silly-Check'], variable=cbVarSilly, **gs.TONStyles['checkbutton'])
+        cbSilly.grid(row=10, column=1, padx=5, pady=5, sticky='w')
+
 
         # Save changes
         def SaveOptions():
@@ -392,6 +401,11 @@ def CreateOptionsWindow():
                 ModifyNode(gs._FILE_CONFIG, 'osc-enabled', cbVarOSCAux)
                 InitializeOSCClient(gs.configList['osc-in-port'], gs.configList['osc-profile'])
 
+            # Enable Silly
+            cbVarSillyAux = str(cbVarSilly.get())
+            if cbVarSillyAux != gs.configList['silly-enabled']:
+                ModifyNode(gs._FILE_CONFIG, 'silly-enabled', cbVarSillyAux)
+
             # Reload config variable
             gs.configList = InitializeConfig(gs._FILE_CONFIG)
             gs.optionsRoot.destroy()
@@ -411,11 +425,11 @@ def CreateOptionsWindow():
 
         # Save button
         saveButton = tk.Button(frameOptions, text=gs.localeDict['Options-Save-Button'], command=SaveOptions, **gs.TONStyles['buttons'])
-        saveButton.grid(row=10, column=2, padx=5, pady=5, sticky='ew')
+        saveButton.grid(row=11, column=2, padx=5, pady=5, sticky='ew')
 
         # Reset settings button
         saveButton = tk.Button(frameOptions, text=gs.localeDict['Options-Reset-Button'], command=ResetOptions, **gs.TONStyles['buttons'])
-        saveButton.grid(row=10, column=0, padx=5, pady=5, sticky='w')
+        saveButton.grid(row=11, column=0, padx=5, pady=5, sticky='w')
 
         gs.optionsRoot.wait_window()
     except Exception as e:

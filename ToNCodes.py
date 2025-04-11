@@ -1,5 +1,5 @@
 from Tools.xmlTools import InitializeConfig, ReadCodeFiles, ModifyNode, VerifyConfigFields
-from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles, GetKeyData, RegexCheck, LoadLocale
+from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles, RegexCheck, PoolCheck, LoadLocale, LoadJson
 from Tools.guiTools import CreateWindow, HorizontalMenu, HorizontalFileBox, CreateTreeView, CalculatePosition, ApplyStyle, DebugBar
 from Tools.errorHandler import ErrorLogging
 from Tools.netTools import CheckForUpdates, WSstart, InitializeOSCClient
@@ -61,9 +61,8 @@ if __name__ == "__main__":
     mainThread.start()
 
     # GUI setup
-    gs.killersList = GetKeyData(gs._FILE_DATAK, gs._FILE_DATA, 'K')
-    gs.killersListSilly = GetKeyData(gs._FILE_DATAKSILLY, gs._FILE_DATASILLY, 'K')
-    gs.unboundsDict = GetKeyData(gs._FILE_DATAUK, gs._FILE_DATAU, 'U')
+    gs.pools = PoolCheck()
+    gs.sillyNames = LoadJson(gs._FILE_SILLYNAMES)
     
     gs.root = CreateWindow(gs._TITLE + gs.titleMessage, gs._WIDTH, gs._HEIGHT+30, True)
     auxX,auxY = CalculatePosition(gs._WIDTH, gs._HEIGHT)
@@ -77,6 +76,5 @@ if __name__ == "__main__":
     # Debug bar
     if gs.configList['debug-window'] == '1':
         DebugBar(gs.root)
-
 
     gs.root.mainloop()

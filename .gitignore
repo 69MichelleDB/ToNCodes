@@ -11,6 +11,8 @@ Temp/*
 Tools/OSC/*
 !Tools/OSC/Hi.txt
 
+Tools/Items/pools.dat
+
 config*
 !Templates/config.xml.default
 *.old

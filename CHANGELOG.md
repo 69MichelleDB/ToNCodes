@@ -1,5 +1,15 @@
 # Changelog
 
+## [alpha-0.7.8]
+
+**New**
+- Added option to disable April Fool names.
+
+**Changes**
+- Optimized code and cleaned clutter.
+- Reduced file size and reworked update mechanism for terrors.
+- Renamed some internal concepts.
+
 ## [alpha-0.7.7] - 2025.04.10
 
 **Fixes**

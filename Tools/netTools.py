@@ -9,7 +9,7 @@ from tkinter import messagebox
 from Tools.fileTools import CreateNewTempCodeFile, GetAllFiles
 from Tools.errorHandler import ErrorLogging
 from Tools.updateHandler import WarningHandler
-from Tools.Items.Killer import DecodeNote
+from Tools.Items.Encounters import DecodeNote
 from pythonosc import udp_client
 
 

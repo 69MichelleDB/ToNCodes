@@ -39,7 +39,7 @@ mkdir ${finalFolder}/Tools/Items
 mkdir ${finalFolder}/Tools/Locale
 mkdir ${finalFolder}/Tools/Themes
 mkdir ${finalFolder}/Tools/OSC
-mv Tools/Items/data* ${finalFolder}/Tools/Items
+mv Tools/Items/silly.json ${finalFolder}/Tools/Items
 mv Tools/Locale ${finalFolder}/Tools
 mv Tools/Themes/*.json ${finalFolder}/Tools/Themes
 rm ${finalFolder}/Tools/Themes/*-test.json
