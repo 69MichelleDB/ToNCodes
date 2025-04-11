@@ -53,7 +53,7 @@ def DecodeNote(i_input, nameOnly=False):
 
                 roundNameFix = round.lower().replace(' ','')
 
-                if roundNameFix in ['midnight','bloodbath','double trouble','ex','unbound']:    # These rounds have multiple killers
+                if roundNameFix in ['midnight','bloodbath','doubletrouble','ex','unbound']:    # These rounds have multiple killers
                     count = 0
                     for killer in killersRaw:
                         match roundNameFix:
@@ -70,8 +70,10 @@ def DecodeNote(i_input, nameOnly=False):
                                     else:       # If no variant was found, find the alternate
                                         matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]
                             case 'unbound':
-                                matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]
-                                break   # We only need the first number
+                                if count == 0:
+                                    matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]
+                                else: 
+                                    break   # We only need the first number
 
                         # Regular terrors
                         if len(matched) == 0:

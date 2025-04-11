@@ -75,6 +75,7 @@ def ParseContent(i_content, i_fileName, i_cursor):
                                     OSCorderList.append(OSCOrder('round_killer1', gs.oscJsonProfile['round_killer1']['variable'], int(args[0])))
                                     OSCorderList.append(OSCOrder('round_killer2', gs.oscJsonProfile['round_killer2']['variable'], int(args[1])))
                                     OSCorderList.append(OSCOrder('round_killer3', gs.oscJsonProfile['round_killer3']['variable'], int(args[2])))
+                                    OSCorderList.append(OSCOrder('round_type', gs.oscJsonProfile['round_type']['variable'], gs.oscJsonProfile['round_type']['values'][args[3]]))
                             case "round_unknown":
                                 print('round_unknown placeholder')
                             case "round_possessed":

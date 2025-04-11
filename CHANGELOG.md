@@ -1,5 +1,12 @@
 # Changelog
 
+## [alpha-0.7.9] - 
+
+**Fixes**
+- Unbound rounds display name stopped showing in `alpha-0.7.8`, now that's fixed.
+- Fixed crash with Double Trouble rounds.
+- Fixed OSC not reporting revealed Fog (Alternate) rounds properly, you will need to delete and create your OSC profile.
+
 ## [alpha-0.7.8] - 2025.04.11
 
 **New**
