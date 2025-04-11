@@ -72,7 +72,7 @@ def CheckForUpdates(i_checkForcedUpdate=False):
                         answer = messagebox.askyesno(gs.localeDict['Update-New-Head'], gs.localeDict['Update-New-Body'].format(latestVersion=latestVersion))
                         if answer:
                             print("Opening GitHub link")
-                            webbrowser.open(urlLatest)
+                            webbrowser.open_new_tab(urlLatest)
                         else:
                             print("Not opening GitHub link")
                     else:

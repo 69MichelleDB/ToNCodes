@@ -16,6 +16,7 @@ from Tools.netTools import SendWSMessage
 import json
 import re
 import sys
+import webbrowser
 
 
 # This will apply a common theme to every element
@@ -234,9 +235,13 @@ def CreateOptionsWindow():
 
 
         # FIFTH ROW
+        def OpenSite(i_url):
+            webbrowser.open_new_tab(i_url)
+
         # Label
-        labelWS = Label(frameOptions, text=gs.localeDict['Options-Websocket-Label'])
+        labelWS = Label(frameOptions, text=gs.localeDict['Options-Websocket-Label'], foreground="blue", cursor="hand2", font=["Arial", 11,'underline'])
         labelWS.grid(row=4, column=0, padx=5, pady=5, sticky='w')
+        labelWS.bind("<Button-1>", lambda e: OpenSite("https://tontrack.me/"))
 
         #Checkbox
         cbVarWS = tk.IntVar()
