@@ -123,6 +123,13 @@ def ParseContent(i_content, i_fileName, i_cursor):
                         break
             
         cursor = i_content.tell()                               # If we are done, recover where the cursor is, which should be at the end
+        
+        # To prevent saving, if the end of file cursor is None for whatever reason, abort and don't save anything, wait for the next loop
+        if cursor is None:
+            ErrorLogging(f"Error in ParseContent, cursor is None", True)
+            cursor = i_cursor
+            codesArray = []
+        
         return cursor, codesArray
     except Exception as e:
         print(e)

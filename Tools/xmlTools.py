@@ -7,6 +7,7 @@ import Globals as gs
 from Tools.netTools import SendWebhook
 from Tools.errorHandler import ErrorLogging
 from Tools.notesTools import ParseContent
+from Tools.fileTools import CleanControlEntries
 
 
 #region Common XML
@@ -27,21 +28,15 @@ def ReadXml(i_filePath):
             defaultConfigFile = os.path.join(gs._FOLDER_TEMPLATES, gs._FILE_CONFIG+'.default')
             with open(defaultConfigFile, 'r') as src, open(gs._FILE_CONFIG, 'w') as dst:
                 dst.write(src.read())
-        elif i_filePath == gs._FILE_CONTROL:            # CONTROL FILE corruption
-            error = f'Your {gs._FILE_CONTROL} is corrupted, we are going to attempt to regenerate it'
-            if os.path.exists(gs._FILE_CONTROL):                  # Delete the corrupted control file and create a new one
-                os.remove(gs._FILE_CONTROL)
-            with open(gs._FILE_CONTROL, 'w') as file:
-                file.write('<?xml version="1.0" ?><Root></Root>')
-        elif i_filePath[len(gs._FOLDER_CODES)+1:len(gs._FOLDER_CODES)+11] == 'output_log':    # CODE FILE corruption
+        elif i_filePath[len(gs._FOLDER_CODES)+1:len(gs._FOLDER_CODES)+11] == 'output_log':      # CODE FILE corruption
             fileCode = i_filePath
             error = f'{fileCode} is corrupted, we are going to attempt to regenerate it'
             if os.path.exists(fileCode):                    # Delete the corrupted code file
                 os.remove(fileCode)
-            allLogs = GetAllFiles(gs.configList['vrchat-log-path']+'output_log_*.txt')                  # I want control to forget the corrupted file
+            allLogs = GetAllFiles(gs.configList['vrchat-log-path']+'output_log_*.txt')          # I want control to forget the corrupted file
             fileCodeXML = os.path.join(gs.configList['vrchat-log-path'] ,fileCode.replace('Codes/','').replace('.xml','.txt'))
             allLogs.remove(fileCodeXML)
-            CleanControlEntries(gs._FILE_CONTROL, allLogs) # And we do that here
+            CleanControlEntries(gs.controlJson, allLogs) # And we do that here
             with open(fileCode, 'w') as file:
                 file.write('<?xml version="1.0" ?><Root></Root>')
             gs.forceRefreshCodes = True                     # We need to tell CodesHunter to refresh and read the Codes again
@@ -269,43 +264,6 @@ def ControlFileInsert(i_controlFile, i_file, i_date, i_cursor):
         print(e)
         ErrorLogging(f"Error in ControlFileUpdate: {e}")
 
-# Try to update an entry in the control file, if there's no entry, insert a new entry
-def ControlFileUpdate(i_controlFile, i_file, i_date, i_cursor):
-    try:
-        found = False
-        root = ReadXml(i_controlFile)
-        for tonCode in root.findall('.//TON-File'):
-            fileNode = tonCode.find('File')
-            if fileNode.text == i_file:
-                found = True
-                dateNode = tonCode.find('Date')
-                dateNode.text = i_date
-                cursorNode = tonCode.find('Cursor')
-                cursorNode.text = str(i_cursor)
-                break
-        if found:
-            WriteXml(root, i_controlFile)
-        else:
-           ControlFileInsert(i_controlFile, i_file, i_date, i_cursor)
-    except Exception as e:
-        print(e)
-        ErrorLogging(f"Error in ModifyCode: {e}")
-
-# Loop the xml file and if there's a file that doesn't exist anymore, delete it from control
-def CleanControlEntries(i_controlFile, i_logFiles):
-    try: 
-        print('Checking for old entries in Control file...')
-        root = ReadXml(i_controlFile)
-        for tonCode in root.findall('.//TON-File'):
-            fileNode = tonCode.find('File')
-            if fileNode.text not in i_logFiles:
-                print(f"{fileNode.text} doesn't exist anymore, deleting entry from control file.")
-                root.remove(tonCode)
-        WriteXml(root, i_controlFile)
-    except Exception as e:
-        print(e)
-        ErrorLogging(f"Error in CleanControlEntries: {e}")
-
 
 # region Populate codes
 
@@ -350,7 +308,6 @@ def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
         fileNameAux = os.path.basename(i_logFile)
         with open(i_logFile, 'r') as f:
             print(f'[START] Reading file: {fileNameAux}')
-            #cursor, logEntriesAux = ParseContent(f.read(), fileNameAux, cursor)
             cursor, logEntriesAux = ParseContent(f, fileNameAux, cursor)
             if len(logEntriesAux)>0:
                 if logEntriesAux[0][1] not in addedDates:

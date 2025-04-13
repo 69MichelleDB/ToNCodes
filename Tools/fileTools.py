@@ -154,19 +154,46 @@ def CleanTempFiles():
         print(e)
         ErrorLogging(f"Error in CleanTempFiles: {e}")
 
-# Check if the Control file (we'll store file, mod. date and cursor position here) exists and returns the full path
+# Check if the Control file (we'll store file, mod. date and cursor position here) exists and loads it
 def ControlFile():
     try:
         # Make sure the Control file exists
-        if not os.path.exists(gs._FILE_CONTROL):
-            with open(gs._FILE_CONTROL, 'w') as file:
-                file.write('<?xml version="1.0" ?><Root></Root>')
-
-        return gs._FILE_CONTROL
+        if not os.path.exists(gs._FILE_CONTROLJSON):
+            with open(gs._FILE_CONTROLJSON, 'w') as file:
+                file.write('{}')
+        return LoadJson(gs._FILE_CONTROLJSON)
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in ControlFile: {e}")
-        
+
+# Loop the json and if there's a file that doesn't exist anymore, delete it from control
+def CleanControlEntries(i_controlJson, i_logFiles):
+    try: 
+        dictCopy = i_controlJson.copy()     # If we delete entries from i_controlJson the for will throw an exception, I'll iterate a copy
+        print('Checking for old entries in Control file...')
+        for entry in dictCopy:
+            if entry not in i_logFiles:
+                print(f"{entry} doesn't exist anymore, deleting entry from control file.") 
+                del i_controlJson[entry]
+        SaveJson(gs._FILE_CONTROLJSON, i_controlJson)
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in CleanControlEntries: {e}")
+
+# Try to update an entry in the control file, if there's no entry, insert a new entry
+def ControlFileUpdate(i_controlFile, i_file, i_date, i_cursor):
+    try:
+        if i_file in i_controlFile:
+            i_controlFile[i_file]["date"] = i_date
+            i_controlFile[i_file]["cursor"] = i_cursor
+        else:
+            i_controlFile[i_file] = {
+                "date" : i_date,
+                "cursor" : i_cursor
+            }
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in ModifyCode: {e}")
 
 def RegexCheck():
     try:
@@ -238,6 +265,14 @@ def LoadJson(i_path):
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in LoadJson: {e}")
+
+def SaveJson(i_path, i_jsonDict):
+    try: 
+        with open(i_path, 'w') as file:
+            json.dump(i_jsonDict, file, indent=4)
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in SaveJson: {e}")
 
 # Load the selected locale in the global dict
 def LoadLocale():
