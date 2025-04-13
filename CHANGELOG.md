@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [alpha-0.7.10] -
+## [alpha-0.7.10] - 2025.04.13
 
 **Changes**
 - Removed `codes-folder` from config.xml.default
