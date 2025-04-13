@@ -7,8 +7,10 @@
 - Removed `codes-folder` from config.xml.default
 - Cleaned up code and fixed references to the Codes folder.
 - Moved control.xml from xml to json format. [#63](https://github.com/69MichelleDB/ToNCodes/issues/63)
-    - Fixes to prevent null cursors when parsing Log files.
 
+**Fixes**
+- Fixes to prevent null cursors when parsing Log files. [#63](https://github.com/69MichelleDB/ToNCodes/issues/63)
+- Refresh encounter data if the file is missing on load. [#62](https://github.com/69MichelleDB/ToNCodes/issues/62)
 
 ## [alpha-0.7.9] - 2025.04.11
 

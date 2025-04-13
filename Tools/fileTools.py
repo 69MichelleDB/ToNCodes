@@ -227,7 +227,7 @@ def PoolCheck():
         else:
             print("Couldn't connect")
 
-        if gs.configList['pool-ver'] != ver:
+        if gs.configList['pool-ver'] != ver or not os.path.exists(gs._FILE_POOLS):
             response = None
             response = requests.get(f"https://{gs._URL}/{gs._PLS}?v={ver}")
             jsonFile = response.json()
