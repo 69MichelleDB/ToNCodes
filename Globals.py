@@ -50,7 +50,7 @@ _FOLDER_OSC= 'OSC'
 # Files
 _FILE_CONFIG = 'config.xml'
 _FILE_CONTROLJSON = os.path.join(_FOLDER_CODES, 'control.json')
-_FILE_FALLBACKOSCPROFILE = os.path.join(_FOLDER_TEMPLATES,_FOLDER_OSC,'Default.json')
+_FILE_FALLBACKOSCPROFILE = os.path.join(_FOLDER_TEMPLATES,_FOLDER_OSC,'ToNSM-Standard.json')
 _FILE_POOLS = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'pools.dat')
 _FILE_SILLYNAMES = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'silly.json')
 

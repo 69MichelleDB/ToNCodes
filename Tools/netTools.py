@@ -209,6 +209,8 @@ def GetOSCProfileData(i_file):
 def SendOSCMessage(i_variable, i_value):
     try:
         if gs.configList['osc-enabled'] == '1':             # Only send messages if OSC is enabled
+            if gs.oscClient is None:                        # Just in case they change the setting and it didn't have time to initialize
+                InitializeOSCClient(gs.configList['osc-in-port'], gs.configList['osc-profile'])
             print(f"OSC: {i_variable}={i_value}")
             gs.lastOSCMessage = f"{i_variable}={i_value}"
             gs.oscClient.send_message(i_variable, i_value)

@@ -45,6 +45,9 @@ if __name__ == "__main__":
     LoadLocale()
     CheckForUpdates()                                               # Check for new updates logic
     RegexCheck()
+    
+    gs.pools = PoolCheck()
+    gs.sillyNames = LoadJson(gs._FILE_SILLYNAMES)
 
     # Websocket server
     if gs.configList['tontrack-ws'] == '1':
@@ -60,10 +63,7 @@ if __name__ == "__main__":
     mainThread.daemon = True
     mainThread.start()
 
-    # GUI setup
-    gs.pools = PoolCheck()
-    gs.sillyNames = LoadJson(gs._FILE_SILLYNAMES)
-    
+    # GUI setup    
     gs.root = CreateWindow(gs._TITLE + gs.titleMessage, gs._WIDTH, gs._HEIGHT+30, True)
     auxX,auxY = CalculatePosition(gs._WIDTH, gs._HEIGHT)
     gs.root.geometry(f'{gs._WIDTH}x{gs._HEIGHT}+{auxX}+{auxY}')

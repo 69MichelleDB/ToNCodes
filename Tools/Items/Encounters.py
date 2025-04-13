@@ -47,9 +47,7 @@ def DecodeNote(i_input, nameOnly=False):
             killersRaw = dataRaw[2].split(' ')
             eventR = dataRaw[3] if len(dataRaw)>3 else ''
 
-            gs.killersListCurrent = gs.pools
-
-            if len(gs.killersListCurrent)>0:
+            if len(gs.pools)>0:
 
                 roundNameFix = round.lower().replace(' ','')
 
@@ -60,24 +58,24 @@ def DecodeNote(i_input, nameOnly=False):
                             case 'midnight':
                                 # Check for terror variants in midnight
                                 if count < 2:
-                                    matched = [i for i in gs.killersListCurrent if i.type==roundNameFix and i.variant_type=='terror' and i.id==int(killer)]
+                                    matched = [i for i in gs.pools if i.type==roundNameFix and i.variant_type=='terror' and i.id==int(killer)]
                                 else:
                                     # Check for alternate variants in midnight
-                                    matched = [i for i in gs.killersListCurrent if i.type==roundNameFix and i.variant_type=='alternate' and i.id==int(killer)]
+                                    matched = [i for i in gs.pools if i.type==roundNameFix and i.variant_type=='alternate' and i.id==int(killer)]
                                     if len(matched)>0:                                  # We need to check for monarch if a variant was found
                                         if matched[0].id == 19:                         # Check for Monarch, rounds with them in, have no other terrors
                                             isMonarch = True
                                     else:       # If no variant was found, find the alternate
-                                        matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]
+                                        matched = [i for i in gs.pools if i.type==roundAux and i.id==int(killer)]
                             case 'unbound':
                                 if count == 0:
-                                    matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]
+                                    matched = [i for i in gs.pools if i.type==roundAux and i.id==int(killer)]
                                 else: 
                                     break   # We only need the first number
 
                         # Regular terrors
                         if len(matched) == 0:
-                            matched = [i for i in gs.killersListCurrent if i.type=='terrors' and i.id==int(killer)]
+                            matched = [i for i in gs.pools if i.type=='terrors' and i.id==int(killer)]
                         killers.append(matched[0].name)
                         if roundNameFix == 'double trouble' and count == 2:        # In case of double trouble, one of the killers is there twice
                             killers = DoubleTrouble(killers)
@@ -101,14 +99,14 @@ def DecodeNote(i_input, nameOnly=False):
                             killers.append('GIGABYTES')
                         case '8pages':
                             killer = killersRaw[0]
-                            matched = [i for i in gs.killersListCurrent if i.type==roundNameFix and i.id==int(killer)]
+                            matched = [i for i in gs.pools if i.type==roundNameFix and i.id==int(killer)]
                             killers.append(matched[0].name)
                 else:                                                                                           # Single killer rounds
                     killer = killersRaw[0]
 
                     # Check for terror variants in cracked
                     if roundNameFix == 'cracked':
-                        matched = [i for i in gs.killersListCurrent if i.type==roundNameFix and i.variant_type=='terror' and i.id==int(killer)]
+                        matched = [i for i in gs.pools if i.type==roundNameFix and i.variant_type=='terror' and i.id==int(killer)]
                     
                     # Special event replacements
                     if eventR!='' and len(matched)>0:
@@ -117,11 +115,11 @@ def DecodeNote(i_input, nameOnly=False):
                                 matched[0].name = 'Neo Pilot' if matched[0].value=='fusion_pilot' else matched[0].name
                     
                     # Check for Alternates
-                    matched = [i for i in gs.killersListCurrent if i.type==roundAux and i.id==int(killer)]      
+                    matched = [i for i in gs.pools if i.type==roundAux and i.id==int(killer)]      
 
                     # And finally check for regular terrors
                     if len(matched) == 0:                                                                           
-                        matched = [i for i in gs.killersListCurrent if i.type=='terrors' and i.id==int(killer)]
+                        matched = [i for i in gs.pools if i.type=='terrors' and i.id==int(killer)]
                     killers.append(matched[0].name)
                     matched = []
                 
@@ -168,5 +166,23 @@ def DoubleTrouble (i_killers):
 
     result.append(k1 if k1Count == 1 else f'{k1} Lv.2')     # Send a new list with the killers properly parsed
     result.append(k2 if k2Count == 1 else f'{k2} Lv.2')
+
+    return result
+
+# In case of 8 pages, the first value of the killers string is the pools id, but for OSC, following Kittenji's standard,
+# we need to pass 1. regular terror index, 2. the type of the killer classic, alt, 8 pages exclusive, 3. the pool's id
+# This function obtains its regular terror id
+def TerrorID8Pages(i_id, i_type, i_round):
+    result = 255
+    matched = []
+
+    matched = [i for i in gs.pools if i.type==i_round.lower().replace(' ','') and i.id==int(i_id)]
+    match i_type:
+        case '0':
+            matched = [i for i in gs.pools if i.type=='terrors' and i.value==matched[0].value]
+        case '1':
+            matched = [i for i in gs.pools if i.type=='alternates' and i.value==matched[0].value]
+    
+    result = matched[0].id if len(matched)>0 else 255
 
     return result
