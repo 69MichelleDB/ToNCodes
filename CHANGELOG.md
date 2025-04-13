@@ -3,6 +3,9 @@
 
 ## [alpha-0.7.10] -
 
+**Changes**
+- Removed `codes-folder` from config.xml.default
+- Cleaned up code and fixed references to the Codes folder.
 
 
 ## [alpha-0.7.9] - 2025.04.11

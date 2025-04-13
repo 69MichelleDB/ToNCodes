@@ -158,12 +158,11 @@ def CleanTempFiles():
 def ControlFile():
     try:
         # Make sure the Control file exists
-        filePath = os.path.join(gs.configList['codes-folder'], gs._FILE_CONTROL)
-        if not os.path.exists(filePath):
-            with open(filePath, 'w') as file:
+        if not os.path.exists(gs._FILE_CONTROL):
+            with open(gs._FILE_CONTROL, 'w') as file:
                 file.write('<?xml version="1.0" ?><Root></Root>')
 
-        return filePath
+        return gs._FILE_CONTROL
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in ControlFile: {e}")
