@@ -13,6 +13,15 @@ def ParseContent(i_content, i_fileName, i_cursor):
         logLineRegex = re.compile(r"(^\d{4}\.\d{2}\.\d{2}\s+\d{2}\:\d{2}\:\d{2})\s+\w+\s+-\s+(.+$)") # Regex to extract date and content
         lineMatch = []
 
+        # In case we either swap to a different file or ToNCodes is restarted and takes picks up where it left, this
+        # will recover the seasonal event and if the new file doesn't have an event, it should clean the previous correctly
+        if gs.currentFile!=i_fileName:
+            gs.currentFile = i_fileName
+            gs.roundEvent = ""
+            text = i_content.read()
+            gs.roundEvent = 'Winterfest' if gs.regexDict["TONWINTER"].search(text) else gs.roundEvent
+            gs.roundEvent = 'AprilFools' if gs.regexDict["TONWAPRIL"].search(text) else gs.roundEvent
+            
         # Read line by line
         i_content.seek(i_cursor)                # Move the cursor to the last read position
         while True:

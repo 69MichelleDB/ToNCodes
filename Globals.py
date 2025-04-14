@@ -55,6 +55,7 @@ _FILE_POOLS = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'pools.dat')
 _FILE_SILLYNAMES = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'silly.json')
 
 # Global variables
+titleMessage = ''
 configList = {}
 localeDict = {}
 root = None
@@ -62,7 +63,6 @@ optionsRoot = None
 TONStyles = {}
 debugBarFrame = None
 debugBarAfterID = None
-titleMessage = ''
 writingFlag = False
 wsFlag = False
 newCodeAdded = True
@@ -76,6 +76,7 @@ fileBoxChanged = False
 oscClient = None
 oscJsonProfile = None
 controlJson = {}
+currentFile = ''
 
 # Round and debugging variables
 roundEvent = ''

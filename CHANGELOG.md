@@ -4,8 +4,7 @@
 
 **Fixes**
 - Double trouble display correctly now.
-
-
+- Fix to recover the current ongoing seasonal event correctly.
 
 ## [alpha-0.7.10] - 2025.04.13
 
