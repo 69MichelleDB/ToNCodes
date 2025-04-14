@@ -4,7 +4,7 @@ from tkinter.ttk import Treeview, Scrollbar, Label, Entry, Combobox
 import os.path
 import pyperclip
 from Tools.xmlTools import ModifyNode, InitializeConfig, ModifyCode, WriteNewCode
-from Tools.fileTools import GetPossibleVRCPath2, LoadLocale, GetAllFiles, ResetConfigFile
+from Tools.fileTools import GetPossibleVRCPath2, LoadLocale, GetAllFiles, ResetConfigFile, LoadJson
 from Tools.errorHandler import ErrorLogging
 from Tools.netTools import CheckForUpdates, GetOSCProfileData, InitializeOSCClient
 from screeninfo import get_monitors
@@ -22,8 +22,9 @@ import webbrowser
 # This will apply a common theme to every element
 def ApplyStyle(i_style):
     path = os.path.join(gs._FOLDER_TOOLS,gs._FOLDER_TOOLS_THEMES,gs.configList['theme'])
-    with open(path) as file:
-        jsonFile = json.loads(file.read())
+    jsonFile = LoadJson(path)
+    # with open(path) as file:
+    #     jsonFile = json.loads(file.read())
 
     maps = {}
     for widgetStyle in jsonFile:
@@ -752,7 +753,6 @@ def CreateTreeView(i_root, i_RefreshInterval, i_RefreshCallback):
         def FillTree():
             gs.newCodeAdded = False
             gs.fileBoxChanged = False
-            # existingItems = {tree.item(item, 'values') for item in tree.get_children()}     # Get all the items in the tree in a tuple, only the values
             sortedData = sorted(gs.codesData, key=lambda x: x[1], reverse=True)             # Sort by Date
             if gs.fileBoxSelected.get() != '':                                              # Only from the selected file
                 

@@ -1,5 +1,11 @@
 # Changelog
 
+## [alpha-0.7.11] - 
+
+**Fixes**
+- Double trouble display correctly now.
+
+
 
 ## [alpha-0.7.10] - 2025.04.13
 

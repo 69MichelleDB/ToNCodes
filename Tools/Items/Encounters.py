@@ -77,7 +77,7 @@ def DecodeNote(i_input, nameOnly=False):
                         if len(matched) == 0:
                             matched = [i for i in gs.pools if i.type=='terrors' and i.id==int(killer)]
                         killers.append(matched[0].name)
-                        if roundNameFix == 'double trouble' and count == 2:        # In case of double trouble, one of the killers is there twice
+                        if roundNameFix == 'doubletrouble' and count == 2:        # In case of double trouble, one of the killers is there twice
                             killers = DoubleTrouble(killers)
                         count += 1
                         matched = []
