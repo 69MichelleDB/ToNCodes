@@ -1,6 +1,6 @@
 # Changelog
 
-## [alpha-0.7.12] - 
+## [alpha-0.7.12] - 2025.04.15
 
 **New**
 - Added OSC parameters to debug.
