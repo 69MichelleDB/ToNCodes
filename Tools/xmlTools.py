@@ -294,7 +294,7 @@ def WriteNewCode(i_codesFolder, i_fileName, i_dateTime, i_logContent, i_note):
 # Processes log file in search of data
 def PopulateCodes2(i_logFile, i_codesFolder, i_cursor):
     try:
-        cursor = int(i_cursor)
+        cursor = int(i_cursor) if i_cursor is not None else 0
 
         print('Processing modified files, extracting codes...')
         addedDates = []
