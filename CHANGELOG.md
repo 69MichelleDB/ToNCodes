@@ -2,8 +2,12 @@
 
 ## [alpha-0.7.12] - 
 
+**New**
+- Added OSC parameters to debug.
+- Added 2 more OSC parameters, Landed stuns and Failed stuns.
+
 **Fixes**
-- Reworked OSC logic.
+- Reworked OSC logic, it should work better now.
 
 ## [alpha-0.7.11] - 2025.04.14
 

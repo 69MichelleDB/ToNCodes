@@ -88,6 +88,8 @@ roundKiller = ''
 roundCondition = ''
 lastWSMessage = ''
 lastOSCMessage = ''
+roundStunsLanded = 0
+roundStunsMissed = 0
 
 # TEMP
 auxPathFirstBoot = None

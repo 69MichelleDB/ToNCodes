@@ -173,18 +173,19 @@ class OSCOrder:
 
 # We are going to make a queue of OSC calls and process them individually
 def ExecuteOSCList(i_orderList):
-    for order in i_orderList:
-        SendOSCMessage(order.attribute, order.values)
+    if gs.configList['osc-enabled'] == '1':             # Only send messages if OSC is enabled
+        for order in i_orderList:
+            if order.values is not None and OSCParamName(order.attribute)!='':
+                SendOSCMessage(order.attribute, order.values)
 
-        match order.extraOrders:            # Some orders may require extra actions like restarting some OSC variables
-            case 'diedinround':
-                DiedInRound()
-            case 'roundended':
-                RoundEnded()
-
+            match order.extraOrders:            # Some orders may require extra actions like restarting some OSC variables
+                case 'diedinround':
+                    DiedInRound()
+                case 'roundended':
+                    RoundEnded()
     return []
 
-def LaodOSCDebug(i_dict):
+def LoadOSCDebug(i_dict):
     for item in i_dict:
         value = None
         aux = i_dict[item]['values']
@@ -198,7 +199,7 @@ def LaodOSCDebug(i_dict):
             value = 0.0
         else:
             value = 255
-        if item in ['round_type','page_collected']:
+        if item in ['round_type','page_collected','landedStuns','missedStuns']:
             value = 0
         gs.oscJsonProfileDEBUG[i_dict[item]['variable'].replace('/avatar/parameters/','')] = value
 
@@ -217,7 +218,7 @@ def InitializeOSCClient(i_port, i_file):
         else:
             gs.oscJsonProfile = GetOSCProfileData(i_file)
 
-        LaodOSCDebug(gs.oscJsonProfile)
+        LoadOSCDebug(gs.oscJsonProfile)
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in InitializeClient: {e}")
@@ -236,18 +237,18 @@ def SendOSCMessage(i_variable, i_value):
             print(f"OSC: {i_variable}={i_value}")
             gs.lastOSCMessage = f"{i_variable}={i_value}"
             gs.oscClient.send_message(i_variable, i_value)  # Send the message
-            gs.oscJsonProfileDEBUG[i_variable.replace('/avatar/parameters/','')] = i_value
+            #gs.oscJsonProfileDEBUG[i_variable.replace('/avatar/parameters/','')] = i_value
+            gs.oscJsonProfileDEBUG[OSCParamName(i_variable)] = i_value
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in SendOSCMessage: {e}")
 
-
-
 def OSCParamName(i_name):
     return i_name.replace('/avatar/parameters/','')
 
+
 def DiedInRound():
-    sleep(0.5)
+    sleep(0.1)
     SendOSCMessage(gs.oscJsonProfile['TONISALIVE']['variable'], True)
 
 def RoundEnded():

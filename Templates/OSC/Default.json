@@ -140,10 +140,6 @@
       "variable": "/avatar/parameters/ToNC_ItemPickup",
       "values": 255
     },
-    "round_map_swap": {
-      "variable": "/avatar/parameters/ToNC_RoundMap",
-      "values": ""
-    },
     "round_killer1": {
       "variable": "/avatar/parameters/ToNC_Killer1",
       "values": 255
@@ -155,6 +151,10 @@
     "round_killer3": {
       "variable": "/avatar/parameters/ToNC_Killer3",
       "values": 255
+    },
+    "TONISALIVE" : {
+      "variable": "/avatar/parameters/ToNC_IsAlive",
+      "values": true
     },
     "round_lost": {
       "variable": "/avatar/parameters/ToNC_RoundVictory",
@@ -207,5 +207,13 @@
     "is_gigabyte": {
       "variable": "/avatar/parameters/ToNC_Gigabyte",
       "values": true
+    },
+    "landedStuns": {
+      "variable": "/avatar/parameters/ToNC_Stuns",
+      "values": 0
+    },
+    "failedStuns": {
+      "variable": "/avatar/parameters/ToNC_StunsMissed",
+      "values": 0
     }
 }

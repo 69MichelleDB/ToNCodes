@@ -64,6 +64,13 @@ def ParseContent(i_content, i_fileName, i_cursor):
                                 ResetRound()
                             case "TONISALIVE":
                                 OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], False, 'diedinround'))
+                            case "TONSTUN":
+                                if args[0] == 'landed':
+                                    gs.roundStunsLanded += 1
+                                    OSCorderList.append(OSCOrder(key, gs.oscJsonProfile['landedStuns']['variable'], gs.roundStunsLanded))
+                                elif args[0] == 'failed':
+                                    gs.roundStunsMissed += 1
+                                    OSCorderList.append(OSCOrder(key, gs.oscJsonProfile['failedStuns']['variable'], gs.roundStunsMissed))
                             case "opt_in":                              # Player joins the game
                                 gs.roundNotJoined = 1
                                 OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], gs.oscJsonProfile[key]['values']))

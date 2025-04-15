@@ -207,5 +207,13 @@
     "is_gigabyte": {
       "variable": "/avatar/parameters/ToN_EncounterGBS",
       "values": true
+    },
+    "landedStuns": {
+      "variable": "/avatar/parameters/",
+      "values": 0
+    },
+    "failedStuns": {
+      "variable": "/avatar/parameters/",
+      "values": 0
     }
 }

@@ -208,6 +208,7 @@ def RegexCheck():
             gs.regexDict["TONWAPRIL"]=re.compile(r"^silly!$")
             gs.regexDict["TONISALIVE"]=re.compile(r"^You died.$")
             gs.regexDict["TONMONARC"]=re.compile(r"^oh shit here comes Monarch...$")
+            gs.regexDict["TONSTUN"]=re.compile(r"^.+\s(landed|failed) a stun!$")
             print("Regex loaded")
         else:
             print(f"Failed to retrieve regex data. Status code: {response.status_code}")
