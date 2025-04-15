@@ -13,7 +13,7 @@
     },
     "round_map": {
       "variable": "/avatar/parameters/ToN_Map",
-      "values": ""
+      "values": 255
     },
     "round_type": {
       "variable": "/avatar/parameters/ToN_RoundType",
@@ -140,29 +140,29 @@
       "variable": "/avatar/parameters/ToN_Item",
       "values": 255
     },
-    "round_map_swap": {
-      "variable": "/avatar/parameters/ToN_Map",
-      "values": ""
-    },
     "round_killer1": {
       "variable": "/avatar/parameters/ToN_Terror1",
-      "values": ""
+      "values": 255
     },
     "round_killer2": {
       "variable": "/avatar/parameters/ToN_Terror2",
-      "values": ""
+      "values": 255
     },
     "round_killer3": {
       "variable": "/avatar/parameters/ToN_Terror3",
-      "values": ""
+      "values": 255
+    },
+    "TONISALIVE" : {
+      "variable": "/avatar/parameters/ToN_IsAlive",
+      "values": true
     },
     "round_lost": {
-      "variable": "/avatar/parameters/ToN_IsAlive",
+      "variable": "/avatar/parameters/ToN_IsStarted",
       "values": false
     },
     "round_won": {
-      "variable": "/avatar/parameters/ToN_IsAlive",
-      "values": true
+      "variable": "/avatar/parameters/ToN_IsStarted",
+      "values": false
     },
     "round_possessed": {
       "variable": "/avatar/parameters/ToN_Saboteur",
@@ -170,7 +170,7 @@
     },
     "page_collected": {
       "variable": "/avatar/parameters/ToN_Pages",
-      "values": ""
+      "values": 0
     },
     "is_joy_asleep": {
       "variable": "/avatar/parameters/ToN_EncounterIJA",

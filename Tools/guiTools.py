@@ -23,8 +23,6 @@ import webbrowser
 def ApplyStyle(i_style):
     path = os.path.join(gs._FOLDER_TOOLS,gs._FOLDER_TOOLS_THEMES,gs.configList['theme'])
     jsonFile = LoadJson(path)
-    # with open(path) as file:
-    #     jsonFile = json.loads(file.read())
 
     maps = {}
     for widgetStyle in jsonFile:
@@ -838,10 +836,10 @@ def DebugBar(i_root):
         gs.debugBarFrame = tk.Frame(i_root, **gs.TONStyles['frameDebug'])
         gs.debugBarFrame.pack(side=tk.BOTTOM, fill=tk.X)
 
-        heightT = 2
+        heightT = 13
         if 'debug-ws' in gs.configList:
             if gs.configList['debug-ws']=='1':
-                heightT = 3
+                heightT = 14
         text = tk.Text(gs.debugBarFrame, wrap=tk.WORD, height=heightT, **gs.TONStyles['debugText'])
         text.pack(fill=tk.X, expand=True)
         
@@ -863,10 +861,24 @@ def DebugBar(i_root):
             auxWS = ''
             if 'debug-ws' in gs.configList:
                 if gs.configList['debug-ws']=='1':
-                    auxWS = "\n" + gs.lastWSMessage
+                    auxWS = gs.lastWSMessage + "\n" 
+
+            oscdebug = ''
+            i = 0
+            for item in gs.oscJsonProfileDEBUG:
+                oscdebug += f"{item} = {gs.oscJsonProfileDEBUG[item]}"
+                if i%2==0:
+                    oscdebug += '\t\t'
+                elif len(gs.oscJsonProfileDEBUG)-1>i:
+                    oscdebug += '\n'
+                else:
+                    oscdebug += ''
+                i += 1
+            
             text.insert(tk.END, f"{datetime.datetime.now().strftime("%H:%M:%S")} {gs.roundEvent} {currentMap} {gs.roundType} {killer} {gs.roundCondition}\n" \
-                                f"{gs.lastOSCMessage}" \
-                                f"{auxWS}")
+                                f"{gs.lastOSCMessage}\n" \
+                                f"{auxWS}" \
+                                f"{oscdebug}")
             text.config(state=tk.DISABLED)  # Disable edits in the text box
             gs.debugBarAfterID = gs.root.after(gs._DEBUG_REFRESH, DebugBarRefresh)
 

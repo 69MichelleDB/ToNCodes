@@ -1,7 +1,7 @@
 import os.path
 
 # Constants
-_VERSION = 'alpha-0.7.11'
+_VERSION = 'alpha-0.7.12'
 _TITLE = f"ToNCodes {_VERSION} - by MichelleDB"
 _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
 _WSURL = "localhost"
@@ -74,7 +74,8 @@ codesData = []
 fileBoxSelected = ''
 fileBoxChanged = False
 oscClient = None
-oscJsonProfile = None
+oscJsonProfile = {}
+oscJsonProfileDEBUG = {}
 controlJson = {}
 currentFile = ''
 

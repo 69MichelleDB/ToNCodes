@@ -13,7 +13,7 @@
     },
     "round_map": {
       "variable": "/avatar/parameters/ToNC_RoundMap",
-      "values": ""
+      "values": 255
     },
     "round_type": {
       "variable": "/avatar/parameters/ToNC_RoundType",
@@ -146,15 +146,15 @@
     },
     "round_killer1": {
       "variable": "/avatar/parameters/ToNC_Killer1",
-      "values": ""
+      "values": 255
     },
     "round_killer2": {
       "variable": "/avatar/parameters/ToNC_Killer2",
-      "values": ""
+      "values": 255
     },
     "round_killer3": {
       "variable": "/avatar/parameters/ToNC_Killer3",
-      "values": ""
+      "values": 255
     },
     "round_lost": {
       "variable": "/avatar/parameters/ToNC_RoundVictory",
@@ -170,7 +170,7 @@
     },
     "page_collected": {
       "variable": "/avatar/parameters/ToNC_PagesCollected",
-      "values": ""
+      "values": 0
     },
     "is_joy_asleep": {
       "variable": "/avatar/parameters/ToNC_JoyAsleep",

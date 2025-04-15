@@ -1,7 +1,7 @@
 import Globals as gs
 import re
 from Tools.errorHandler import ErrorLogging
-from Tools.netTools import SendWSMessage, OSCOrder, ExecuteOSCList, SendOSCMessage, ResetRoundOSC, NewRound
+from Tools.netTools import SendWSMessage, OSCOrder, ExecuteOSCList, SendOSCMessage
 from Tools.Items.Encounters import TerrorID8Pages
 import asyncio
 
@@ -62,15 +62,17 @@ def ParseContent(i_content, i_fileName, i_cursor):
                                 else:
                                     print("There was no round condition, code wasn't saved.")
                                 ResetRound()
+                            case "TONISALIVE":
+                                OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], False, 'diedinround'))
                             case "opt_in":                              # Player joins the game
                                 gs.roundNotJoined = 1
                                 OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], gs.oscJsonProfile[key]['values']))
                             case "opt_out":                             # Opting out means they respawned
                                 gs.roundNotJoined = -1
                                 gs.roundCondition = 'RESPAWN'
-                                OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], gs.oscJsonProfile[key]['values'], 'resetRound'))
+                                OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], gs.oscJsonProfile[key]['values']))
                             case "round_start":
-                                OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], gs.oscJsonProfile[key]['values'], 'newRound'))
+                                OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], gs.oscJsonProfile[key]['values']))
                             case "round_map":
                                 gs.roundMap = f"{args[0]} ({args[1]})"
                                 gs.roundType = args[2]
@@ -82,16 +84,21 @@ def ParseContent(i_content, i_fileName, i_cursor):
                                 if args[3] != '':       # I found a case with an 8 pages where the game returned an empty round with other killers before the round ended
                                     gs.roundKiller = f"{args[0]} {args[1]} {args[2]}"
                                     gs.roundType = args[3]
-                                    if args[3] != '8 Pages':
-                                        OSCorderList.append(OSCOrder('round_killer1', gs.oscJsonProfile['round_killer1']['variable'], int(args[0])))
-                                        OSCorderList.append(OSCOrder('round_killer2', gs.oscJsonProfile['round_killer2']['variable'], int(args[1])))
-                                        OSCorderList.append(OSCOrder('round_killer3', gs.oscJsonProfile['round_killer3']['variable'], int(args[2])))
-                                    else:
+                                    if args[3] == '8 Pages':
                                         # In case of 8 pages what value goes into each killer number for OSC changes
                                         result = TerrorID8Pages(args[0], args[1], args[3])
                                         OSCorderList.append(OSCOrder('round_killer1', gs.oscJsonProfile['round_killer1']['variable'], result))
                                         OSCorderList.append(OSCOrder('round_killer2', gs.oscJsonProfile['round_killer2']['variable'], int(args[1])))
                                         OSCorderList.append(OSCOrder('round_killer3', gs.oscJsonProfile['round_killer3']['variable'], int(args[0])))
+                                    elif args[3] not in ['Midnight','Bloodbath','Double Trouble','EX','Unbound']:
+                                        OSCorderList.append(OSCOrder('round_killer1', gs.oscJsonProfile['round_killer1']['variable'], int(args[0])))
+                                    elif args[3] in ['Midnight','Bloodbath','Double Trouble','EX','Unbound']:
+                                        if args[3] == 'Midnight' and args[2] == '19':   # Check for Monarch
+                                            OSCorderList.append(OSCOrder('round_killer3', gs.oscJsonProfile['round_killer3']['variable'], int(args[2])))
+                                        else: 
+                                            OSCorderList.append(OSCOrder('round_killer1', gs.oscJsonProfile['round_killer1']['variable'], int(args[0])))
+                                            OSCorderList.append(OSCOrder('round_killer2', gs.oscJsonProfile['round_killer2']['variable'], int(args[1])))
+                                            OSCorderList.append(OSCOrder('round_killer3', gs.oscJsonProfile['round_killer3']['variable'], int(args[2])))
                                     OSCorderList.append(OSCOrder('round_type', gs.oscJsonProfile['round_type']['variable'], gs.oscJsonProfile['round_type']['values'][args[3]]))
                             case "round_unknown":
                                 print('round_unknown placeholder')
@@ -118,10 +125,10 @@ def ParseContent(i_content, i_fileName, i_cursor):
                                 OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], gs.oscJsonProfile[key]['values']))
                             case "round_won":
                                 gs.roundCondition = 'WIN'
-                                OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], gs.oscJsonProfile[key]['values'], 'resetRound'))
+                                OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], gs.oscJsonProfile[key]['values'], 'roundended'))
                             case "round_lost":
                                 gs.roundCondition = 'LOSE'
-                                OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], gs.oscJsonProfile[key]['values'], 'resetRound'))
+                                OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], gs.oscJsonProfile[key]['values'], 'roundended'))
                                 ResetRound()
                             case "item_pickup":
                                 if args[0] in gs.oscJsonProfile[key]['values']:     # First check if the item exists, that list is not refined yet and new items may enter

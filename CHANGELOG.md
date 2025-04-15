@@ -1,5 +1,10 @@
 # Changelog
 
+## [alpha-0.7.12] - 
+
+**Fixes**
+- Reworked OSC logic.
+
 ## [alpha-0.7.11] - 2025.04.14
 
 **Fixes**

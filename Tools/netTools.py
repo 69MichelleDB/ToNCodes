@@ -5,6 +5,7 @@ import webbrowser
 import asyncio
 import websockets
 import json
+from time import sleep
 from tkinter import messagebox
 from Tools.fileTools import CreateNewTempCodeFile, GetAllFiles
 from Tools.errorHandler import ErrorLogging
@@ -176,11 +177,30 @@ def ExecuteOSCList(i_orderList):
         SendOSCMessage(order.attribute, order.values)
 
         match order.extraOrders:            # Some orders may require extra actions like restarting some OSC variables
-            case 'resetRound':
-                ResetRoundOSC()
-            case 'newRound':
-                NewRound()
+            case 'diedinround':
+                DiedInRound()
+            case 'roundended':
+                RoundEnded()
+
     return []
+
+def LaodOSCDebug(i_dict):
+    for item in i_dict:
+        value = None
+        aux = i_dict[item]['values']
+        if isinstance(aux, bool):
+            value = False
+        elif isinstance(aux, int):
+            value = 255
+        elif isinstance(aux, str):
+            value = ""
+        elif isinstance(aux, float):
+            value = 0.0
+        else:
+            value = 255
+        if item in ['round_type','page_collected']:
+            value = 0
+        gs.oscJsonProfileDEBUG[i_dict[item]['variable'].replace('/avatar/parameters/','')] = value
 
 # Initialize the OSC client
 def InitializeOSCClient(i_port, i_file):
@@ -196,6 +216,8 @@ def InitializeOSCClient(i_port, i_file):
             gs.oscJsonProfile = GetOSCProfileData(gs.configList['osc-profile'])
         else:
             gs.oscJsonProfile = GetOSCProfileData(i_file)
+
+        LaodOSCDebug(gs.oscJsonProfile)
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in InitializeClient: {e}")
@@ -213,31 +235,51 @@ def SendOSCMessage(i_variable, i_value):
                 InitializeOSCClient(gs.configList['osc-in-port'], gs.configList['osc-profile'])
             print(f"OSC: {i_variable}={i_value}")
             gs.lastOSCMessage = f"{i_variable}={i_value}"
-            gs.oscClient.send_message(i_variable, i_value)
+            gs.oscClient.send_message(i_variable, i_value)  # Send the message
+            gs.oscJsonProfileDEBUG[i_variable.replace('/avatar/parameters/','')] = i_value
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in SendOSCMessage: {e}")
 
 
-def ResetRoundOSC():
-    SendOSCMessage(gs.oscJsonProfile['round_start']['variable'], False)
-    SendOSCMessage(gs.oscJsonProfile['round_won']['variable'], True)
 
-def NewRound():
+def OSCParamName(i_name):
+    return i_name.replace('/avatar/parameters/','')
+
+def DiedInRound():
+    sleep(0.5)
+    SendOSCMessage(gs.oscJsonProfile['TONISALIVE']['variable'], True)
+
+def RoundEnded():
     SendOSCMessage(gs.oscJsonProfile['round_map']['variable'], 255)
-    SendOSCMessage(gs.oscJsonProfile['round_type']['variable'], 255)
-    SendOSCMessage(gs.oscJsonProfile['round_killer1']['variable'], 255)
-    SendOSCMessage(gs.oscJsonProfile['round_killer2']['variable'], 255)
-    SendOSCMessage(gs.oscJsonProfile['round_killer3']['variable'], 255)
+    SendOSCMessage(gs.oscJsonProfile['round_type']['variable'], 0)
 
-    SendOSCMessage(gs.oscJsonProfile['round_possessed']['variable'], False)
-    SendOSCMessage(gs.oscJsonProfile['page_collected']['variable'], 255)
-    SendOSCMessage(gs.oscJsonProfile['is_joy_asleep']['variable'], False)
-    SendOSCMessage(gs.oscJsonProfile['is_joy_awake']['variable'], False)
-    SendOSCMessage(gs.oscJsonProfile['is_glorbo']['variable'], False)
-    SendOSCMessage(gs.oscJsonProfile['is_wild_yet_bloodthirsty_creature']['variable'], False)
-    SendOSCMessage(gs.oscJsonProfile['is_atrached']['variable'], False)
-    SendOSCMessage(gs.oscJsonProfile['is_hungry_home_invader']['variable'], False)
-    SendOSCMessage(gs.oscJsonProfile['is_meatball_man']['variable'], False)
-    SendOSCMessage(gs.oscJsonProfile['is_foxy']['variable'], False)
-    SendOSCMessage(gs.oscJsonProfile['is_gigabyte']['variable'], False)
+    if gs.oscJsonProfileDEBUG[OSCParamName(gs.oscJsonProfile['round_killer1']['variable'])]!=255:
+        SendOSCMessage(gs.oscJsonProfile['round_killer1']['variable'], 255)
+    if gs.oscJsonProfileDEBUG[OSCParamName(gs.oscJsonProfile['round_killer2']['variable'])]!=255:
+        SendOSCMessage(gs.oscJsonProfile['round_killer2']['variable'], 255)
+    if gs.oscJsonProfileDEBUG[OSCParamName(gs.oscJsonProfile['round_killer3']['variable'])]!=255:
+        SendOSCMessage(gs.oscJsonProfile['round_killer3']['variable'], 255)
+
+    if gs.oscJsonProfileDEBUG[OSCParamName(gs.oscJsonProfile['round_possessed']['variable'])]!=False:
+        SendOSCMessage(gs.oscJsonProfile['round_possessed']['variable'], False)
+    if gs.oscJsonProfileDEBUG[OSCParamName(gs.oscJsonProfile['page_collected']['variable'])]!=0:
+        SendOSCMessage(gs.oscJsonProfile['page_collected']['variable'], 0)
+    if gs.oscJsonProfileDEBUG[OSCParamName(gs.oscJsonProfile['is_joy_asleep']['variable'])]!=False:
+        SendOSCMessage(gs.oscJsonProfile['is_joy_asleep']['variable'], False)
+    if gs.oscJsonProfileDEBUG[OSCParamName(gs.oscJsonProfile['is_joy_awake']['variable'])]!=False:
+        SendOSCMessage(gs.oscJsonProfile['is_joy_awake']['variable'], False)
+    if gs.oscJsonProfileDEBUG[OSCParamName(gs.oscJsonProfile['is_glorbo']['variable'])]!=False:
+        SendOSCMessage(gs.oscJsonProfile['is_glorbo']['variable'], False)
+    if gs.oscJsonProfileDEBUG[OSCParamName(gs.oscJsonProfile['is_wild_yet_bloodthirsty_creature']['variable'])]!=False:
+        SendOSCMessage(gs.oscJsonProfile['is_wild_yet_bloodthirsty_creature']['variable'], False)
+    if gs.oscJsonProfileDEBUG[OSCParamName(gs.oscJsonProfile['is_atrached']['variable'])]!=False:
+        SendOSCMessage(gs.oscJsonProfile['is_atrached']['variable'], False)
+    if gs.oscJsonProfileDEBUG[OSCParamName(gs.oscJsonProfile['is_hungry_home_invader']['variable'])]!=False:
+        SendOSCMessage(gs.oscJsonProfile['is_hungry_home_invader']['variable'], False)
+    if gs.oscJsonProfileDEBUG[OSCParamName(gs.oscJsonProfile['is_meatball_man']['variable'])]!=False:
+        SendOSCMessage(gs.oscJsonProfile['is_meatball_man']['variable'], False)
+    if gs.oscJsonProfileDEBUG[OSCParamName(gs.oscJsonProfile['is_foxy']['variable'])]!=False:
+        SendOSCMessage(gs.oscJsonProfile['is_foxy']['variable'], False)
+    if gs.oscJsonProfileDEBUG[OSCParamName(gs.oscJsonProfile['is_gigabyte']['variable'])]!=False:
+        SendOSCMessage(gs.oscJsonProfile['is_gigabyte']['variable'], False)
