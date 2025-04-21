@@ -4,7 +4,19 @@
     "Horizontal-Menu-Updates" : "Check for updates...",
     "Horizontal-Menu-Exit" : "Exit",
     "Horizontal-Menu-File" : "File",
+    "Horizontal-Menu-Archipelago" : "Archipelago",
     "Horizontal-Menu-About" : "About",
+
+    "Archipelago-Title" : "Archipelago",
+    "AP-NewGame-Button" : "New game",
+    "AP-DeleteGame-Button" : "Delete",
+    "AP-ContinueGame-Button" : "Connect",
+    "AP-DisconnectGame-Button" : "Disconnect",
+    "AP-ServerGame-Label" : "Server",
+    "AP-UserName-Label" : "Player slot",
+    "AP-PassGame-Label" : "Password",
+    "AP-RepeatedFolder-Head" : "Repeated name",
+    "AP-RepeatedFolder-Body" : "You're trying to create a new Archipelago run with the same name {name}, please delete it if you want to reuse the name.",
 
     "About-Title" : "About",
     

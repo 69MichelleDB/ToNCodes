@@ -1,7 +1,7 @@
 import os.path
 
 # Constants
-_VERSION = 'alpha-0.7.12'
+_VERSION = 'alpha-0.8.0'
 _TITLE = f"ToNCodes {_VERSION} - by MichelleDB"
 _GITHUB = 'https://github.com/69MichelleDB/ToNCodes'
 _WSURL = "localhost"
@@ -11,6 +11,7 @@ _DEBUG_REFRESH = 200
 _OSCURL = "127.0.0.1"
 _PLS = 'pools.json'
 _RX = 'regex.json'
+_AP_VERSION = '0.6.1'
 
 # Main window
 _WIDTH = 650
@@ -36,6 +37,10 @@ _HEIGHT_DEBUG = 300
 _WIDTH_OSCPARAM = 450
 _HEIGHT_OSCPARAM = 500
 
+# AP window
+_WIDTH_AP = 430
+_HEIGHT_AP = 700
+
 # Folders
 _FOLDER_CODES = 'Codes'
 _FOLDER_LOGS = 'Logs'
@@ -46,6 +51,7 @@ _FOLDER_TOOLS_ITEMS = 'Items'
 _FOLDER_TOOLS_THEMES = 'Themes'
 _FOLDER_TOOLS_THEMES_ASSETS = 'Assets'
 _FOLDER_OSC= 'OSC'
+_FOLDER_AP= 'Archipelago_logs'
 
 # Files
 _FILE_CONFIG = 'config.xml'
@@ -53,6 +59,7 @@ _FILE_CONTROLJSON = os.path.join(_FOLDER_CODES, 'control.json')
 _FILE_FALLBACKOSCPROFILE = os.path.join(_FOLDER_TEMPLATES,_FOLDER_OSC,'ToNSM-Standard.json')
 _FILE_POOLS = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'pools.dat')
 _FILE_SILLYNAMES = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'silly.json')
+_FILE_AP_INDEX= 'index.json'
 
 # Global variables
 titleMessage = ''
@@ -78,6 +85,8 @@ oscJsonProfile = {}
 oscJsonProfileDEBUG = {}
 controlJson = {}
 currentFile = ''
+APfolder = ''
+APThread = None
 
 # Round and debugging variables
 roundEvent = ''

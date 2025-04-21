@@ -12,6 +12,7 @@ import json
 import vdf
 import Tools.Items.Encounters as agent
 import requests
+import shutil
 from Tools.middlePass import ModifyNode_Call
 
 # Verify all folders and files are there
@@ -300,3 +301,19 @@ def GetAllFiles(i_path, i_file='*', i_absolutePath=False):
     except Exception as e:
         print(e)
         ErrorLogging(f"Error in GetAllThemes: {e}")
+
+def GetAllFolders(i_path):
+    try:
+        result = [folder for folder in os.listdir(i_path) if os.path.isdir(os.path.join(i_path, folder))]
+        result = sorted(result, key=lambda x: x[0])
+        return result
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in GetAllFolders: {e}")
+
+def DeleteFolder(i_path):
+    try:
+        shutil.rmtree(i_path)
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in DeleteFolder: {e}")

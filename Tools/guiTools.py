@@ -4,7 +4,7 @@ from tkinter.ttk import Treeview, Scrollbar, Label, Entry, Combobox
 import os.path
 import pyperclip
 from Tools.xmlTools import ModifyNode, InitializeConfig, ModifyCode, WriteNewCode
-from Tools.fileTools import GetPossibleVRCPath2, LoadLocale, GetAllFiles, ResetConfigFile, LoadJson
+from Tools.fileTools import GetPossibleVRCPath2, LoadLocale, GetAllFiles, GetAllFolders, ResetConfigFile, SaveJson, LoadJson, DeleteFolder
 from Tools.errorHandler import ErrorLogging
 from Tools.netTools import CheckForUpdates, GetOSCProfileData, InitializeOSCClient
 from screeninfo import get_monitors
@@ -17,6 +17,8 @@ import json
 import re
 import sys
 import webbrowser
+from Tools.archiTools import StartAP, stop_thread
+import threading
 
 
 # This will apply a common theme to every element
@@ -614,8 +616,8 @@ def CreateAboutWindow():
         aboutRoot.geometry(f'{gs._WIDTH_ABOUT}x{gs._HEIGHT_ABOUT}+{auxX}+{auxY}')
         # Modal stuff
         aboutRoot.grab_set()
-        aboutRoot.transient()
-        aboutRoot.wait_visibility()
+        aboutRoot.transient(gs.root)
+        #aboutRoot.wait_visibility()
 
         frameAbout = tk.Frame(aboutRoot)
         frameAbout.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
@@ -651,6 +653,154 @@ def CreateAboutWindow():
         print(e)
         ErrorLogging(f"Error in CreateAboutWindow: {e}")
 
+
+# region Archipelago Win
+def CreateAPWindow():
+    class APfile:
+        def __init__ (self, i_folder, i_server, i_slotName, i_passw):
+            self.folder = i_folder
+            self.server = i_server
+            self.slotName = i_slotName
+            self.passw = i_passw
+
+        def to_dict(self):
+            return {
+                "folder": self.folder,
+                "server": self.server,
+                "slotName": self.slotName,
+                "passw": self.passw
+            }
+
+    try:
+        # Window creation
+        apRoot = CreateWindow(gs.localeDict['Archipelago-Title'], gs._WIDTH_AP, gs._HEIGHT_AP, False, True, gs.root)
+        auxX,auxY = CalculatePosition(gs._WIDTH_AP, gs._HEIGHT_AP)
+        apRoot.geometry(f'{gs._WIDTH_AP}x{gs._HEIGHT_AP}+{auxX}+{auxY}')
+        # Modal stuff
+        apRoot.grab_set()
+        apRoot.transient(gs.root)
+        #apRoot.wait_visibility()
+
+        frameAP = tk.Frame(apRoot)
+        frameAP.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
+
+        # Set weights so they take the window
+        apRoot.grid_columnconfigure(0, weight=1)
+        frameAP.grid_columnconfigure(0, weight=1)
+        frameAP.grid_columnconfigure(1, weight=1)
+        frameAP.grid_columnconfigure(2, weight=1)
+        frameAP.grid_rowconfigure(0, weight=1)
+        frameAP.grid_rowconfigure(1, weight=1)
+        frameAP.grid_rowconfigure(2, weight=1)
+        frameAP.grid_rowconfigure(3, weight=1)
+        frameAP.grid_rowconfigure(4, weight=1)
+
+        def RefreshList():
+            combobox['values'] = GetAllFolders(gs._FOLDER_AP)
+
+        # Combo saved games
+        gs.APfolder = tk.StringVar()
+        combobox = Combobox(frameAP, values=[], state='normal', textvariable=gs.APfolder)
+        RefreshList()
+        combobox.grid(row=0, columnspan=3, padx=5, pady=5, sticky='ew')
+
+        def on_value_change(self):
+            jsondata = LoadJson(os.path.join(gs._FOLDER_AP, gs.APfolder.get(), gs._FILE_AP_INDEX))
+            textAPServerVar.set(jsondata['server'])
+            textAPUserVar.set(jsondata['slotName'])
+            textAPPassVar.set(jsondata['passw'])
+
+        combobox.bind('<<ComboboxSelected>>', on_value_change)
+
+
+        # Label
+        labelAPServer = Label(frameAP, text=gs.localeDict['AP-ServerGame-Label'])
+        labelAPServer.grid(row=1, column=0, padx=5, pady=5, sticky='w')
+        # Textbox
+        textAPServerVar = tk.StringVar()
+        textAPServerVar.set('archipelago.gg:12345')
+        textAPServer = Entry(frameAP, textvariable=textAPServerVar)
+        textAPServer.grid(row=1, column=1, padx=5, pady=5, sticky='ew')
+
+        # Label
+        labelAPUser = Label(frameAP, text=gs.localeDict['AP-UserName-Label'])
+        labelAPUser.grid(row=2, column=0, padx=5, pady=5, sticky='w')
+        # Textbox
+        textAPUserVar = tk.StringVar()
+        textAPUser = Entry(frameAP, textvariable=textAPUserVar)
+        textAPUser.grid(row=2, column=1, padx=5, pady=5, sticky='ew')
+
+        # Label
+        labelAPPass = Label(frameAP, text=gs.localeDict['AP-PassGame-Label'])
+        labelAPPass.grid(row=3, column=0, padx=5, pady=5, sticky='w')
+        # Textbox
+        textAPPassVar = tk.StringVar()
+        textAPPass = Entry(frameAP, textvariable=textAPPassVar)
+        textAPPass.grid(row=3, column=1, padx=5, pady=5, sticky='ew')
+
+        def NewGame():
+            print("New AP game...")
+            folderName = gs.APfolder.get()
+            serverName = textAPServerVar.get()
+            slotName = textAPUserVar.get()
+            password = textAPPassVar.get()
+            obj = APfile(folderName, serverName, slotName, password)
+            if not os.path.exists(folderName):
+                os.mkdir(os.path.join(gs._FOLDER_AP, folderName))
+                SaveJson(os.path.join(gs._FOLDER_AP, folderName, gs._FILE_AP_INDEX), obj.to_dict())
+                RefreshList()
+            else:
+                messagebox.showerror(gs.localeDict['AP-RepeatedFolder-Head'], gs.localeDict['AP-RepeatedFolder-Body'].format(name=folderName))
+        def DeleteGame():
+            print("Delete AP game...")
+            if os.path.exists(os.path.join(gs._FOLDER_AP, gs.APfolder.get())):
+                DeleteFolder(os.path.join(gs._FOLDER_AP, gs.APfolder.get()))
+                RefreshList()
+                gs.APfolder.set('')
+                textAPServerVar.set('')
+                textAPUserVar.set('')
+                textAPPassVar.set('')
+
+        def ContinueGame():
+            print("Continue AP game...")
+            serverName = textAPServerVar.get()
+            slotName = textAPUserVar.get()
+            password = textAPPassVar.get()
+            gs.APThread = threading.Thread(target=StartAP, args=(os.path.join(gs._FOLDER_AP, gs.APfolder.get()), serverName, slotName, password))
+            gs.APThread.daemon = True
+            gs.APThread.start()
+            DisconnectGameButton.grid(row=4, column=2, padx=5, pady=5, sticky='ew')
+            ContinueGameButton.grid_remove()
+
+        def DisconnectGame():
+            print("Disconnect AP game...")
+            stop_thread()
+            gs.APThread.join()
+            ContinueGameButton.grid(row=4, column=2, padx=5, pady=5, sticky='ew')
+            DisconnectGameButton.grid_remove()
+
+        # Buttons
+        NewGameButton = tk.Button(frameAP, text=gs.localeDict['AP-NewGame-Button'], command=NewGame, **gs.TONStyles['buttons'])
+        NewGameButton.grid(row=4, column=0, padx=5, pady=5, sticky='ew')
+        DeleteGameButton = tk.Button(frameAP, text=gs.localeDict['AP-DeleteGame-Button'], command=DeleteGame, **gs.TONStyles['buttons'])
+        DeleteGameButton.grid(row=4, column=1, padx=5, pady=5, sticky='ew')
+        ContinueGameButton = tk.Button(frameAP, text=gs.localeDict['AP-ContinueGame-Button'], command=ContinueGame, **gs.TONStyles['buttons'])
+        ContinueGameButton.grid(row=4, column=2, padx=5, pady=5, sticky='ew')
+        DisconnectGameButton = tk.Button(frameAP, text=gs.localeDict['AP-DisconnectGame-Button'], command=DisconnectGame, **gs.TONStyles['buttons'])
+        #DisconnectGameButton.grid(row=4, column=2, padx=5, pady=5, sticky='ew')
+
+        # Text
+        bgColor = apRoot.cget("bg")  # Get the default background color of the window
+        textAP = tk.Text(frameAP, wrap=tk.WORD, state=tk.DISABLED, **gs.TONStyles['ap'])
+        textAP.insert(tk.END,'Here goes the ws text...')
+        textAP.grid(row=5, columnspan=3, padx=5, pady=5, sticky='ew')
+
+        apRoot.wait_window()
+
+    except Exception as e:
+        print(e)
+        ErrorLogging(f"Error in CreateAPWindow: {e}")
+
 # region Main Win
 
 # H-Menu
@@ -675,6 +825,9 @@ def HorizontalMenu(i_root):
             menu=fileMenu,
             underline=0
         )
+
+        # Archipelago
+        menubar.add_command(label=gs.localeDict['Horizontal-Menu-Archipelago'],  command=CreateAPWindow)
 
         # About...
         menubar.add_command(label=gs.localeDict['Horizontal-Menu-About'],  command=CreateAboutWindow)

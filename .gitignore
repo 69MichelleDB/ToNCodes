@@ -13,6 +13,9 @@ Tools/OSC/*
 
 Tools/Items/pools.dat
 
+Archipelago_logs/*
+!Archipelago_logs/hi.txt
+
 config*
 !Templates/config.xml.default
 *.old
