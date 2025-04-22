@@ -2,10 +2,10 @@
 
 ## Intro
 
-Terrors of Nowhere by Beyond is a VRChat horror world where you and other players try to survive different monsters for a period of time. Your progress gets stored as codes that you can copy and paste whenever you want to restore your session. ToNCodes automates the process of storing those codes as they generate within VRChat's logs.
+[Terrors of Nowhere by Beyond](https://vrchat.com/home/world/wrld_a61cdabe-1218-4287-9ffc-2a4d1414e5bd) is a VRChat world where you and other players try to survive different creatures for a period of time. Every win grants you a quantity of Enkephalin (Eph) and +1 Survival Point (SP), exchange your Eph for tools to improve your odds and unlock new permanent items the more SP you have. Your progress gets stored as codes that you can copy and paste whenever you want to restore your session (things that carry over: your Index, SP, stats and achievements). ToNCodes automates the process of storing those codes as they generate within VRChat's logs.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/23bd925c-a4df-483b-8475-d96b8739265e" />
+  <img src="https://github.com/user-attachments/assets/904c01e6-b3cb-4ea0-bb7c-5a7b88869f94" />
 </p>
 
 Since there was no available solutions for Linux, this started as a personal application to store all Terrors of Nowhere codes generated while playing. I'm not working on it with the intention to replace any existing solutions made for the public, it's mostly an excuse for me to mess with Python and because I believe having multiple choices is always good. You are welcome to use it if you please.
@@ -13,8 +13,29 @@ Since there was no available solutions for Linux, this started as a personal app
 If you find any bugs or want to make suggestions, please open a new issue or let me know on [Discord](https://discord.com/channels/983240485529337856/1340340722011734169).
 
 ## IMPORTANT WARNING
-
+> [!CAUTION]  
 This tool is currently in alpha stages and in development, so expect instability and bugs. I'd suggest keeping backups of at least the `Codes` folder where all the xml files are inside the app's folder.
+
+## Archipelago
+
+[What is Archipelago?](https://archipelago.gg/) In summary, you and multiple people randomize different games (worlds) and all items get shuffled across all worlds, you might find someone's Zelda Triforce piece and someone might find your Speed coil.
+
+Currently this is a very early and unoptimized version to gather interest and opinions, there's a lot of work to do. The AP client isn't feature complete yet.
+
+**Note:** We don't have direct access to the game and we can't lock your items, so you'll have to follow the tracker to know what you can and can't use.
+
+At the start all you items are locked and they'll be randomized between all worlds.
+
+Encountering a new place or a new terror will counts as a check, your victory condition is finding a certain ammount of Terrors, Alternates, Unbounds, Locations and Moons.
+
+**Getting started**
+WIP
+
+__Currently working on:__
+- Making AP Client compatible with current Websocket integration.
+- Scrolling client log
+- List of unlocked items
+
 
 ## Notes
 

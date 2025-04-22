@@ -6,6 +6,25 @@ on:
       - main
 
 jobs:
+  apworld-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository           # Clone rep
+        uses: actions/checkout@v4
+
+      - name: Run AP Script        # Compiler script
+        run: |
+          mv ./.github/scripts/.apworld.sh ./.apworld.sh
+          chmod +x ./.apworld.sh
+          ./.apworld.sh
+
+      - name: Save AP Artifacts          # Save the results 
+        uses: actions/upload-artifact@v4
+        with:
+          name: ToNCodes-apworld
+          path: |
+            terrors_of_nowhere.apworld
+
   linux-build:
     runs-on: ubuntu-latest
     steps:
