@@ -23,7 +23,7 @@ jobs:
         with:
           name: ToNCodes-apworld
           path: |
-            terrors_of_nowhere.apworld
+            apworld/terrors_of_nowhere.apworld
 
   linux-build:
     runs-on: ubuntu-latest
