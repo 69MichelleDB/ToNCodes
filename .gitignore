@@ -26,3 +26,7 @@ BuildBin/*
 
 ignore-*
 *-test*
+
+AutoWorld.py
+BaseClasses.py
+MoveApWorld-ignore.sh
