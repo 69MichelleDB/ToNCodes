@@ -93,12 +93,17 @@ def ParseContent(i_content, i_fileName, i_cursor):
                                     OSCorderList.append(OSCOrder(key, gs.oscJsonProfile[key]['variable'], args[1]))
                                 if 'round_type' in gs.oscJsonProfile:
                                     OSCorderList.append(OSCOrder('round_type', gs.oscJsonProfile['round_type']['variable'], gs.oscJsonProfile['round_type']['values'][args[2]]))
+                                # AP
+                                if gs.APclient:
+                                    gs.APclient.MapReceived(args[1])
+
                             case "round_map_swap":
                                 print('round_map_swap placeholder, I need an example to see how the map is fed, is name and id or just name?') # TODO
                             case "round_killers":
                                 if args[3] != '':       # I found a case with an 8 pages where the game returned an empty round with other killers before the round ended
                                     gs.roundKiller = f"{args[0]} {args[1]} {args[2]}"
                                     gs.roundType = args[3]
+                                    apResult = []
                                     if args[3] == '8 Pages':
                                         # In case of 8 pages what value goes into each killer number for OSC changes
                                         result = TerrorID8Pages(args[0], args[1], args[3])
@@ -108,13 +113,16 @@ def ParseContent(i_content, i_fileName, i_cursor):
                                             OSCorderList.append(OSCOrder('round_killer2', gs.oscJsonProfile['round_killer2']['variable'], int(args[1])))
                                         if 'round_killer3' in gs.oscJsonProfile:
                                             OSCorderList.append(OSCOrder('round_killer3', gs.oscJsonProfile['round_killer3']['variable'], int(args[0])))
+                                        apResult.append(args[0])
                                     elif args[3] not in ['Midnight','Bloodbath','Double Trouble','EX','Unbound']:
                                         if 'round_killer1' in gs.oscJsonProfile:
                                             OSCorderList.append(OSCOrder('round_killer1', gs.oscJsonProfile['round_killer1']['variable'], int(args[0])))
+                                            apResult.append(args[0])
                                     elif args[3] in ['Midnight','Bloodbath','Double Trouble','EX','Unbound']:
                                         if args[3] == 'Midnight' and args[2] == '19':   # Check for Monarch
                                             if 'round_killer3' in gs.oscJsonProfile:
                                                 OSCorderList.append(OSCOrder('round_killer3', gs.oscJsonProfile['round_killer3']['variable'], int(args[2])))
+                                                apResult.append(args[2])
                                         else: 
                                             if 'round_killer1' in gs.oscJsonProfile:
                                                 OSCorderList.append(OSCOrder('round_killer1', gs.oscJsonProfile['round_killer1']['variable'], int(args[0])))
@@ -122,7 +130,13 @@ def ParseContent(i_content, i_fileName, i_cursor):
                                                 OSCorderList.append(OSCOrder('round_killer2', gs.oscJsonProfile['round_killer2']['variable'], int(args[1])))
                                             if 'round_killer3' in gs.oscJsonProfile:
                                                 OSCorderList.append(OSCOrder('round_killer3', gs.oscJsonProfile['round_killer3']['variable'], int(args[2])))
+                                            apResult.append(args[0])
+                                            apResult.append(args[1])
+                                            apResult.append(args[2])
                                     OSCorderList.append(OSCOrder('round_type', gs.oscJsonProfile['round_type']['variable'], gs.oscJsonProfile['round_type']['values'][args[3]]))
+                                # AP
+                                if gs.APclient:
+                                    gs.APclient.KillerReceived(apResult, args[3])
                             case "round_unknown":
                                 print('round_unknown placeholder')
                             case "round_possessed":

@@ -1,7 +1,7 @@
 from Tools.xmlTools import InitializeConfig, ReadCodeFiles, ModifyNode, VerifyConfigFields
 from Tools.fileTools import VerifyInitFileStructure, VerifyConfigExists, CleanTempFiles, RegexCheck, PoolCheck, LoadLocale, LoadJson
 from Tools.guiTools import CreateWindow, HorizontalMenu, HorizontalFileBox, CreateTreeView, CalculatePosition, ApplyStyle, DebugBar
-from Tools.errorHandler import ErrorLogging
+from Tools.errorHandler import ErrorLogging, InitializeLoggers
 from Tools.netTools import CheckForUpdates, WSstart, InitializeOSCClient
 from CodesHunter import CodesHunter
 import threading
@@ -41,6 +41,8 @@ if __name__ == "__main__":
     VerifyConfigExists(gs._FILE_CONFIG)                             # Verify the config file exist
     VerifyConfigFields(gs._FILE_CONFIG)
     gs.configList = InitializeConfig(gs._FILE_CONFIG)               # Retrieve all config data
+
+    InitializeLoggers()
 
     LoadLocale()
     CheckForUpdates()                                               # Check for new updates logic

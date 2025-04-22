@@ -62,6 +62,10 @@ _FILE_SILLYNAMES = os.path.join(_FOLDER_TOOLS,_FOLDER_TOOLS_ITEMS,'silly.json')
 _FILE_AP_INDEX= 'index.json'
 
 # Global variables
+logger = None
+loggerInfo = None
+loggerError = None
+loggerDebug= None
 titleMessage = ''
 configList = {}
 localeDict = {}
@@ -85,8 +89,10 @@ oscJsonProfile = {}
 oscJsonProfileDEBUG = {}
 controlJson = {}
 currentFile = ''
-APfolder = ''
+APSelectedfolder = ''
+APjsondata = {}
 APThread = None
+APclient = None
 
 # Round and debugging variables
 roundEvent = ''

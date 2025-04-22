@@ -17,7 +17,7 @@ import json
 import re
 import sys
 import webbrowser
-from Tools.archiTools import StartAP, stop_thread
+from Tools.archiTools import APwebsocketClient
 import threading
 
 
@@ -662,13 +662,25 @@ def CreateAPWindow():
             self.server = i_server
             self.slotName = i_slotName
             self.passw = i_passw
+            self.terrors = []
+            self.alternates = []
+            self.unbounds = []
+            self.locations = []
+            self.moons = []
 
         def to_dict(self):
             return {
                 "folder": self.folder,
                 "server": self.server,
                 "slotName": self.slotName,
-                "passw": self.passw
+                "passw": self.passw,
+                "data": {
+                    "terrors": self.terrors,
+                    "alternates": self.alternates,
+                    "unbounds": self.unbounds,
+                    "locations": self.locations,
+                    "moons": self.moons
+                }
             }
 
     try:
@@ -699,19 +711,23 @@ def CreateAPWindow():
             combobox['values'] = GetAllFolders(gs._FOLDER_AP)
 
         # Combo saved games
-        gs.APfolder = tk.StringVar()
-        combobox = Combobox(frameAP, values=[], state='normal', textvariable=gs.APfolder)
+        APfolder = tk.StringVar()
+        combobox = Combobox(frameAP, values=[], state='normal', textvariable=APfolder)
         RefreshList()
+        APfolder.set(gs.APSelectedfolder)
         combobox.grid(row=0, columnspan=3, padx=5, pady=5, sticky='ew')
 
+        def RefreshValues():
+            gs.APjsondata = LoadJson(os.path.join(gs._FOLDER_AP, APfolder.get(), gs._FILE_AP_INDEX))
+            textAPServerVar.set(gs.APjsondata['server'])
+            textAPUserVar.set(gs.APjsondata['slotName'])
+            textAPPassVar.set(gs.APjsondata['passw'])
+            gs.APSelectedfolder = APfolder.get()
+
         def on_value_change(self):
-            jsondata = LoadJson(os.path.join(gs._FOLDER_AP, gs.APfolder.get(), gs._FILE_AP_INDEX))
-            textAPServerVar.set(jsondata['server'])
-            textAPUserVar.set(jsondata['slotName'])
-            textAPPassVar.set(jsondata['passw'])
+            RefreshValues()
 
         combobox.bind('<<ComboboxSelected>>', on_value_change)
-
 
         # Label
         labelAPServer = Label(frameAP, text=gs.localeDict['AP-ServerGame-Label'])
@@ -740,7 +756,7 @@ def CreateAPWindow():
 
         def NewGame():
             print("New AP game...")
-            folderName = gs.APfolder.get()
+            folderName = APfolder.get()
             serverName = textAPServerVar.get()
             slotName = textAPUserVar.get()
             password = textAPPassVar.get()
@@ -749,14 +765,15 @@ def CreateAPWindow():
                 os.mkdir(os.path.join(gs._FOLDER_AP, folderName))
                 SaveJson(os.path.join(gs._FOLDER_AP, folderName, gs._FILE_AP_INDEX), obj.to_dict())
                 RefreshList()
+                RefreshValues()
             else:
                 messagebox.showerror(gs.localeDict['AP-RepeatedFolder-Head'], gs.localeDict['AP-RepeatedFolder-Body'].format(name=folderName))
         def DeleteGame():
             print("Delete AP game...")
-            if os.path.exists(os.path.join(gs._FOLDER_AP, gs.APfolder.get())):
-                DeleteFolder(os.path.join(gs._FOLDER_AP, gs.APfolder.get()))
+            if os.path.exists(os.path.join(gs._FOLDER_AP, APfolder.get())):
+                DeleteFolder(os.path.join(gs._FOLDER_AP, APfolder.get()))
                 RefreshList()
-                gs.APfolder.set('')
+                APfolder.set('')
                 textAPServerVar.set('')
                 textAPUserVar.set('')
                 textAPPassVar.set('')
@@ -766,7 +783,8 @@ def CreateAPWindow():
             serverName = textAPServerVar.get()
             slotName = textAPUserVar.get()
             password = textAPPassVar.get()
-            gs.APThread = threading.Thread(target=StartAP, args=(os.path.join(gs._FOLDER_AP, gs.APfolder.get()), serverName, slotName, password))
+            gs.APclient = APwebsocketClient(gs.APjsondata)
+            gs.APThread = threading.Thread(target=gs.APclient.StartAP)
             gs.APThread.daemon = True
             gs.APThread.start()
             DisconnectGameButton.grid(row=4, column=2, padx=5, pady=5, sticky='ew')
@@ -774,8 +792,10 @@ def CreateAPWindow():
 
         def DisconnectGame():
             print("Disconnect AP game...")
-            stop_thread()
+            gs.APclient.stop_thread()
             gs.APThread.join()
+            gs.APclient = None
+            gs.APThread = None
             ContinueGameButton.grid(row=4, column=2, padx=5, pady=5, sticky='ew')
             DisconnectGameButton.grid_remove()
 
@@ -785,15 +805,21 @@ def CreateAPWindow():
         DeleteGameButton = tk.Button(frameAP, text=gs.localeDict['AP-DeleteGame-Button'], command=DeleteGame, **gs.TONStyles['buttons'])
         DeleteGameButton.grid(row=4, column=1, padx=5, pady=5, sticky='ew')
         ContinueGameButton = tk.Button(frameAP, text=gs.localeDict['AP-ContinueGame-Button'], command=ContinueGame, **gs.TONStyles['buttons'])
-        ContinueGameButton.grid(row=4, column=2, padx=5, pady=5, sticky='ew')
         DisconnectGameButton = tk.Button(frameAP, text=gs.localeDict['AP-DisconnectGame-Button'], command=DisconnectGame, **gs.TONStyles['buttons'])
-        #DisconnectGameButton.grid(row=4, column=2, padx=5, pady=5, sticky='ew')
+        if gs.APThread:
+            DisconnectGameButton.grid(row=4, column=2, padx=5, pady=5, sticky='ew')
+        else:
+            ContinueGameButton.grid(row=4, column=2, padx=5, pady=5, sticky='ew')
 
         # Text
         bgColor = apRoot.cget("bg")  # Get the default background color of the window
-        textAP = tk.Text(frameAP, wrap=tk.WORD, state=tk.DISABLED, **gs.TONStyles['ap'])
+        textAP = tk.Text(frameAP, wrap=tk.WORD, state=tk.NORMAL, **gs.TONStyles['ap'])
         textAP.insert(tk.END,'Here goes the ws text...')
+        textAP.config(state=tk.DISABLED)
         textAP.grid(row=5, columnspan=3, padx=5, pady=5, sticky='ew')
+
+        if gs.APSelectedfolder != '':
+            RefreshValues()
 
         apRoot.wait_window()
 
