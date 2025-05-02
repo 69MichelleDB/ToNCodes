@@ -77,24 +77,67 @@ class APwebsocketClient():
                 packageRecv = messagejson[0]['cmd']
                 
                 match packageRecv:
+                    # Sent to clients when they connect to an Archipelago server.
                     case "RoomInfo":
-                        print('First ping to the server, send GetDataPackage')
+                        print('[AP] First ping to the server, send GetDataPackage')
                         await self.Send_GetDataPackage()
-                
+
+                    # Sent to clients to provide what is known as a 'data package' which contains information to enable a client
+                    # to most easily communicate with the Archipelago server. Contents include things like location id to name mappings, among others
                     case "DataPackage":
-                        print('Attempting to Connect')
+                        print('[AP] Attempting to Connect')
                         await self.Send_Connect()
 
+                    # Sent to clients when the server refuses connection. This is sent during the initial connection handshake.
                     case "ConnectionRefused":
-                        print("Failed to connect")
+                        print("[AP] Failed to connect")
 
+                    # Sent to clients when the connection handshake is successfully completed.
                     case "Connected":
-                        print("Connected to the server")
+                        print("[AP] Connected to the server")
                         self.connectedInfo = messagejson[0].copy()
+                        if len(self.connectedInfo['slot_data'])==0:
+                            print('[AP]: No Slot Data received!')
+                            gs.logger.debug('[AP Debug]: No Slot Data received!')
+
+                    # Sent to clients when they receive an item.
+                    case "ReceivedItems":
+                        print("[AP] Received new items")
+
+                    # Sent to clients to acknowledge a received LocationScouts packet and responds with the item in the location(s) being scouted.
+                    case "LocationInfo":
+                        print("[AP] Locations scouted")
+
+                    # Sent when there is a need to update information about the present game session.
+                    case "RoomUpdate":
+                        print("[AP] Data may have changed in RoomInfo and/or Connected")
+
+                    # ent to clients purely to display a message to the player. While various message types provide additional arguments,
+                    # clients only need to evaluate the data argument to construct the human-readable message text. All other arguments may be ignored safely.
+                    case "PrintJSON":
+                        print("[AP] New message for the player")
+
+                    # Sent to clients after a client requested this message be sent to them, more info in the Bounce package.
+                    case "Bounced":
+                        print("[AP] Someone requested a bounce")
+
+                    # Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
+                    case "InvalidPacket":
+                        print("[AP] Packet had an error")
+
+                    # Sent to clients as a response the a Get package.
+                    case "Retrieved":
+                        print("[AP] Get response")
+
+                    # Sent to clients in response to a Set package if want_reply was set to true, or if the client has registered to receive updates
+                    # for a certain key using the SetNotify package. SetReply packages are sent even if a Set package did not alter the value for the key.
+                    case "SetReply":
+                        print("[AP] SetReply")
+
 
             except asyncio.TimeoutError:
                 pass
-        print("Closing AP websocket")
+        print("[AP]: Closing AP websocket")
         await self.websocketAP.close()
 
     # Starts the client and the logger
@@ -114,8 +157,8 @@ class APwebsocketClient():
 
     async def SendMessageAsync(self, i_head ,i_args):
         try:
-            message = [{"cmd": i_head, **i_args}]                     # Build the message
-            await self.websocketAP.send(json.dumps(message))               # And send it away
+            message = [{"cmd": i_head, **i_args}]                           # Build the message
+            await self.websocketAP.send(json.dumps(message))                # And send it away
         except Exception as e:
             print(e)
             ErrorLogging(f"Error in SendMessage: {e}")
@@ -166,21 +209,20 @@ class APwebsocketClient():
             asyncio.run(self.Send_StatusUpdate(ClientStatus.CLIENT_GOAL))
 
     def MapReceived(self, i_map: int):
-        print(len(self.indexJson['data'][Concepts.locations.name])-1)
         if i_map not in self.indexJson['data']['locations'] and \
             self.connectedInfo['slot_data']['location_index_range']>len(self.indexJson['data'][Concepts.locations.name]):
-            print(f"AP: map {i_map} added")
+            print(f"[AP]: map {i_map} added")
             self.indexJson['data']['locations'].append(i_map)
             count = 4000 + len(self.indexJson['data']['locations'])-1
             asyncio.run(self.Send_LocationChecks([count]))
             self.UpdateJson()
         else:
-            print(f"AP: map {i_map} was already found")
+            print(f"[AP]: map {i_map} was already found")
         
         self.VerifyWin()
 
     def KillerReceived(self, i_killers: typing.List[int], i_type):
-        print(f"AP: Killer {i_killers} {i_type} received, comparing")
+        print(f"[AP]: Killer {i_killers} {i_type} received, comparing")
         queue = {}
         if i_type in ['Classic','Fog','Punished','Sabotage','Cracked','Ghost']:
             if i_killers[0] not in self.indexJson['data'][Concepts.terrors.name] and \

@@ -34,7 +34,6 @@ Encountering a new place or a new terror will count as a check. Your victory con
 WIP
 
 __Currently working on:__
-- Making AP Client compatible with my current Websocket integration.
 - Receive items from others
 - Scrolling client log
 - List of unlocked items
